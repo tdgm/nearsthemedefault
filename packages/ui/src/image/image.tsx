@@ -44,6 +44,7 @@ export function Image({
   const srcSet = (format: ImageFormat) =>
     loader ? widths.map((w) => `${loader(src, w, format)} ${w}w`).join(', ') : undefined;
   const img = (
+    // eslint-disable-next-line @next/next/no-img-element -- este e o primitivo de imagem do design system (picture/srcset/CDN proprios, sem next/image).
     <img
       src={src}
       srcSet={srcSet('original')}
