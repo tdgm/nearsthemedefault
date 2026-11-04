@@ -1,0 +1,115 @@
+# Configuracao raiz do template padrao Nears.
+# Trocar de marca = trocar tokens.json. Nada aqui e especifico de cliente.
+platform: nears
+template: standard
+version: 1.0.0
+
+locale:
+  default: pt-BR
+  supported: [pt-BR]
+currency: BRL
+timezone: America/Sao_Paulo
+
+rendering:
+  engine: next
+  mode: hybrid            # SSG + ISR + streaming
+  revalidate: 300
+  dataLayer: graphql
+  endpoint: /api/graphql
+  streaming: true
+  partialPrerender: true
+
+design:
+  theme: white-label
+  tokens:
+    source: packages/tokens/tokens.json
+    output: [css-vars, tailwind, figma]
+  typography:
+    family: "var(--font-brand)"
+    weights: [400, 500, 700]        # maximo 3 - sem familias duplicadas
+    preload: [400]
+    display: swap
+    subset: [latin, latin-ext]
+    fallback:
+      adjust: metric-override
+      stack: "system-ui, sans-serif"
+  color:
+    scales: [neutral, brand, accent]
+    semantic:
+      - surface
+      - surface-subtle
+      - on-surface
+      - on-surface-muted
+      - border
+      - focus-ring
+      - action
+      - link
+      - price
+      - price-sale
+      - success
+      - warning
+      - danger
+    themes: [light, dark]
+  space:
+    base: 4
+    scale: [0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32]
+  radius: [none, sm, md, lg, full]
+  breakpoints:
+    xs: 360
+    sm: 768
+    md: 1024
+    lg: 1280
+    xl: 1536
+  motion:
+    durations: [120, 200, 320]
+    respectsReducedMotion: true
+
+budgets:              # lidos por scripts/check-budgets.mjs - CI falha se estourar
+  js_initial_kb: 120
+  css_initial_kb: 30
+  html_kb: 80
+  requests_initial: 40
+  third_party_hosts: 8
+  third_party_js_kb: 80
+  lcp_ms: 2000
+  inp_ms: 200
+  cls: 0.05
+  ttfb_ms: 400
+  onExceed: fail      # fail | warn - mudar para warn exige ADR
+
+accessibility:
+  standard: WCAG-2.2-AA
+  minTouchTarget: 44
+  axeViolationsAllowed: 0
+  keyboardPathRequired: true
+  reducedMotionRequired: true
+
+integrations:
+  # provider vazio significa "a loja define".
+  # A estrategia de carga NAO e negociavel.
+  tagManager:
+    mode: server-side
+    required: true
+    loadStrategy: afterInteractive
+  analytics:
+    provider: ~
+    loadStrategy: post-interaction
+  reviews:
+    provider: ~
+    schema: aggregateRating
+    ssr: true
+  personalization:
+    provider: ~
+    loadStrategy: idle
+    ssrFallback: required   # conteudo precisa existir antes do script
+  search:
+    provider: ~
+    autocomplete: true
+    indexable: false
+  consent:
+    provider: ~
+    blocking: false
+    reservedHeight: 0       # nunca empurrar layout
+  thirdPartyPolicy:
+    sandbox: partytown
+    requiresAdr: true       # todo novo terceiro precisa de ADR justificando
