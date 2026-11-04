@@ -1,7 +1,7 @@
 // Registry de sections: cruza o que o codigo exporta com o que o manifest
 // declara e FALHA O BUILD se algo faltar (scripts/manifests-validate.mjs).
 import type { Manifests } from '@nears/manifests';
-import type { SectionModule } from './define.ts';
+import type { AnySectionModule } from './define.ts';
 
 export type RegistryIssue = { section: string; message: string };
 
@@ -14,7 +14,7 @@ export class RegistryError extends Error {
   }
 }
 
-export type SectionRegistry = ReadonlyMap<string, SectionModule>;
+export type SectionRegistry = ReadonlyMap<string, AnySectionModule>;
 
 const nonEmpty = (v: unknown) => typeof v === 'object' && v !== null && Object.keys(v).length > 0;
 
@@ -24,14 +24,14 @@ const nonEmpty = (v: unknown) => typeof v === 'object' && v !== null && Object.k
  */
 export function createRegistry(
   manifests: Pick<Manifests, 'sections'>,
-  modules: readonly SectionModule[],
+  modules: readonly AnySectionModule[],
   storyExists: (path: string) => boolean,
 ): SectionRegistry {
   const declared = new Map(
     [...manifests.sections.sections, ...manifests.sections.pdpSections, ...manifests.sections.globals].map((s) => [s.id, s]),
   );
   const issues: RegistryIssue[] = [];
-  const registry = new Map<string, SectionModule>();
+  const registry = new Map<string, AnySectionModule>();
 
   for (const mod of modules) {
     const id = mod.id;

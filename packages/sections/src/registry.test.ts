@@ -32,7 +32,7 @@ describe('createRegistry', () => {
   });
 
   const failing = (patch: Record<string, unknown>) => () =>
-    createRegistry(manifests, [{ ...ok, ...patch } as typeof ok], exists);
+    createRegistry(manifests, [{ ...ok, ...patch } as unknown as typeof ok], exists);
 
   it.each([
     ['id fora do manifest', { id: 'nao-existe' }, 'nao existe em sections.registry.yaml'],

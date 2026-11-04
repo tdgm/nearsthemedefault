@@ -21,5 +21,14 @@ export type SectionModule<P = unknown> = {
   story: string;
 };
 
+/**
+ * Forma apagada (sem o tipo das props) para listas heterogeneas: o registry
+ * guarda sections de props diferentes, entao `Component` aceita `never`.
+ */
+export type AnySectionModule = Omit<SectionModule, 'Component' | 'schema'> & {
+  Component: ComponentType<never>;
+  schema: z.ZodType;
+};
+
 /** Identidade tipada: so existe para o compilador checar a forma na declaracao. */
 export const defineSection = <P>(module: SectionModule<P>): SectionModule<P> => module;
