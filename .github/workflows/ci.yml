@@ -48,9 +48,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      # Sem "--": o pnpm repassaria o "--" ao vitest, que trataria --coverage
-      # como filtro de arquivo e acharia 0 testes (docs/adr/0009).
-      - run: pnpm test --coverage
+      # `pnpm test --coverage` falha no pnpm 9 ("Unknown option: 'coverage'") e
+      # `pnpm test -- --coverage` repassa o "--" ao vitest, que acha 0 testes.
+      # Chamar o vitest direto evita os dois (docs/adr/0009).
+      - run: pnpm exec vitest run --coverage
       - run: pnpm build-storybook --quiet
       - run: pnpm exec playwright install --with-deps chromium   # test-runner do Storybook usa Playwright
       - run: pnpm test:a11y            # axe em 100% das stories, 0 violacoes

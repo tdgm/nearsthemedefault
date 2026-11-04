@@ -121,3 +121,6 @@ Tres falhas de configuracao, nenhuma de codigo:
    sem Dependency graph + GitHub Advanced Security). O job so roda em repo
    publico; em privado o gate de dependencias e o `pnpm audit
    --audit-level=high` do job `validate`. Para reativar, habilitar GHAS.
+4. Job `test`: `pnpm test --coverage` falha no pnpm 9 ("Unknown option:
+   'coverage'"). Passou a `pnpm exec vitest run --coverage` (conferido no Mac:
+   19 testes, exit 0).
