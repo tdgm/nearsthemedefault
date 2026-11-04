@@ -40,7 +40,7 @@ Fontes: so open source (OFL/Apache), self-hosted, com fallback websafe -
 | `.github/workflows/ci.yml` | Cinco jobs: validate, test, budgets, lighthouse, e2e |
 | `lighthouserc.json` | Assercoes de Core Web Vitals |
 | `scripts/check-budgets.mjs` | Falha o build quando o bundle estoura o limite |
-| `docs/adr/` | Decisoes de arquitetura (tipografia, multinicho) |
+| `docs/adr/` | Decisoes de arquitetura (tipografia, multinicho, rotas e robots, contraste) |
 
 ## Orcamentos
 

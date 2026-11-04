@@ -125,7 +125,14 @@ Implemente a Fase 6. A regra de canonical e critica: quando um produto aparece
 tanto em /{departamento}/{categoria} quanto em /{tipo-de-produto}/{atributo}, o
 canonical aponta para o eixo de departamento, e o eixo plano so e indexavel no
 nivel 1. O eixo plano e o atributo do nivel 2 sao ligados/desligados por
-catalog.flatAxis. Implemente tambem a rota de landing de cauda longa /b/{slug} com
+catalog.flatAxis.
+
+URLs ambiguas (/{x} e /{x}/{y}) sao resolvidas pelo bloco resolution do
+routes.manifest: indice de slugs gerado no build, um slug de 1o segmento por
+fonte, slugs reservados, 2o segmento procurado so na fonte indicada pelo 1o.
+Nada de tentar padrao por padrao. Prove com testes: slug duplicado entre
+departamento e campanha falha o build, slug reservado falha o build, slug
+inexistente retorna status 404. Implemente tambem a rota de landing de cauda longa /b/{slug} com
 filtros pre-aplicados, exigindo H1, introducao e FAQ unicos por pagina.
 Valide com JS desabilitado e me mostre o HTML renderizado de uma collection.
 ```
@@ -140,7 +147,10 @@ considerado incompleto. Ao fim desta fase, mude onMissingGeoField de
 warn-build para fail-build.
 
 Gere llms.txt com politica explicita por agente, deixando os valores como
-configuracao e nao como decisao sua. Ao final, cole o JSON-LD gerado de uma PDP
+configuracao e nao como decisao sua. No robots.txt, expanda cada item de
+excluded.disallowSegments em tres linhas exatas (/{seg}$, /{seg}/, /{seg}?) e
+inclua um teste provando que /saias, /sobre e /carrinho-de-bebe continuam
+liberadas. Ao final, cole o JSON-LD gerado de uma PDP
 para eu validar no Rich Results.
 ```
 

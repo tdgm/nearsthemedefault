@@ -122,6 +122,51 @@ routes:
     indexable: false
     robots: "noindex,nofollow"
 
+# Varios padroes tem a mesma forma de URL: /{department}, /{productType},
+# /{campaign} e /{pageSlug} (um segmento); /{department}/{category},
+# /{productType}/{attributeValue} e /{campaign}/{segment} (dois segmentos).
+# O roteador NAO tenta um apos o outro (cada tentativa seria um fetch somando
+# TTFB): consulta um indice de slugs que diz a qual fonte cada slug pertence.
+# Decisao registrada em docs/adr/0003-resolucao-de-rotas-e-robots.md.
+resolution:
+  strategy: slug-index
+  literalSegmentsFirst: true     # /s, /b/..., /mapa-do-site, /404 e /{x}/p vencem
+                                 # qualquer padrao feito so de parametros
+  slugIndex:
+    scope: first-segment         # um slug de 1o segmento pertence a UMA fonte
+    sources:
+      - { route: department, from: cms }
+      - { route: category-flat, from: catalog }
+      - { route: campaign, from: cms }
+      - { route: institutional, from: cms }
+    onConflict: fail-build       # CMS/catalogo nao publicam slug ja usado por outra fonte
+    onMiss: not-found            # slug fora do indice -> status 404 real, nunca soft 404
+    revalidate: 300
+  secondSegment:
+    # Resolvido o 1o segmento, o 2o so e procurado na fonte correspondente.
+    department: department-category
+    category-flat: category-flat-attribute
+    campaign: campaign-segment
+  reserved:
+    firstSegment:                # nenhuma fonte pode usar estes slugs
+      - s
+      - b
+      - p
+      - mapa-do-site
+      - "404"
+      - api
+      - account
+      - carrinho
+      - checkout
+      - login
+      - preview
+      - quick-view
+      - design-system
+      - test
+      - teste
+      - qa
+    secondSegment: [p]           # /{x}/p e sempre PDP
+
 canonical:
   strategy: self-referencing
   rules:
@@ -143,22 +188,19 @@ facets:
     firstPageCanonical: self
 
 excluded:
-  disallow:
-    - "/account*"
-    - "/carrinho*"
-    - "/checkout*"
-    - "/login*"
-    - "/s*"
-    - "/quick-view/*"
-    - "/preview/*"
-    - "/api/*"
+  # robots.txt casa por PREFIXO: "Disallow: /s" bloquearia /saias, /sofas,
+  # /smartphones; "/carrinho*" bloquearia /carrinho-de-bebe. Por isso aqui so
+  # entram NOMES de segmento, e o gerador (Fase 7) emite tres linhas exatas
+  # por segmento:  Disallow: /{seg}$   Disallow: /{seg}/   Disallow: /{seg}?
+  # Nunca escreva "*" nesta lista.
+  disallowSegments: [account, carrinho, checkout, login, s]
+  # Prefixos que ja terminam em "/" sao seguros como prefixo.
+  disallowPrefixes: ["/quick-view/", "/preview/", "/api/"]
 
 forbiddenInProduction:
-  patterns:
-    - "/design-system*"
-    - "/test*"
-    - "/teste*"
-    - "/qa*"
+  # Mesma semantica de segmento: bloqueia /qa e /qa/..., nao /quadros nem
+  # /testes-de-gravidez.
+  segments: [design-system, test, teste, qa]
   note: >
     O build de producao falha se alguma destas rotas resolver.
     Ambiente interno nunca vive na raiz do dominio publico.

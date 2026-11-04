@@ -65,15 +65,20 @@ QuickFilter, ProductGrid, ProductCard, Breadcrumb, TextSEO, FAQ e RelatedLinks.
 
 Entregar: home, collection, pdp, landing, page, search, sitemap HTML e 404.
 Roteamento a partir de `routes.manifest.yaml`, incluindo a regra de canonical entre
-o eixo de departamento e o eixo plano de tipo de produto. Data layer GraphQL com Zod
+o eixo de departamento e o eixo plano de tipo de produto, e a resolucao de URLs
+ambiguas por indice de slugs unicos com slugs reservados
+(`docs/adr/0003-resolucao-de-rotas-e-robots.md`). Data layer GraphQL com Zod
 validando toda resposta e mocks para desenvolvimento.
 
-**Gate:** todo conteudo indexavel presente com JS desabilitado.
+**Gate:** todo conteudo indexavel presente com JS desabilitado; build falha com
+slug duplicado entre fontes ou slug reservado em uso; slug inexistente retorna
+status 404.
 
 ## Fase 7 - SEO e GEO
 
 Entregar: helpers tipados de metadata e JSON-LD por template, geracao de sitemap.xml
-segmentado, robots.txt e llms.txt a partir do manifest, alt automatico por regra,
+segmentado, robots.txt (Disallow por segmento exato, nunca por prefixo solto) e
+llms.txt a partir do manifest, alt automatico por regra,
 politica de indexacao de facetas, bloco de FAQ por collection e por PDP, e
 atribuicao de trafego vindo de motores generativos.
 
