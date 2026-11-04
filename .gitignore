@@ -147,3 +147,19 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Lighthouse CI
+.lighthouseci/
+
+# Playwright
+playwright-report/
+test-results/
+
+# Storybook build
+storybook-static/
+
+# Chaves, certificados e segredos - nunca versionar (docs/adr/0008)
+*.pem
+*.key
+*.cert
+*.p12

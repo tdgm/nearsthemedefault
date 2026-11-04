@@ -1,0 +1,21 @@
+version: 2
+
+updates:
+  # pnpm workspace na raiz. Dependabot detecta pnpm-lock.yaml automaticamente
+  # e atualiza as dependencias de todo o monorepo (apps/web, packages/*).
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      dev-dependencies:
+        dependency-type: development
+
+  # Mantem as Actions do .github/workflows atualizadas - e o mecanismo que
+  # substitui pin manual de SHA (ver docs/adr/0008, item sobre nao fabricar
+  # hash de commit a mao).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

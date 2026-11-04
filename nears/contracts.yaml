@@ -155,6 +155,14 @@ gates:
     # Tokens decorativos (border, border-strong) ficam fora de proposito:
     # WCAG nao exige contraste de elementos que nao identificam um controle.
     contrastMin: { text: 4.5, ui: 3.0 }
+  security:
+    # Espelha nears.config.yaml > security. Enforcement exato por linha em
+    # docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md.
+    headers: enforced-in-ci
+    dependencyAudit: enforced-in-ci
+    secretScanning: enforced-in-ci
+    staticAnalysis: enforced-in-ci       # CodeQL, .github/workflows/codeql.yml
+    multiTenancyHostValidation: pending-fase-6
   seo:
     richResultsErrors: 0
     templatesChecked: [product, breadcrumb, itemlist, faq]

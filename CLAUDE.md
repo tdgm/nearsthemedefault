@@ -22,7 +22,7 @@ Onde cada coisa muda:
 
 ## Stack obrigatoria
 
-- Next.js 15 (App Router) + React 19 + TypeScript strict
+- Next.js 16 (App Router) + React 19 + TypeScript strict (docs/adr/0007-nextjs-16.md)
 - Tailwind CSS 4 consumindo CSS custom properties (nunca cor literal em classe)
 - Radix UI primitives apenas para overlay / menu / dialog / radiogroup
 - Zod para validar todo manifest e toda resposta de API
@@ -124,6 +124,36 @@ WCAG 2.2 AA e gate de merge, nao aspiracao.
   "Nx de R$ Y sem juros", CEP, CNPJ, data dd/mm/aaaa.
 - Commits em Conventional Commits. Um commit por entregavel coerente.
 
+### Seguranca
+
+Cadeia de suprimentos, segredos e headers tem gate no CI desde a Fase 0,
+mesmo em repo vazio. Detalhe completo em
+`docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md`.
+
+- Nenhum segredo ou chave de API no cliente. `NEXT_PUBLIC_*` so para valor
+  genuinamente publico; qualquer coisa sensivel fica em variavel de ambiente
+  server-only.
+- Gateways de pagamento (Asaas, Mercado Pago, Pagar.Me) sao responsabilidade
+  do backend/painel. Este repo e frontend puro: nunca processa, nunca
+  armazena e nunca loga credencial ou dado de pagamento.
+- `pnpm audit --audit-level=high` roda no CI (job `validate`); vulnerabilidade
+  high/critical bloqueia merge. Toda dependencia nova tambem passa por ele,
+  alem do peso em KB ja exigido acima.
+- `pnpm-lock.yaml` e obrigatorio e commitado; CI sempre instala com
+  `--frozen-lockfile`. Dependabot mantem dependencias e GitHub Actions
+  atualizados (`.github/dependabot.yml`).
+- Scanner de segredos (gitleaks) e CodeQL correm no CI a cada push/PR
+  (`.github/workflows/ci.yml` e `codeql.yml`).
+- Headers de seguranca (CSP, HSTS, X-Content-Type-Options, Referrer-Policy,
+  Permissions-Policy, `frame-ancestors`) vem de
+  `nears.config.yaml > security.headers`, nunca hardcoded em componente ou
+  middleware/proxy.
+- Resolucao de loja por dominio personalizado (multi-tenant) nunca confia
+  direto no header `Host`: precisa validar contra a lista de dominios
+  verificados pelo painel antes de rotear (host header injection, cache
+  poisoning). Mecanismo exato e decisao de arquitetura da Fase 6; o contrato
+  ja existe em `security.multiTenancy`.
+
 ## Comandos
 
 ```bash
@@ -137,6 +167,7 @@ pnpm lh                  # Lighthouse CI contra o build
 pnpm storybook
 pnpm manifests:validate  # Zod sobre os 4 YAML de /nears
 pnpm tokens:contrast     # falha se algum par semantico nao atingir AA
+pnpm audit --audit-level=high  # vulnerabilidade de dependencia; gate no CI
 pnpm validate            # tudo acima + check-budgets
 ```
 

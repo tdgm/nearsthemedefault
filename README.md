@@ -41,7 +41,9 @@ Fontes: so open source (OFL/Apache), self-hosted, com fallback websafe -
 | `lighthouserc.json` | Assercoes de Core Web Vitals |
 | `scripts/check-budgets.mjs` | JS/CSS/HTML estatico por rota (lido de `routes.manifest.yaml > appRoute`) |
 | `scripts/check-third-party-hosts.mjs` | Conta hosts de terceiros distintos no relatorio do Lighthouse CI |
-| `docs/adr/` | Decisoes de arquitetura (tipografia, multinicho, rotas e robots, contraste, enforcement de budgets, composicao de sections) |
+| `.github/dependabot.yml` | Mantem dependencias (npm/pnpm) e GitHub Actions atualizadas |
+| `.github/workflows/codeql.yml` | Analise estatica (SAST) em push/PR/semanal |
+| `docs/adr/` | Decisoes de arquitetura (tipografia, multinicho, rotas e robots, contraste, enforcement de budgets, composicao de sections, Next.js 16, seguranca de CI) |
 
 ## Orcamentos
 
@@ -58,14 +60,26 @@ Fonte unica de verdade: `nears/nears.config.yaml`. O CI falha se estourar.
 | LCP / INP / CLS / TTFB (p75 mobile) | 2.0s / 200ms / 0.05 / 400ms |
 | Lighthouse mobile (perf / a11y / seo) | 90 / 95 / 100 |
 
+## Seguranca
+
+`pnpm audit`, scanner de segredos (gitleaks) e CodeQL correm no CI desde a
+Fase 0, mesmo em repo vazio. Headers de seguranca (CSP, HSTS, etc.) vem de
+`nears.config.yaml > security`, nunca hardcoded em componente. Detalhe
+completo em
+[docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md](./docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md).
+
 ## Decisoes em aberto
 
-Dois pontos dependem de decisao de negocio antes do go-live:
+Tres pontos dependem de decisao de negocio antes do go-live:
 
 - **`geo.agents`** em `nears/contracts.yaml`: quais crawlers de IA permitir.
   Quase tudo esta como `decide` de proposito.
 - **`onMissingGeoField`**: hoje `warn-build`. Deve virar `fail-build` ao fim
   da Fase 7, senao schema incompleto vira divida permanente.
+- **`security.multiTenancy.allowlistSource`** em `nears/nears.config.yaml`:
+  como o frontend valida o dominio personalizado de cada loja contra uma
+  lista de dominios verificados pelo painel, antes de rotear (evita host
+  header injection / cache poisoning). Mecanismo exato fica para a Fase 6.
 
 ## Padrao arquitetural
 

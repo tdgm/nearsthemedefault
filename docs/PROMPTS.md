@@ -51,9 +51,9 @@ arquivo fisico - /[slug]/page e /[slug]/[sub]/page - porque resolvem a fonte em
 runtime, nao por nome de pasta; ver a nota no topo do manifest e
 docs/adr/0003). scripts/check-budgets.mjs le esse campo direto, sem adivinhar.
 
-Decisoes de negocio que nao sao suas - sinalize e espere resposta: politica de geo.agents em contracts.yaml (quais crawlers de IA permitir) e o momento de promover onMissingGeoField de warn-build para fail-build.
+Decisoes de negocio que nao sao suas - sinalize e espere resposta: politica de geo.agents em contracts.yaml (quais crawlers de IA permitir); o momento de promover onMissingGeoField de warn-build para fail-build; e o mecanismo exato de nears.config.yaml > security.multiTenancy.allowlistSource (como o frontend recebe/valida a lista de dominios verificados por loja - endpoint do painel, arquivo gerado no build, ou resolucao upstream antes de chegar no Next.js. Ver docs/adr/0008).
 
-Regras que nao quero repetir: TypeScript strict, Server Components por padrao, nenhum valor de marca hardcoded, toda imagem com dimensao declarada, zero lib de UI pronta, e todo componente nasce com story + teste + axe limpo. WCAG 2.2 AA e gate, nao aspiracao.
+Regras que nao quero repetir: TypeScript strict, Server Components por padrao, nenhum valor de marca hardcoded, toda imagem com dimensao declarada, zero lib de UI pronta, nenhum segredo no cliente, `pnpm audit`/scanner de segredos/CodeQL verdes desde o repo vazio, e todo componente nasce com story + teste + axe limpo. WCAG 2.2 AA e gate, nao aspiracao.
 ```
 
 ## Fase 1 - Tokens

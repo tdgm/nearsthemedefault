@@ -4,17 +4,20 @@ Oito fases. Cada uma tem entregavel e gate. Nao avance com gate vermelho.
 
 ## Fase 0 - Fundacao
 
-Entregar: monorepo pnpm, Next 15 App Router, TS strict, ESLint/Prettier, Vitest,
-Playwright, Storybook, Lighthouse CI, GitHub Actions. As paginas criadas devem
-usar exatamente os caminhos de `routes.manifest.yaml > appRoute` (inclusive o
-grupo ambiguo compartilhando `/[slug]/page` e `/[slug]/[sub]/page` - ver nota no
-topo do manifest e docs/adr/0003). O script `pnpm validate` ja deve falhar
-corretamente ao estourar budget - teste com um import gigante proposital e
-depois remova. Ver docs/adr/0005 para qual script/assertion cobre cada linha
-do orcamento.
+Entregar: monorepo pnpm, Next 16 App Router (docs/adr/0007), TS strict,
+ESLint/Prettier, Vitest, Playwright, Storybook, Lighthouse CI, GitHub Actions.
+As paginas criadas devem usar exatamente os caminhos de
+`routes.manifest.yaml > appRoute` (inclusive o grupo ambiguo compartilhando
+`/[slug]/page` e `/[slug]/[sub]/page` - ver nota no topo do manifest e
+docs/adr/0003). O script `pnpm validate` ja deve falhar corretamente ao
+estourar budget - teste com um import gigante proposital e depois remova.
+Ver docs/adr/0005 para qual script/assertion cobre cada linha do orcamento.
 
 **Gate:** CI verde em repo vazio; `scripts/check-budgets.mjs` roda sem erro
-mesmo sem nenhuma rota implementada (so avisa "ainda nao implementadas").
+mesmo sem nenhuma rota implementada (so avisa "ainda nao implementadas"). CI
+inclui desde esta fase, tambem em repo vazio: auditoria de dependencias
+(`pnpm audit --audit-level=high`), scanner de segredos (gitleaks) e CodeQL,
+todos com `permissions` em least-privilege (ver docs/adr/0008).
 
 ## Fase 1 - Tokens
 
@@ -83,6 +86,12 @@ validando toda resposta e mocks para desenvolvimento.
 **Gate:** todo conteudo indexavel presente com JS desabilitado; build falha com
 slug duplicado entre fontes ou slug reservado em uso; slug inexistente retorna
 status 404.
+
+Nota: esta fase NAO inclui o mecanismo de resolucao de loja por dominio
+personalizado (multi-tenant, ex.: `followin.com.br`) - isso depende da
+decisao ainda aberta em `nears.config.yaml > security.multiTenancy.allowlistSource`
+(docs/PROMPTS.md > Decisoes de negocio, docs/adr/0008). Rotas aqui assumem
+uma loja ja resolvida.
 
 ## Fase 7 - SEO e GEO
 

@@ -9,6 +9,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Least-privilege por padrao (docs/adr/0008). Nenhum job deste workflow
+# precisa escrever no repo ou em PRs; dependency-review eleva pull-requests
+# para leitura, nada mais.
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: "22"
   PNPM_VERSION: "9"
@@ -27,6 +33,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm audit --audit-level=high   # vulnerabilidade high/critical bloqueia merge
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm manifests:validate   # Zod sobre os 4 YAML de /nears
@@ -104,3 +111,31 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:e2e
       - run: pnpm test:nojs    # valida conteudo indexavel sem JavaScript
+
+  secrets-scan:
+    name: Segredos no codigo
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # gitleaks varre o historico inteiro, nao so o HEAD
+      - uses: gitleaks/gitleaks-action@v2
+
+  dependency-review:
+    name: Revisao de dependencias (PR)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+      # Repo privado: este Action exige GitHub Advanced Security habilitado
+      # na org/repo. Sem GHAS o job falha por falta de permissao da
+      # plataforma, nao por vulnerabilidade real - confirme antes de tratar
+      # isso como gate obrigatorio (docs/adr/0008).
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high

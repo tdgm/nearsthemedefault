@@ -56,7 +56,7 @@ rendering:
   dataLayer: graphql
   endpoint: /api/graphql
   streaming: true
-  partialPrerender: true
+  cacheComponents: true   # Next 16; substitui a PPR experimental do 15 (docs/adr/0007)
 
 design:
   theme: white-label
@@ -140,6 +140,36 @@ accessibility:
   axeViolationsAllowed: 0
   keyboardPathRequired: true
   reducedMotionRequired: true
+
+security:
+  # Declarativo como o resto deste arquivo: headers nunca hardcoded em
+  # componente, middleware ou proxy. Decisao e enforcement em
+  # docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md.
+  headers:
+    contentSecurityPolicy:
+      mode: strict-dynamic    # nonce por requisicao; sem 'unsafe-inline' sem nonce
+      reportOnly: false
+    hsts:
+      enabled: true
+      maxAgeSeconds: 63072000
+      includeSubDomains: true
+      preload: false         # preload e dificil de reverter por ate 1 ano; decidir por dominio antes de ligar
+    xContentTypeOptions: nosniff
+    referrerPolicy: strict-origin-when-cross-origin
+    permissionsPolicy: "camera=(), microphone=(), geolocation=()"
+    frameAncestors: none     # clickjacking; abrir excecao so por rota especifica, nunca global
+  dependencies:
+    lockfileRequired: true
+    auditLevel: high          # pnpm audit --audit-level=high, gate no CI (job validate)
+  multiTenancy:
+    # A loja e servida por dominio personalizado (ex.: followin.com.br). O
+    # roteamento NUNCA pode confiar direto no header Host: precisa validar
+    # contra a lista de dominios verificados pelo painel antes de resolver
+    # qual loja renderizar (risco: host header injection, cache poisoning,
+    # SSRF por Host forjado). Mecanismo exato e decisao de arquitetura/negocio
+    # ainda em aberto - ver docs/PROMPTS.md > Decisoes de negocio.
+    hostValidation: allowlist-only
+    allowlistSource: decide   # endpoint do painel, arquivo gerado no build, ou resolucao upstream; definir antes da Fase 6
 
 integrations:
   # provider vazio significa "a loja define".
