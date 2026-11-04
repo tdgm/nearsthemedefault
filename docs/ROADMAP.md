@@ -62,7 +62,7 @@ Componentes que usam `priority: inherit` (ex.: ProductCard) recebem a priority
 resolvida do container como prop - nunca leem um valor fixo proprio
 (docs/adr/0006).
 
-**Gate:** JS inicial ainda <= 120 KB com header e footer montados.
+**Gate:** JS inicial ainda <= 140 KB (docs/adr/0010) com header e footer montados; se nao couber, reduzir ilhas client antes de subir o limite.
 
 ## Fase 5 - Sections de conteudo
 

@@ -9,7 +9,7 @@ import YAML from 'yaml';
 const cfg = YAML.parse(
   readFileSync(resolve(process.cwd(), '../../nears/nears.config.yaml'), 'utf8'),
 ) as {
-  rendering: { cacheComponents: boolean };
+  rendering: { cacheComponents: boolean; partialPrefetching: boolean };
   security: {
     headers: {
       hsts: { enabled: boolean; maxAgeSeconds: number; includeSubDomains: boolean; preload: boolean };
@@ -51,6 +51,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   cacheComponents: cfg.rendering.cacheComponents,
+  partialPrefetching: cfg.rendering.partialPrefetching,
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },

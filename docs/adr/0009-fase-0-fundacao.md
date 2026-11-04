@@ -57,8 +57,6 @@ Verificado e passando:
   Playwright, que nao suporta macOS 12. Roda no CI, nao localmente.
 - E2E contra o build de producao (rodou contra o dev server).
 - `pnpm lh` (Lighthouse CI) e `check-third-party-hosts.mjs`.
-- O teste de budget estourado de proposito exigido pelo ROADMAP (so faz
-  sentido depois da decisao sobre o limite de JS).
 - O workflow do GitHub Actions em si; nenhum job do CI foi executado.
 
 ## Riscos em aberto
@@ -73,9 +71,11 @@ Verificado e passando:
    gera. `check-budgets.mjs` agora le `.next/diagnostics/route-bundle-stats.json`
    (chunks de primeiro carregamento por rota) e `.next/app-path-routes-manifest.json`
    (appRoute -> rota), e procura CSS em `static/` (Turbopack nao usa `static/css`).
-3. **`partialPrefetching`.** O Next 16.4 avisa que `cacheComponents` sem
-   `partialPrefetching` explicito e transitorio. Definir na Fase 0.
-4. **Orcamento de JS estourado ja no app vazio (EM ABERTO).** Medido com o
+3. **`partialPrefetching` (RESOLVIDO).** Agora explicito em
+   `rendering.partialPrefetching: true` (manifest -> `next.config.ts`); o aviso
+   do build sumiu. Sem efeito em bytes (ADR 0010).
+4. **Orcamento de JS estourado ja no app vazio (RESOLVIDO pelo ADR 0010:
+   limite 140 KB).** Medido com o
    `check-budgets.mjs` corrigido: todas as rotas criticas carregam 135,7 KB de
    JS gzip (react-dom 71,8 + cliente do Next 46,6 + restante) contra o limite
    de 120 KB, sem nenhum componente de loja ainda. Nao e regressao de codigo
@@ -99,3 +99,11 @@ Verificado e passando:
   Barras finais redirecionam com 308 (comportamento padrao do Next).
 - Verificado no Mac: 19 testes unitarios, typecheck, lint, manifests e 19 E2E
   (chromium) verdes, incluindo axe em `/`, `/s`, `/s?q=` e 404.
+
+## Orcamento de JS e teste de estouro (2026-11-04)
+
+- Investigacao e decisao em `docs/adr/0010-orcamento-de-js-e-piso-do-framework.md`:
+  limite de JS 120 -> 140 KB (piso do framework ~135,5 KB).
+- `pnpm check-budgets` verde no Mac (JS 135,7 KB <= 140; CSS 2,2 KB; HTML 4 KB).
+- Teste de estouro de proposito feito: com `js_initial_kb: 100` o script falha
+  (exit != 0) nas 6 rotas criticas; config restaurado em seguida.
