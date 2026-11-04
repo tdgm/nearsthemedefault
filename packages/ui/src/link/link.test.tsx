@@ -42,7 +42,7 @@ describe('Link', () => {
   it('appearance mostra o link com as classes de Button, sem a cor de link', () => {
     render(<Link href="/ofertas" appearance={{ variant: 'primary' }}>Ver ofertas</Link>);
     const link = screen.getByRole('link', { name: 'Ver ofertas' });
-    expect(link).toHaveClass('bg-action', 'text-action-on', 'min-h-11');
+    expect(link).toHaveClass('bg-action', 'text-action-on', 'inline-flex');
     expect(link).not.toHaveClass('text-link');
   });
 });
