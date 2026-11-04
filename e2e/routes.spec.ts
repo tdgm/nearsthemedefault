@@ -22,7 +22,10 @@ for (const url of urls) {
   });
 }
 
-test('home: 0 violacoes axe', async ({ page }) => {
+test('home: 0 violacoes axe', async ({ page, javaScriptEnabled }) => {
+  // O axe-core e JavaScript injetado na pagina: sem JS ele nao roda (o
+  // projeto `nojs` so valida que o conteudo existe no HTML inicial).
+  test.skip(!javaScriptEnabled, 'axe precisa de JavaScript');
   await page.goto('/');
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag22aa']).analyze();
   expect(results.violations).toEqual([]);

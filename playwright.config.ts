@@ -11,6 +11,10 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: 'on-first-retry',
+    // Local: PW_CHANNEL=chrome usa o Chrome instalado. Necessario em macOS que o
+    // Playwright nao suporta (ex.: macOS 12 nao baixa o Chromium dele). No CI
+    // a variavel nao existe e vale o Chromium do Playwright.
+    channel: process.env.PW_CHANNEL || undefined,
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
