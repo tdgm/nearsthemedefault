@@ -43,7 +43,7 @@ export function createRegistry(
     if (registry.has(id)) add('registrada duas vezes');
     const spec = declared.get(id);
     if (!spec) add('nao existe em sections.registry.yaml');
-    if (typeof mod.Component !== 'function' && typeof mod.Component !== 'object') add('nao exporta o componente');
+    if (typeof mod.Component !== 'function') add('nao exporta o componente');
     if (!mod.schema || typeof mod.schema.safeParse !== 'function') add('nao exporta `schema` (Zod)');
     if (!mod.meta) add('nao exporta `meta`');
     else {

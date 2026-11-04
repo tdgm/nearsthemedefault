@@ -1,7 +1,7 @@
 // Contrato de uma section (CLAUDE.md > Codigo): componente, `schema` (Zod),
 // `meta` (priority, cwv, a11y) e story. Sem os quatro, o registry rejeita.
 import type { Priority } from '@nears/manifests';
-import type { ComponentType } from 'react';
+import type { ReactNode } from 'react';
 import type { z } from 'zod';
 
 export type SectionMeta = {
@@ -14,7 +14,8 @@ export type SectionMeta = {
 export type SectionModule<P = unknown> = {
   /** Id da section em sections.registry.yaml. */
   id: string;
-  Component: ComponentType<P>;
+  /** Function component; pode ser async (Server Component, padrao do projeto). */
+  Component: (props: P) => ReactNode | Promise<ReactNode>;
   schema: z.ZodType<P>;
   meta: SectionMeta;
   /** Caminho (relativo a raiz do repo) do arquivo .stories.tsx desta section. */
@@ -26,7 +27,7 @@ export type SectionModule<P = unknown> = {
  * guarda sections de props diferentes, entao `Component` aceita `never`.
  */
 export type AnySectionModule = Omit<SectionModule, 'Component' | 'schema'> & {
-  Component: ComponentType<never>;
+  Component: (props: never) => unknown;
   schema: z.ZodType;
 };
 
