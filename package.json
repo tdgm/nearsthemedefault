@@ -1,0 +1,68 @@
+{
+  "name": "nearsthemedefault",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Template padrao white-label da plataforma Nears",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "start": "pnpm --filter web start",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test --project=chromium",
+    "test:nojs": "playwright test --project=nojs",
+    "test:a11y": "node scripts/test-a11y.mjs",
+    "lh": "lhci autorun",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "manifests:validate": "node scripts/manifests-validate.mjs",
+    "tokens:contrast": "node scripts/tokens-contrast.mjs",
+    "check-budgets": "node scripts/check-budgets.mjs",
+    "validate": "pnpm lint && pnpm typecheck && pnpm manifests:validate && pnpm tokens:contrast && pnpm test && pnpm build && pnpm check-budgets"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@eslint/js": "^9.39.5",
+    "@lhci/cli": "^0.16.0",
+    "@playwright/test": "^1.64.1",
+    "@storybook/addon-a11y": "8.6.19",
+    "@storybook/addon-essentials": "8.6.19",
+    "@storybook/react": "8.6.19",
+    "@storybook/react-vite": "8.6.19",
+    "@storybook/test": "8.6.19",
+    "@storybook/test-runner": "^0.22",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "@vitest/coverage-v8": "^5.1.0",
+    "axe-playwright": "^2.2.2",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.4.5",
+    "globals": "^17.14.0",
+    "http-server": "^14.1.1",
+    "jsdom": "^28.1.0",
+    "prettier": "^3.9.10",
+    "storybook": "8.6.19",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.72.1",
+    "vite": "^6.4.5",
+    "vitest": "^5.1.0",
+    "yaml": "^2.9.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "basic-ftp": ">=6.2.1"
+    }
+  }
+}

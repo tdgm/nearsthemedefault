@@ -1,0 +1,13 @@
+node_modules
+.next
+storybook-static
+coverage
+playwright-report
+test-results
+.lighthouseci
+pnpm-lock.yaml
+# Manifests e docs seguem a formatacao propria (comentarios YAML alinhados a mao)
+nears
+docs
+packages/tokens/tokens.json
+*.md

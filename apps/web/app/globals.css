@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+/*
+ * Fase 0: nenhuma cor, fonte ou raio de marca aqui. Cores vem do esquema do
+ * navegador (color-scheme) ate a Fase 1 gerar as CSS custom properties a
+ * partir de packages/tokens/tokens.json.
+ */
+:root {
+  color-scheme: light dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

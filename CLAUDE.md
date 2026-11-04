@@ -60,7 +60,7 @@ Orcamentos aplicados no CI. Build falha se estourar. Fonte da verdade:
 
 | Metrica | Limite |
 | --- | --- |
-| JS inicial da rota critica | 120 KB gzip |
+| JS inicial da rota critica | 140 KB gzip (era 120; ver docs/adr/0010) |
 | CSS inicial | 30 KB |
 | HTML | 80 KB |
 | Requisicoes no load inicial | 40 |

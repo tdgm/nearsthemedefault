@@ -5,7 +5,7 @@
 // Lighthouse CI (lighthouserc.json > settings.budgets + scripts/
 // check-third-party-hosts.mjs), que roda depois deste no job `lighthouse`.
 // Ver docs/adr/0005-enforcement-de-budgets.md para o mapa completo.
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 import { join } from 'node:path';
@@ -14,6 +14,7 @@ import YAML from 'yaml';
 const cfg = YAML.parse(await readFile('nears/nears.config.yaml', 'utf8'));
 const routesManifest = YAML.parse(await readFile('nears/routes.manifest.yaml', 'utf8'));
 const B = cfg.budgets;
+const APP_ROOT = 'apps/web';
 const APP_DIR = 'apps/web/app';
 const BUILD_DIR = 'apps/web/.next';
 
@@ -30,16 +31,23 @@ const walk = async (dir) => {
   return out;
 };
 
-if (!existsSync(join(BUILD_DIR, 'app-build-manifest.json'))) {
+// Next 16 + Turbopack nao gera mais app-build-manifest.json. As fontes sao:
+//  - diagnostics/route-bundle-stats.json: chunks de JS do primeiro carregamento
+//    de cada rota (firstLoadChunkPaths, relativos a apps/web);
+//  - app-path-routes-manifest.json: "/[slug]/page" -> "/[slug]", a mesma chave
+//    de appRoute do routes.manifest.yaml. Ver docs/adr/0009-fase-0-fundacao.md.
+const STATS_FILE = join(BUILD_DIR, 'diagnostics/route-bundle-stats.json');
+const PATHS_FILE = join(BUILD_DIR, 'app-path-routes-manifest.json');
+if (!existsSync(STATS_FILE) || !existsSync(PATHS_FILE)) {
   console.error(
-    `\nNao encontrei ${BUILD_DIR}/app-build-manifest.json. Rode "pnpm build" antes de ` +
-      'scripts/check-budgets.mjs (e isso que o job `budgets` do CI faz).\n'
+    `\nNao encontrei ${STATS_FILE} ou ${PATHS_FILE}. Rode "pnpm build" antes deste ` +
+      'script (e o que o job `budgets` do CI faz). Se o build rodou, a versao do Next ' +
+      'mudou o formato dos diagnosticos: ajuste este script, nao o budget.\n'
   );
   process.exit(1);
 }
-const manifest = JSON.parse(
-  await readFile(join(BUILD_DIR, 'app-build-manifest.json'), 'utf8')
-);
+const routeStats = JSON.parse(await readFile(STATS_FILE, 'utf8'));
+const appPathRoutes = JSON.parse(await readFile(PATHS_FILE, 'utf8'));
 
 // --- rotas criticas: lidas de routes.manifest.yaml > appRoute, nunca ------
 // adivinhadas. Varias rotas compartilham o mesmo appRoute (grupo ambiguo de
@@ -87,19 +95,21 @@ for (const [appRoute, ids] of byAppRoute) {
     continue; // fase ainda nao implementou esta rota - nao e regressao
   }
   const key = keyFromAppRoute(appRoute);
-  const files = manifest.pages[key];
-  if (!files) {
+  const routeName = appPathRoutes[key];
+  const entry = routeName && routeStats.find((s) => s.route === routeName);
+  if (!entry) {
     console.error(
       `\nFALHOU   ${ids.join('/')} tem page em ${folder} mas a chave ` +
-        `"${key}" nao existe em app-build-manifest.json. O build e o ` +
+        `"${key}" nao existe nos diagnosticos do build (${PATHS_FILE}). O build e o ` +
         'routes.manifest.yaml divergiram - confira o nome da pasta/arquivo.\n'
     );
     failed = true;
     continue;
   }
-  const js = files.filter((f) => f.endsWith('.js'));
+  // firstLoadChunkPaths vem relativo a apps/web (".next/static/chunks/x.js").
+  const js = entry.firstLoadChunkPaths.filter((f) => f.endsWith('.js'));
   let kb = 0;
-  for (const f of js) kb += await gzipKb(join(BUILD_DIR, f));
+  for (const f of js) kb += await gzipKb(join(APP_ROOT, f));
   kb = Math.round(kb * 10) / 10;
   const over = kb > B.js_initial_kb;
   if (over) failed = true;
@@ -120,9 +130,8 @@ if (notImplemented.length) {
 }
 
 // --- CSS total -------------------------------------------------------------
-const cssFiles = (await walk(join(BUILD_DIR, 'static/css'))).filter((f) =>
-  f.endsWith('.css')
-);
+// Turbopack grava o CSS em static/chunks; o webpack usava static/css.
+const cssFiles = (await walk(join(BUILD_DIR, 'static'))).filter((f) => f.endsWith('.css'));
 let cssKb = 0;
 for (const f of cssFiles) cssKb += await gzipKb(f);
 cssKb = Math.round(cssKb * 10) / 10;
