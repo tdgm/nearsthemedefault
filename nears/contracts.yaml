@@ -1,0 +1,153 @@
+# Contratos de dados, SEO e GEO. Os helpers de JSON-LD sao gerados daqui.
+version: 1.0.0
+
+data:
+  product:
+    required:
+      - id
+      - sku
+      - gtin
+      - name
+      - slug
+      - brand
+      - description
+      - images          # minimo 4, cada uma com url, alt, width, height
+      - breadcrumb
+      - offers
+    offers:
+      required:
+        - price
+        - listPrice
+        - priceCurrency      # BRL
+        - availability       # InStock | OutOfStock | PreOrder
+        - itemCondition      # NewCondition
+        - priceValidUntil
+        - seller
+        - installments       # { count, value, interestFree }
+    requiredForGeo:
+      - aggregateRating          # { ratingValue, reviewCount }
+      - shippingDetails          # { deliveryTime, shippingRate, destination }
+      - hasMerchantReturnPolicy  # { returnDays, returnMethod, returnFees }
+      - color
+      - material
+      - size
+      - sizeGuideUrl
+      - audience
+      - pattern
+    variants:
+      isVariantOf: { groupId: string, name: string }
+      hasVariant: "array<{ sku, size, color, availability, price }>"
+    onMissingGeoField: warn-build    # vira fail-build ao fim da Fase 7
+
+  collection:
+    required: [id, name, slug, breadcrumb, productCount]
+    requiredForGeo: [intro, faq, relatedLinks]
+
+  organization:
+    required: [name, legalName, url, logo, address, sameAs]
+    optional: [foundingDate, taxId, contactPoint]
+
+seo:
+  global:
+    canonical: self-referencing
+    titleTemplate: "{page} | {brand}"
+    descriptionMaxChars: 158
+    openGraph:
+      required: [og:title, og:description, og:url, og:type, og:image]
+      imageSize: "1200x630"
+    twitter: { card: summary_large_image }
+    robotsDefault: "index,follow,max-image-preview:large"
+    headings: { h1PerPage: 1, skipLevels: forbidden }
+    altText:
+      strategy: rule-based
+      pattern: "{productType} {color} {audience} {brand}"
+    noJsRender: required
+
+  byTemplate:
+    home:
+      h1: descriptive
+      schema: [WebSite, SearchAction, Organization]
+    collection:
+      h1: collectionName
+      schema: [BreadcrumbList, ItemList, CollectionPage, FAQPage]
+    longtail:
+      h1: keyword
+      schema: [BreadcrumbList, ItemList, CollectionPage, FAQPage]
+      requires: [uniqueIntro, faq]
+    pdp:
+      h1: productName
+      schema: [BreadcrumbList, Product, Offer, AggregateRating]
+    landing:
+      h1: campaignTitle
+      schema: [BreadcrumbList]
+    page:
+      h1: pageTitle
+      schema: [WebPage, FAQPage]
+    sitemap:
+      h1: "Mapa do site"
+      schema: [WebPage]
+    search:
+      robots: "noindex,nofollow"
+      schema: []
+    notfound:
+      robots: "noindex,nofollow"
+      schema: []
+
+geo:
+  requiredEverywhere:
+    answerFirstParagraph: true
+    headingsAsQuestions: true
+    selfContainedChunks: true
+    noContentBehindInteraction: true
+    tablesAsHtml: true
+    factualWithNumbersAndDates: true
+  entity:
+    organization: [name, foundingDate, address, sameAs, logo]
+    napConsistency: enforced
+  coverage:
+    faqOnCollections: 0.8      # minimo 80% das collections
+    faqOnPdp: 1.0
+    productSchemaCompleteness: 1.0
+  files:
+    robotsTxt: generated
+    llmsTxt: generated
+  agents:
+    # Decisao de negocio, nao tecnica. Definir antes do go-live.
+    GPTBot: decide
+    OAI-SearchBot: allow
+    PerplexityBot: decide
+    ClaudeBot: decide
+    Google-Extended: decide
+    CCBot: decide
+  attribution:
+    trackAiReferrals: true
+    referrerPatterns:
+      - "chat.openai.com"
+      - "chatgpt.com"
+      - "perplexity.ai"
+      - "claude.ai"
+      - "gemini.google.com"
+      - "copilot.microsoft.com"
+
+gates:
+  performance:
+    lighthouseMobile: { performance: 0.90, accessibility: 0.95, seo: 1.0 }
+    cruxP75: { lcp: 2000, inp: 200, cls: 0.05 }
+    budgets: enforced-in-ci
+  accessibility:
+    wcag: "2.2-AA"
+    keyboardPath: complete
+    axeViolations: 0
+  seo:
+    richResultsErrors: 0
+    templatesChecked: [product, breadcrumb, itemlist, faq]
+    noJsIndexableContent: required
+    orphanPages: 0
+  geo:
+    faqCoverage: 0.8
+    productSchemaCompleteness: 1.0
+    llmsTxt: present
+  governance:
+    everySectionDeclares: [priority, cwv, a11y]
+    noHardcodedBrandValues: true
+    storybookCoverage: 1.0
