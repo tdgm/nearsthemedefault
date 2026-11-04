@@ -1,6 +1,3 @@
-linha1
-linha2
-  indentado
 # CLAUDE.md - nearsthemedefault
 
 ## O que e este projeto
