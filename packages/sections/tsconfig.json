@@ -6,7 +6,7 @@
   ],
   "compilerOptions": {
     "types": [
-      "@testing-library/jest-dom/vitest"
+      "node", "@testing-library/jest-dom/vitest"
     ]
   }
 }
