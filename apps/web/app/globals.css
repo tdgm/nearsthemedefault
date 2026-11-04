@@ -5,6 +5,8 @@
    ("no valid target file") com exports de CSS, embora o build funcione (docs/adr/0011). */
 @import '../../../packages/tokens/dist/tokens.css';
 @import '../../../packages/tokens/dist/theme.css';
+/* Tailwind so gera classes que encontra: inclui os componentes do design system. */
+@source '../../../packages/ui/src';
 
 /* Nenhuma cor, fonte ou raio de marca escrito aqui: tudo vem de token. */
 @layer base {

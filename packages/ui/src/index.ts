@@ -1,2 +1,9 @@
-// Design system (atomos e moleculas). Os componentes reais entram na Fase 3.
-export { FoundationsNote } from './foundations-note';
+// Design system (atomos e moleculas). Componentes de servidor por padrao;
+// os que precisam de estado/efeito declaram "use client" com justificativa.
+export { cn } from './cn';
+export * from './format';
+export { Button, buttonClasses, type ButtonProps, type ButtonSize, type ButtonVariant } from './button/button';
+export { IconButton, type IconButtonProps } from './icon-button/icon-button';
+export { Link, type LinkProps } from './link/link';
+export { Badge, type BadgeProps, type BadgeTone } from './badge/badge';
+export { Skeleton, type SkeletonProps } from './skeleton/skeleton';

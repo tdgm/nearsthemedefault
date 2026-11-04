@@ -1,0 +1,42 @@
+/* Folha de estilo do design system: usada pelo Storybook e importada pelo app.
+   Tokens da marca vem de packages/tokens/dist (gerados por `pnpm tokens:build`).
+   Nenhuma cor, fonte ou raio de marca escrito aqui. */
+@import 'tailwindcss';
+@import '../../tokens/dist/tokens.css';
+@import '../../tokens/dist/theme.css';
+
+/* Tailwind so gera as classes que encontra: este pacote inteiro. */
+@source '.';
+
+@layer base {
+  html {
+    background-color: var(--nears-color-surface);
+    color: var(--nears-color-on-surface);
+    font-family: var(--nears-font-brand);
+    font-size: var(--nears-text-md);
+    line-height: var(--nears-leading-normal);
+  }
+
+  *,
+  ::before,
+  ::after {
+    border-color: var(--nears-color-border-control);
+  }
+
+  /* Foco visivel sempre (WCAG 2.2 AA, CLAUDE.md > Acessibilidade). */
+  :focus-visible {
+    outline: 2px solid var(--nears-color-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

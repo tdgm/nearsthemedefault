@@ -51,7 +51,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   // Pacotes do monorepo publicados como TypeScript (sem etapa de build propria).
-  transpilePackages: ['@nears/manifests'],
+  transpilePackages: ['@nears/manifests', '@nears/ui'],
   cacheComponents: cfg.rendering.cacheComponents,
   partialPrefetching: cfg.rendering.partialPrefetching,
   async headers() {
