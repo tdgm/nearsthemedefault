@@ -19,7 +19,7 @@ const setup = () =>
     <>
       <OverlayTrigger targetId="menu">Abrir menu</OverlayTrigger>
       <Overlay id="menu" title="Menu">
-        <a href="/feminino">Feminino</a>
+        <a href="#feminino">Feminino</a>
       </Overlay>
     </>,
   );
@@ -28,7 +28,7 @@ describe('Overlay', () => {
   it('o conteudo ja esta no HTML com o dialogo fechado (indexavel)', () => {
     const { container } = setup();
     expect(container.querySelector('dialog')).not.toHaveAttribute('open');
-    expect(container.querySelector('a[href="/feminino"]')).toBeInTheDocument();
+    expect(container.querySelector('a[href="#feminino"]')).toBeInTheDocument();
   });
 
   it('tem nome acessivel pelo titulo e botao Fechar de 44px dentro de form method=dialog', () => {
