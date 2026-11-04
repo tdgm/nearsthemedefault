@@ -1,0 +1,165 @@
+# Mapa de URLs. O roteador do app e gerado a partir deste arquivo.
+version: 1.0.0
+
+defaults:
+  render: isr
+  revalidate: 300
+  indexable: true
+  headerVariant: full
+
+routes:
+  - id: home
+    pattern: "/"
+    template: home
+    render: ssg
+    priority: 1.0
+
+  - id: department
+    pattern: "/{department}"
+    template: collection
+    source: cms
+    priority: 0.9
+    params:
+      department:
+        type: enum
+        from: navigation.departments
+
+  - id: department-category
+    pattern: "/{department}/{category}"
+    template: collection
+    source: cms
+    priority: 0.8
+
+  - id: department-category-sub
+    pattern: "/{department}/{category}/{subcategory}"
+    template: collection
+    source: cms
+    priority: 0.7
+
+  - id: category-flat
+    pattern: "/{productType}"
+    template: collection
+    source: catalog
+    priority: 0.7
+    note: >
+      Eixo plano por tipo de peca, paralelo ao eixo de departamento.
+      Indexavel apenas neste nivel.
+
+  - id: category-flat-fit
+    pattern: "/{productType}/{fit}"
+    template: collection
+    source: catalog
+    indexable: false
+    canonicalTo: department-category
+    note: >
+      Nivel 2 do eixo plano duplica o eixo de departamento.
+      Rastreavel mas nao indexavel.
+
+  - id: longtail
+    pattern: "/b/{keyword}"
+    template: collection
+    source: query-preset
+    priority: 0.6
+    scale: high
+    requires:
+      - uniqueH1
+      - uniqueIntro
+      - faq
+      - relatedLinks
+    note: >
+      Landings de cauda longa com filtros pre-aplicados.
+      Sem conteudo unico a pagina nao e publicada.
+
+  - id: campaign
+    pattern: "/{campaign}"
+    template: landing
+    priority: 0.5
+    indexable: conditional
+    schedule:
+      startField: startsAt
+      endField: endsAt
+      onExpire: redirect
+
+  - id: campaign-segment
+    pattern: "/{campaign}/{segment}"
+    template: landing
+    indexable: conditional
+
+  - id: pdp
+    pattern: "/{productSlug}/p"
+    template: pdp
+    priority: 0.8
+    headerVariant: minimal
+
+  - id: search
+    pattern: "/s"
+    template: search
+    render: csr
+    indexable: false
+    robots: "noindex,nofollow"
+
+  - id: institutional
+    pattern: "/{pageSlug}"
+    template: page
+    render: ssg
+    priority: 0.4
+
+  - id: sitemap-html
+    pattern: "/mapa-do-site"
+    template: sitemap
+    render: ssg
+    required: true
+    priority: 0.5
+    note: "Hub de linkagem interna. Obrigatorio no template padrao."
+
+  - id: not-found
+    pattern: "/404"
+    template: notfound
+    indexable: false
+    robots: "noindex,nofollow"
+
+canonical:
+  strategy: self-referencing
+  rules:
+    - when: "route.id == 'category-flat-fit'"
+      canonicalTo: department-category
+      reason: "Eixo de departamento e o canonico para nivel 2+"
+    - when: "query has utm_* or gclid or fbclid"
+      stripParams: true
+    - when: "route.template == 'collection' and facets.length > 1"
+      robots: "noindex,follow"
+
+facets:
+  indexable: [category, size, color]
+  indexableAlone: true          # so indexa quando aplicada isoladamente
+  neverIndexable: [price, sort, page_size, seller]
+  pagination:
+    strategy: indexable-urls
+    param: page
+    firstPageCanonical: self
+
+excluded:
+  disallow:
+    - "/account*"
+    - "/carrinho*"
+    - "/checkout*"
+    - "/login*"
+    - "/s*"
+    - "/quick-view/*"
+    - "/preview/*"
+    - "/api/*"
+
+forbiddenInProduction:
+  - "/design-system*"
+  - "/test*"
+  - "/teste*"
+  - "/qa*"
+  note: >
+    O build de producao falha se alguma destas rotas resolver.
+    Ambiente interno nunca vive na raiz do dominio publico.
+
+sitemapXml:
+  enabled: true
+  segmented: true
+  maxUrlsPerFile: 1000
+  segments: [product, category, longtail, campaign, page, brand]
