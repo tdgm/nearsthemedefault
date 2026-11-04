@@ -1,0 +1,33 @@
+/* CSS do Storybook para packages/ui. apps/web nao importa este arquivo - tem
+   o seu proprio apps/web/app/globals.css com o mesmo padrao de imports
+   (docs/adr/0011: caminho relativo porque o resolvedor de pacotes do
+   Tailwind falha com exports de CSS em alguns bundlers). */
+@import 'tailwindcss';
+@import '../../tokens/dist/tokens.css';
+@import '../../tokens/dist/theme.css';
+
+@layer base {
+  html {
+    background-color: var(--nears-color-surface);
+    color: var(--nears-color-on-surface);
+    font-family: var(--nears-font-brand);
+    font-size: var(--nears-text-md);
+    line-height: var(--nears-leading-normal);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--nears-color-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

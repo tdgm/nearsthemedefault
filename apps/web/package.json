@@ -12,6 +12,7 @@
   "dependencies": {
     "@nears/manifests": "workspace:*",
     "@nears/tokens": "workspace:*",
+    "@nears/ui": "workspace:*",
     "next": "16.4.5",
     "react": "19.3.1",
     "react-dom": "19.3.1",
