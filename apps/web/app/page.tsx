@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { exampleHref, phases, statusLabel } from '../lib/evolution';
+import { exampleHref, phases, stateLinks, statusLabel } from '../lib/evolution';
 import { loadRoutes } from '../lib/manifest';
 
 export default function HomePage() {
@@ -25,6 +25,22 @@ export default function HomePage() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section aria-labelledby="estados" className="mt-8">
+        <h2 id="estados" className="mb-2 text-xl font-semibold">
+          Estados de tela
+        </h2>
+        <ul className="list-disc pl-6">
+          {stateLinks.map((s) => (
+            <li key={s.href}>
+              <Link href={s.href} className="underline">
+                {s.label}
+              </Link>{' '}
+              (<code>{s.href}</code>)
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section aria-labelledby="rotas" className="mt-8">

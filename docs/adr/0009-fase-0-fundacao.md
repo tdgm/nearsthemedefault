@@ -81,3 +81,21 @@ Verificado e passando:
    de 120 KB, sem nenhum componente de loja ainda. Nao e regressao de codigo
    nosso. Decisao pendente do mantenedor: subir o limite (exige ADR),
    reduzir o custo-base do framework ou reavaliar a medicao.
+
+## Revisao de rotas e busca (/s)
+
+- `/s` agora e a rota de busca real: formulario GET nativo (`role="search"`,
+  campo rotulado, funciona sem JS), estado **vazio** (sem `q` ou so espacos) e
+  estado **sem resultados** (com `q`). Termo aparado, limitado a 100 caracteres e
+  renderizado como texto. `noindex,nofollow` explicito na pagina. Microcopy vem
+  de `vocabulary.search*` em `nears.config.yaml` (helper `vocab()`).
+- `searchParams` fica dentro de `<Suspense>` (exigencia do `cacheComponents`):
+  o shell (H1 + formulario vazio) sai no HTML estatico.
+- Home de evolucao ganhou "Estados de tela" (busca vazia, sem resultados, 404);
+  o exemplo de `not-found` passou a `/a/b/c/d/e`, que de fato retorna 404.
+- **Achado para a Fase 6 (gate):** slugs desconhecidos/reservados
+  (`/qualquer-coisa`, `/404`, `/s/x` etc.) ainda caem no `[slug]` placeholder e
+  respondem 200. Retornar 404 real depende da resolucao por slug-index (ADR 0003).
+  Barras finais redirecionam com 308 (comportamento padrao do Next).
+- Verificado no Mac: 19 testes unitarios, typecheck, lint, manifests e 19 E2E
+  (chromium) verdes, incluindo axe em `/`, `/s`, `/s?q=` e 404.

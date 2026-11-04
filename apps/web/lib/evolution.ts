@@ -36,4 +36,14 @@ export const exampleHref: Record<string, string> = {
   search: '/s',
   institutional: '/pagina-exemplo',
   'sitemap-html': '/mapa-do-site',
+  // /404 literal cairia no [slug] (200); este caminho nao casa com nenhuma
+  // rota e mostra o app/not-found.tsx com status 404 de verdade.
+  'not-found': '/a/b/c/d/e',
 };
+
+/** Estados de tela que nao sao rotas proprias (links de conferencia). */
+export const stateLinks: { label: string; href: string }[] = [
+  { label: 'Busca vazia (sem termo)', href: '/s' },
+  { label: 'Busca sem resultados', href: '/s?q=camiseta' },
+  { label: 'Página não encontrada (404)', href: '/a/b/c/d/e' },
+];
