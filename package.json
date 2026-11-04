@@ -30,7 +30,8 @@
     "tokens:build": "pnpm --filter @nears/tokens build",
     "tokens:check": "pnpm --filter @nears/tokens check",
     "check-budgets": "node scripts/check-budgets.mjs",
-    "validate": "pnpm lint && pnpm typecheck && pnpm manifests:validate && pnpm manifests:check && pnpm tokens:check && pnpm tokens:contrast && pnpm test && pnpm build && pnpm check-budgets"
+    "check-ui-bundle": "node scripts/check-ui-bundle.mjs",
+    "validate": "pnpm lint && pnpm typecheck && pnpm manifests:validate && pnpm manifests:check && pnpm tokens:check && pnpm tokens:contrast && pnpm test && pnpm build && pnpm check-budgets && pnpm check-ui-bundle"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

@@ -70,6 +70,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - run: node scripts/check-budgets.mjs
+      - run: node scripts/check-ui-bundle.mjs   # @nears/ui <= 25 KB gzip (Fase 3)
 
   lighthouse:
     name: Core Web Vitals
