@@ -1,0 +1,392 @@
+# Catalogo de blocos. O build falha se uma section nao declarar
+# priority, cwv e a11y. Props sao validadas por Zod gerado deste arquivo.
+version: 1.0.0
+
+priorityLevels:
+  critical: "no HTML inicial, sem lazy"
+  high: "no HTML inicial, hidratacao diferida"
+  lazy: "fora da dobra, content-visibility auto"
+  on-interaction: "JS so entra ao interagir"
+  idle: "requestIdleCallback"
+
+globals:
+  - id: promo-bar
+    slot: above-header
+    priority: critical
+    props:
+      message: { type: string, required: true }
+      href: { type: url }
+      countdown: { type: object, props: { endsAt: datetime } }
+      dismissible: { type: boolean, default: true }
+      rulesHref: { type: url }
+    cwv: { reservedHeight: 48, cls: 0, ssrTime: true }
+    a11y: { role: region, labelRequired: true, dismissKeyboard: true }
+
+  - id: header
+    slot: header
+    priority: critical
+    variants: [full, minimal, none]
+    variantRules:
+      - { pattern: "*/p", variant: minimal }
+    props:
+      logo: { type: image, required: true }
+      nav: { type: ref, to: navigation }
+      search: { type: boolean, default: true }
+      account: { type: boolean, default: true }
+      wishlist: { type: boolean, default: true }
+      cart: { type: boolean, default: true }
+    cwv: { reservedHeight: 56, sticky: true }
+    a11y: { landmark: banner, skipLink: required }
+
+  - id: nav-drawer
+    slot: overlay
+    priority: on-interaction
+    props:
+      departments:
+        type: array
+        of:
+          label: string
+          href: url
+          groups: array
+          highlight: { type: object }
+          promo: { type: object }
+    cwv: { linksInInitialHtml: true, jsOnInteraction: true }
+    a11y:
+      focusTrap: true
+      escClose: true
+      ariaExpanded: true
+      landmark: navigation
+
+  - id: minicart
+    slot: overlay
+    priority: on-interaction
+    props: { items: array }
+    cwv: { noBlockingFetchOnLoad: true }
+    a11y: { focusTrap: true, escClose: true, liveRegion: true }
+
+  - id: footer
+    slot: footer
+    priority: lazy
+    props:
+      service: array
+      newsletter: { type: object, props: { segments: array } }
+      columns: array
+      apps: array
+      social: array
+      seals: array
+      legal: object
+    cwv: { contentVisibility: auto, containIntrinsicSize: "0 640px" }
+    a11y: { landmark: contentinfo, collapsibleAria: true }
+
+  - id: customer-service
+    slot: floating
+    priority: idle
+    props: { channels: array }
+    cwv: { reservedHeight: 0, noLayoutShift: true }
+    a11y: { minTouchTarget: 44 }
+
+sections:
+  - id: hero
+    priority: critical
+    props:
+      slides:
+        type: array
+        min: 1
+        of:
+          imageDesktop: image
+          imageMobile: image
+          alt: { type: string, required: true }
+          href: url
+          headline: string
+          cta: string
+      autoplay: { type: boolean, default: false }
+    cwv:
+      lcpCandidate: true
+      firstSlide: { loading: eager, fetchpriority: high }
+      media: picture
+      formats: [avif, webp]
+      aspectRatio: required
+    a11y: { carousel: tablist, pauseControl: required, keyboardNav: true }
+
+  - id: benefit-bar
+    priority: high
+    props:
+      items: { type: array, of: { icon: string, label: string, href: url } }
+    cwv: { reservedHeight: 44 }
+    a11y: { role: list }
+
+  - id: section-title
+    priority: inherit
+    props:
+      text: { type: string, required: true }
+      level: { type: enum, values: [h2, h3], default: h2 }
+      href: url
+    cwv: { noLayoutShift: true }
+    a11y: { headingOrder: enforced }
+
+  - id: banner-grid
+    priority: lazy
+    props:
+      columns: { type: enum, values: ["2", "3", "4"], default: "3" }
+      banners: { type: array }
+    cwv: { media: picture, loading: lazy, aspectRatio: required }
+    a11y: { role: list, altRequired: true }
+
+  - id: category-hub
+    priority: lazy
+    props:
+      items: { type: number, default: 6 }
+      item: { image: image, label: string, fromPrice: money, href: url }
+    cwv: { aspectRatio: required, scrollSnap: native }
+    a11y: { role: list, keyboardScroll: true }
+    seo: { renderAs: ul, linksInHtml: true }
+
+  - id: showcase
+    priority: lazy
+    variants: [static, tabs, personalized, wishlist, recommended]
+    props:
+      title: string
+      source: { type: enum, values: [collection, query, recommender] }
+      limit: { type: number, min: 4, max: 12, default: 8 }
+      tabs: array
+    cwv: { ssrFirstTab: true, scrollSnap: native }
+    a11y: { tabs: tablist, keyboardNav: true }
+    seo: { schema: ItemList }
+
+  - id: event-banner
+    priority: lazy
+    props: { imageDesktop: image, imageMobile: image, alt: string, href: url }
+    cwv: { media: picture, aspectRatio: required }
+    a11y: { altRequired: true }
+
+  - id: banner-full
+    priority: lazy
+    props:
+      image: image
+      alt: string
+      headline: string
+      body: string
+      cta: string
+    cwv: { media: picture, aspectRatio: required }
+    a11y: { contrastOverImage: verified }
+
+  - id: quick-filter
+    priority: high
+    props:
+      chips: { type: array, of: { label: string, facet: string, value: string } }
+    cwv: { reservedHeight: 48, scrollSnap: native }
+    a11y: { role: list, minTouchTarget: 44 }
+    seo: { linksInHtml: true, relNofollowWhenMultiFacet: true }
+
+  - id: product-grid
+    priority: critical
+    props:
+      columns: { xs: 2, md: 3, lg: 4 }
+      pageSize: { type: number, default: 24 }
+      sort:
+        type: array
+        default: [relevance, price_asc, price_desc, newest, discount]
+      facets:
+        type: array
+        default: [category, size, color, price, age, fit]
+    cwv:
+      ssr: true
+      skeleton: true
+      imageSizes: required
+      noLayoutShift: true
+      containIntrinsicSize: required
+    a11y:
+      role: list
+      resultsLiveRegion: true
+      filtersInDrawer: focusTrap
+    seo:
+      schema: ItemList
+      pagination: { urls: indexable, rel: [prev, next] }
+
+  - id: product-card
+    priority: inherit
+    props:
+      image: { type: image, required: true }
+      hoverImage: image
+      name: { type: string, required: true }
+      price: { type: money, required: true }
+      listPrice: money
+      installments: object
+      badges: array
+      colorSwatches: array
+      quickAdd: { type: boolean, default: false }
+      wishlist: { type: boolean, default: true }
+    cwv:
+      aspectRatio: "3/4"
+      intrinsicSize: required
+      lazy: belowFold
+      sizes: "{media.sizes.productCard}"
+    a11y:
+      wholeCardLink: false      # acoes sao controles separados
+      actionsSeparate: true
+      minTouchTarget: 44
+      altFromProductName: true
+
+  - id: breadcrumb
+    priority: critical
+    props: { items: array }
+    cwv: { reservedHeight: 32 }
+    a11y: { landmark: navigation, label: "Voce esta em" }
+    seo: { schema: BreadcrumbList }
+
+  - id: text-seo
+    priority: lazy
+    props:
+      title: string
+      richText: { type: richtext, required: true }
+      collapsible: { type: boolean, default: true }
+      collapsedHeight: { type: number, default: 160 }
+    cwv: { contentVisibility: auto, containIntrinsicSize: "0 320px" }
+    a11y: { expandButton: ariaExpanded, contentAlwaysInDom: true }
+    geo: { chunkable: true, answerFirst: true, headingAsQuestion: preferred }
+
+  - id: faq
+    priority: lazy
+    props:
+      items:
+        type: array
+        min: 3
+        of: { question: string, answer: richtext }
+    cwv: { contentVisibility: auto }
+    a11y: { accordion: true, keyboardNav: true, contentInDom: true }
+    seo: { schema: FAQPage }
+    geo: { required: true }
+
+  - id: related-links
+    priority: lazy
+    props:
+      title: string
+      links: { type: array, of: { label: string, href: url } }
+    cwv: { contentVisibility: auto }
+    a11y: { role: list }
+    seo: { internalLinking: true, descriptiveAnchors: enforced }
+
+pdpSections:
+  - id: pdp-gallery
+    priority: critical
+    props:
+      images: array
+      zoom: { type: boolean, default: true }
+      video: url
+      thumbs: { type: enum, values: [vertical, dots] }
+    cwv:
+      lcpCandidate: true
+      firstImage: { fetchpriority: high }
+      aspectRatio: "3/4"
+    a11y: { keyboardNav: true, zoomEscClose: true }
+
+  - id: pdp-buybox
+    priority: critical
+    props:
+      name: string
+      rating: object
+      price: money
+      installments: object
+      colorSelector: array
+      sizeSelector: array
+      sizeGuideHref: url
+      cta: string
+      stickyMobile: { type: boolean, default: true }
+    cwv: { noLayoutShift: true, stickyReservedHeight: 72 }
+    a11y:
+      sizeSelector: radiogroup
+      colorSelector: radiogroup
+      liveRegion: addToCart
+      minTouchTarget: 44
+
+  - id: pdp-shipping
+    priority: high
+    props: { zipInput: true, helpHref: url }
+    cwv: { reservedHeight: 96 }
+    a11y: { inputLabel: required, errorAssociation: ariaDescribedby }
+
+  - id: pdp-details
+    priority: lazy
+    props:
+      composition: string
+      care: richtext
+      description: richtext
+      measurements: table
+    cwv: { contentVisibility: auto }
+    a11y: { accordion: true, tableHeaders: scope }
+    geo: { renderAsTable: true, neverAsImage: true }
+
+  - id: pdp-reviews
+    priority: lazy
+    props:
+      provider: string
+      aggregate: { rating: number, count: number }
+      items: array
+    cwv: { ssrAggregate: true }
+    a11y: { ratingTextAlternative: required }
+    seo: { schema: [AggregateRating, Review] }
+
+  - id: pdp-buy-look
+    priority: lazy
+    props: { products: array }
+    cwv: { scrollSnap: native }
+    a11y: { role: list }
+    seo: { schema: ItemList }
+
+  - id: pdp-related
+    priority: lazy
+    props: { products: array }
+    cwv: { scrollSnap: native }
+    a11y: { role: list }
+    seo: { schema: ItemList }
+
+templates:
+  home:
+    sections:
+      - hero
+      - benefit-bar
+      - repeat:
+          over: departments
+          blocks: [section-title, banner-grid, category-hub]
+      - event-banner
+      - hero
+      - showcase:tabs
+      - showcase:wishlist
+      - event-banner
+      - section-title
+      - banner-grid
+      - banner-full
+      - text-seo
+      - faq
+      - related-links
+
+  collection:
+    sections: [breadcrumb, section-title, event-banner, quick-filter,
+               product-grid, text-seo, faq, related-links]
+
+  pdp:
+    sections: [breadcrumb, pdp-gallery, pdp-buybox, pdp-shipping, pdp-details,
+               pdp-reviews, pdp-buy-look, pdp-related, faq]
+
+  landing:
+    sections: [hero, banner-grid, showcase, banner-full, text-seo, related-links]
+
+  page:
+    sections: [event-banner, banner-full, text-seo, related-links]
+
+  search:
+    sections: [breadcrumb, section-title, product-grid]
+
+  sitemap:
+    sections:
+      - section-title
+      - repeat: { over: departments, blocks: [related-links] }
+
+  notfound:
+    sections: [section-title, showcase:recommended]
+
+validation:
+  everySectionMustDeclare: [priority, cwv, a11y]
+  onMissing: fail-build
+  maxSectionsPerPage: 24
+  maxCriticalSections: 4
