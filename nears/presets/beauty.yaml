@@ -1,0 +1,15 @@
+# Preset: beleza e cosmeticos.
+preset: beauty
+description: Beleza e cosméticos, com tom e volume como eixos.
+catalog:
+  vertical: beauty
+  productMedia: { aspect: product }
+  variantAxes:
+    - { id: shade, label: Tom, display: swatch, schemaOrg: color }
+    - { id: volume, label: Volume, display: option }
+  facets:
+    available: [category, brand, price, skinType]
+    indexable: [category, brand]
+  geoAttributes: [brand, size]
+  guide: { enabled: true, label: Modo de uso }
+vocabulary: { cart: Sacola, bundle: Monte seu kit }

@@ -1,56 +1,61 @@
-// Valida os 4 YAML de /nears. Fase 0: parse + invariantes cruzados que ja
-// estao documentados (docs/adr/0003). Os schemas Zod completos e a geracao de
-// tipos sao a Fase 2 (docs/ROADMAP.md); este script e substituido por eles.
-import { readFile } from 'node:fs/promises';
-import YAML from 'yaml';
+// Valida os 4 YAML de /nears com os schemas Zod de @nears/manifests e confere
+// as referencias entre eles (from:/enabledBy:, templates, rotas, facetas).
+// Roda o nicho configurado (`generic`) e TODOS os presets de nears/presets, e
+// gera os tipos de cada um em memoria (gate da Fase 2, docs/ROADMAP.md).
+// TypeScript roda direto no Node (type stripping, Node >= 22.18).
+import { resolve } from 'node:path';
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { formatIssue, generateTypes } from '../packages/manifests/src/index.ts';
+import { ManifestError } from '../packages/manifests/src/manifests.ts';
+import { listPresets, loadManifests } from '../packages/manifests/src/node.ts';
+import { RegistryError, createRegistry, pendingSections, sectionModules } from '../packages/sections/src/index.ts';
 
-const FILES = [
-  'nears/nears.config.yaml',
-  'nears/routes.manifest.yaml',
-  'nears/sections.registry.yaml',
-  'nears/contracts.yaml',
-];
+const root = resolve(fileURLToPath(import.meta.url), '../..');
+const nearsDir = resolve(root, 'nears');
+const tokensFile = resolve(root, 'packages/tokens/tokens.json');
 
-const errors = [];
-const docs = {};
+const targets = [{ label: 'generic (nears.config.yaml)', preset: undefined }, ...listPresets(nearsDir).map((p) => ({ label: `preset ${p}`, preset: p }))];
 
-for (const f of FILES) {
+let failed = false;
+let generic;
+for (const t of targets) {
   try {
-    docs[f] = YAML.parse(await readFile(f, 'utf8'));
-    if (docs[f] === null || typeof docs[f] !== 'object') errors.push(`${f}: documento vazio ou nao e um objeto`);
-    else console.log(`ok      ${f}`);
+    const m = loadManifests({ nearsDir, tokensFile, preset: t.preset });
+    if (!t.preset) generic = m;
+    const types = generateTypes(m);
+    if (!types.includes('export type VariantAxisId')) throw new Error('geracao de tipos incompleta');
+    const sections = m.sections.sections.length + m.sections.pdpSections.length;
+    console.log(
+      `ok      ${t.label.padEnd(30)} ${m.config.catalog.variantAxes.length} eixos, ${m.config.catalog.facets.available.length} facetas, ${sections} sections, ${m.routes.routes.length} rotas`,
+    );
   } catch (e) {
-    errors.push(`${f}: YAML invalido - ${e.message}`);
+    failed = true;
+    console.error(`FALHOU  ${t.label}`);
+    if (e instanceof ManifestError) console.error(e.issues.map(formatIssue).join('\n'));
+    else console.error(`  - ${e instanceof Error ? e.message : String(e)}`);
   }
 }
 
-const routes = docs['nears/routes.manifest.yaml'];
-if (routes) {
-  const reserved = new Set(routes.resolution?.reserved?.firstSegment ?? []);
-  const segments = [
-    ...(routes.excluded?.disallowSegments ?? []),
-    ...(routes.forbiddenInProduction?.segments ?? []),
-  ];
-  for (const seg of segments) {
-    if (!reserved.has(seg)) {
-      errors.push(
-        `routes.manifest.yaml: segmento "${seg}" (excluded/forbiddenInProduction) precisa estar em resolution.reserved.firstSegment`,
-      );
-    }
+// Registry: toda section implementada precisa de componente, schema, meta
+// (priority, cwv, a11y) e story, e bater com o manifest. Falha o build.
+if (generic) {
+  try {
+    const registry = createRegistry(generic, sectionModules, (p) => existsSync(resolve(root, p)));
+    const pending = pendingSections(generic, registry);
+    console.log(
+      `ok      registry de sections            ${registry.size} implementadas, ${pending.length} pendentes (Fases 4 e 5)`,
+    );
+  } catch (e) {
+    failed = true;
+    console.error('FALHOU  registry de sections');
+    if (e instanceof RegistryError) console.error(e.issues.map((i) => `  - ${i.section}: ${i.message}`).join('\n'));
+    else console.error(`  - ${e instanceof Error ? e.message : String(e)}`);
   }
-  for (const seg of routes.excluded?.disallowSegments ?? []) {
-    if (String(seg).includes('*')) errors.push(`routes.manifest.yaml: disallowSegments nao aceita "*" (${seg})`);
-  }
-  for (const p of routes.excluded?.disallowPrefixes ?? []) {
-    if (!String(p).endsWith('/')) errors.push(`routes.manifest.yaml: disallowPrefixes deve terminar em "/" (${p})`);
-  }
-  const ids = (routes.routes ?? []).map((r) => r.id);
-  const dup = ids.filter((id, i) => ids.indexOf(id) !== i);
-  if (dup.length) errors.push(`routes.manifest.yaml: ids de rota duplicados: ${[...new Set(dup)].join(', ')}`);
 }
 
-if (errors.length) {
-  console.error('\nFALHOU\n' + errors.map((e) => `  - ${e}`).join('\n') + '\n');
+if (failed) {
+  console.error('\nManifests invalidos.\n');
   process.exit(1);
 }
-console.log('\nManifests validos (parse + invariantes). Schemas Zod completos: Fase 2.\n');
+console.log(`\nManifests validos (schemas Zod + referencias) em ${targets.length} configuracoes de nicho.\n`);

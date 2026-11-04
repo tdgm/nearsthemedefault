@@ -1,0 +1,15 @@
+# Preset: mercado e alimentos.
+preset: grocery
+description: Mercado e alimentos, com peso como eixo e tabela nutricional como guia.
+catalog:
+  vertical: grocery
+  productMedia: { aspect: product }
+  variantAxes:
+    - { id: weight, label: Peso, display: option, schemaOrg: weight }
+  facets:
+    available: [category, brand, price, dietary]
+    indexable: [category, brand]
+  geoAttributes: [brand, weight]
+  guide: { enabled: true, label: Tabela nutricional }
+  flatAxis: { enabled: false }
+vocabulary: { cart: Cesta, bundle: Leve também }

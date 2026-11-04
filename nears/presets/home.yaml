@@ -1,0 +1,15 @@
+# Preset: casa e decoracao.
+preset: home
+description: Casa e decoração, com cor e dimensões como eixos.
+catalog:
+  vertical: home
+  productMedia: { aspect: landscape }
+  variantAxes:
+    - { id: color, label: Cor, display: swatch, schemaOrg: color }
+    - { id: dimensions, label: Tamanho, display: option }
+  facets:
+    available: [category, color, material, price]
+    indexable: [category, material]
+  geoAttributes: [color, material, width, height, depth]
+  guide: { enabled: true, label: Medidas }
+vocabulary: { bundle: Combine com }

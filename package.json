@@ -5,7 +5,7 @@
   "description": "Template padrao white-label da plataforma Nears",
   "packageManager": "pnpm@9.15.9",
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=22.18.0"
   },
   "scripts": {
     "dev": "pnpm --filter web dev",
@@ -23,12 +23,14 @@
     "lh": "lhci autorun",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "manifests:validate": "node scripts/manifests-validate.mjs",
+    "manifests:validate": "node --disable-warning=ExperimentalWarning scripts/manifests-validate.mjs",
+    "manifests:types": "node --disable-warning=ExperimentalWarning scripts/manifests-types.mjs",
+    "manifests:check": "node --disable-warning=ExperimentalWarning scripts/manifests-types.mjs --check",
     "tokens:contrast": "node scripts/tokens-contrast.mjs",
     "tokens:build": "pnpm --filter @nears/tokens build",
     "tokens:check": "pnpm --filter @nears/tokens check",
     "check-budgets": "node scripts/check-budgets.mjs",
-    "validate": "pnpm lint && pnpm typecheck && pnpm manifests:validate && pnpm tokens:check && pnpm tokens:contrast && pnpm test && pnpm build && pnpm check-budgets"
+    "validate": "pnpm lint && pnpm typecheck && pnpm manifests:validate && pnpm manifests:check && pnpm tokens:check && pnpm tokens:contrast && pnpm test && pnpm build && pnpm check-budgets"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

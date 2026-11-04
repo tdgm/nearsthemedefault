@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": [
+      "node"
+    ],
+    "erasableSyntaxOnly": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "_generated/**/*.ts"
+  ]
+}

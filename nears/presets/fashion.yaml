@@ -1,0 +1,16 @@
+# Preset: moda e calcados (docs/adr/0002-template-multinicho.md).
+preset: fashion
+description: Moda e calçados, com cor e tamanho como eixos de variação.
+catalog:
+  vertical: fashion
+  productMedia: { aspect: portrait, hoverImage: true }
+  variantAxes:
+    - { id: color, label: Cor, display: swatch, schemaOrg: color }
+    - { id: size, label: Tamanho, display: option, schemaOrg: size }
+  facets:
+    available: [category, size, color, price, brand]
+    indexable: [category, color]
+  geoAttributes: [color, size, material, audience]
+  guide: { enabled: true, label: Guia de medidas }
+  flatAxis: { enabled: true, secondLevelAttribute: fit }
+vocabulary: { cart: Sacola, bundle: Complete o look }

@@ -1,0 +1,17 @@
+# Preset: eletronicos e eletrodomesticos.
+preset: electronics
+description: Eletrônicos e eletrodomésticos, com voltagem e armazenamento como eixos.
+catalog:
+  vertical: electronics
+  productMedia: { aspect: product }
+  variantAxes:
+    - { id: color, label: Cor, display: swatch, schemaOrg: color }
+    - { id: voltage, label: Voltagem, display: option }
+    - { id: storage, label: Armazenamento, display: option }
+  facets:
+    available: [category, brand, price, voltage, storage]
+    indexable: [category, brand]
+  geoAttributes: [model, mpn, weight]
+  guide: { enabled: true, label: Compatibilidade }
+  flatAxis: { enabled: true, secondLevelAttribute: ~ }
+vocabulary: { bundle: Compre junto }
