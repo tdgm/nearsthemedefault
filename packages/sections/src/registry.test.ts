@@ -26,7 +26,7 @@ describe('createRegistry', () => {
 
   it('registra as sections globais da Fase 4; as de conteudo seguem pendentes (Fase 5)', () => {
     const registry = createRegistry(manifests, sectionSpecs, exists);
-    expect([...registry.keys()].sort()).toEqual(['header', 'minicart', 'nav-drawer', 'promo-bar']);
+    expect([...registry.keys()].sort()).toEqual(['customer-service', 'footer', 'header', 'minicart', 'nav-drawer', 'promo-bar']);
     expect(pendingSections(manifests, registry)).toContain('hero');
   });
 

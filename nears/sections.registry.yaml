@@ -67,6 +67,7 @@ globals:
           groups: array
           highlight: { type: object }
           promo: { type: object }
+      labels: { type: object, note: "microcopy" }
     cwv: { linksInInitialHtml: true, jsOnInteraction: true }
     a11y:
       focusTrap: true
@@ -77,7 +78,13 @@ globals:
   - id: minicart
     slot: overlay
     priority: on-interaction
-    props: { items: array }
+    props:
+      items: array
+      cartHref: { type: url, default: "/carrinho" }
+      checkoutHref: { type: url, default: "/checkout" }
+      continueHref: { type: url, default: "/" }
+      freeShippingFrom: money
+      labels: { type: object, note: "microcopy" }
     cwv: { noBlockingFetchOnLoad: true }
     a11y: { focusTrap: true, escClose: true, liveRegion: true }
 
@@ -86,19 +93,28 @@ globals:
     priority: lazy
     props:
       service: array
-      newsletter: { type: object, props: { segments: array } }
+      newsletter:
+        type: object
+        props:
+          title: string
+          description: string
+          action: url
+          segments: array
       columns: array
       apps: array
       social: array
       seals: array
       legal: object
+      labels: { type: object, note: "microcopy" }
     cwv: { contentVisibility: auto, containIntrinsicSize: "0 640px" }
     a11y: { landmark: contentinfo, collapsibleAria: true }
 
   - id: customer-service
     slot: floating
     priority: idle
-    props: { channels: array }
+    props:
+      channels: array
+      labels: { type: object, note: "microcopy" }
     cwv: { reservedHeight: 0, noLayoutShift: true }
     a11y: { minTouchTarget: 44 }
 
