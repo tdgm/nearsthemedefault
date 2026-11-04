@@ -114,6 +114,9 @@ importers:
       '@nears/manifests':
         specifier: workspace:*
         version: link:../../packages/manifests
+      '@nears/sections':
+        specifier: workspace:*
+        version: link:../../packages/sections
       '@nears/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
