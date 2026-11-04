@@ -1,0 +1,9 @@
+{
+  "name": "@nears/tokens",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Design tokens da Nears. Build (Style Dictionary) entra na Fase 1.",
+  "exports": {
+    "./tokens.json": "./tokens.json"
+  }
+}

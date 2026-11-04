@@ -5,7 +5,7 @@
 // Lighthouse CI (lighthouserc.json > settings.budgets + scripts/
 // check-third-party-hosts.mjs), que roda depois deste no job `lighthouse`.
 // Ver docs/adr/0005-enforcement-de-budgets.md para o mapa completo.
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 import { join } from 'node:path';
