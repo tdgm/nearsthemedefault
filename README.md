@@ -37,6 +37,7 @@ Fontes: so open source (OFL/Apache), self-hosted, com fallback websafe -
 | `nears/sections.registry.yaml` | Catalogo de blocos com props, CWV e a11y |
 | `nears/contracts.yaml` | Contratos de dados, SEO e GEO por template |
 | `packages/tokens/tokens.json` | Design tokens com valores concretos e contrastes medidos |
+| `packages/manifests` | Schemas Zod, loader tipado e checks cruzados dos 4 YAML de `/nears` |
 | `.github/workflows/ci.yml` | Cinco jobs: validate, test, budgets, lighthouse, e2e |
 | `lighthouserc.json` | Assercoes de Core Web Vitals |
 | `scripts/check-budgets.mjs` | JS/CSS/HTML estatico por rota (lido de `routes.manifest.yaml > appRoute`) |

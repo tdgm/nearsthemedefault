@@ -1,0 +1,19 @@
+{
+  "name": "@nears/manifests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Schemas Zod, loader tipado e validacoes cruzadas dos 4 manifests de /nears.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "yaml": "^2.9.1",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3"
+  }
+}

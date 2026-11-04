@@ -1,36 +1,15 @@
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
-import YAML from 'yaml';
+import { loadNearsConfig, loadRoutesManifest, type ManifestRoute, type NearsConfig } from '@nears/manifests';
 import { nearsDir } from './repo';
 
-export type ManifestRoute = {
-  id: string;
-  pattern: string;
-  template: string;
-  appRoute: string | null;
-  jsBudgetCritical?: boolean;
-};
+export type { ManifestRoute, NearsConfig };
 
-export type NearsConfig = {
-  platform: string;
-  template: string;
-  version: string;
-  locale: { default: string; supported: string[] };
-  /** Microcopy por nicho/marca (CLAUDE.md: nenhum texto de interface no codigo). */
-  vocabulary: Record<string, string>;
-};
-
-function readYaml<T>(file: string): T {
-  return YAML.parse(readFileSync(resolve(nearsDir, file), 'utf8')) as T;
-}
-
-/** Config raiz. Sync de proposito: roda so no servidor, em build/prerender. */
+/** Config raiz, validada por Zod (@nears/manifests). Sync de proposito: roda so no servidor, em build/prerender. */
 export function loadConfig(): NearsConfig {
-  return readYaml<NearsConfig>('nears.config.yaml');
+  return loadNearsConfig(nearsDir);
 }
 
 export function loadRoutes(): ManifestRoute[] {
-  return readYaml<{ routes: ManifestRoute[] }>('routes.manifest.yaml').routes;
+  return loadRoutesManifest(nearsDir).routes;
 }
 
 /**
