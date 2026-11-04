@@ -31,6 +31,6 @@ describe('Select', () => {
     render(<Select label="Estado" options={options} hint="Dica" error="Obrigatorio" />);
     const select = screen.getByRole('combobox');
     expect(select).toHaveAttribute('aria-invalid', 'true');
-    expect(select).toHaveAccessibleDescription('Dica ⚠ Obrigatorio');
+    expect(select).toHaveAccessibleDescription('Dica Obrigatorio');
   });
 });

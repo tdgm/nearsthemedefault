@@ -20,14 +20,16 @@ export const ComDica: Story = { args: { legend: 'Forma de entrega', hint: 'O pra
 export const ComErro: Story = { args: { legend: 'Forma de entrega', error: 'Escolha uma forma de entrega.', children: shipping } };
 export const Desabilitado: Story = { args: { legend: 'Forma de entrega', disabled: true, defaultValue: 'standard', children: shipping } };
 
+function ControlledExample() {
+  const [value, setValue] = useState('express');
+  return (
+    <RadioGroup legend="Forma de entrega" value={value} onValueChange={setValue}>
+      {shipping}
+    </RadioGroup>
+  );
+}
+
 export const Controlado: Story = {
   args: { legend: 'Forma de entrega', children: null },
-  render: () => {
-    const [value, setValue] = useState('express');
-    return (
-      <RadioGroup legend="Forma de entrega" value={value} onValueChange={setValue}>
-        {shipping}
-      </RadioGroup>
-    );
-  },
+  render: () => <ControlledExample />,
 };

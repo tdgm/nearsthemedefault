@@ -20,7 +20,7 @@ describe('Checkbox', () => {
     render(<Checkbox label="Aceito" error="Obrigatorio" />);
     const box = screen.getByRole('checkbox');
     expect(box).toHaveAttribute('aria-invalid', 'true');
-    expect(box).toHaveAccessibleDescription('⚠ Obrigatorio');
+    expect(box).toHaveAccessibleDescription('Obrigatorio');
   });
 
   it('desabilitado nao alterna', () => {

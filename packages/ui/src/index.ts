@@ -12,3 +12,8 @@ export { Select, type SelectOption, type SelectProps } from './select/select';
 export { Checkbox, type CheckboxProps } from './checkbox/checkbox';
 export { Radio, RadioGroup, type RadioGroupProps, type RadioProps } from './radio/radio';
 export { VariantSelector, type VariantOption, type VariantSelectorProps } from './variant-selector/variant-selector';
+export { Price, type PriceProps } from './price/price';
+export { Rating, type RatingProps } from './rating/rating';
+export { Image, buildAlt, type ImageFormat, type ImageLoader, type ImageProps } from './image/image';
+export { Breadcrumb, type BreadcrumbItem, type BreadcrumbProps } from './breadcrumb/breadcrumb';
+export { Pagination, pageWindow, type PaginationProps } from './pagination/pagination';

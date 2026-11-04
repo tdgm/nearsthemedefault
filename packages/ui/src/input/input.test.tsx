@@ -17,7 +17,7 @@ describe('Input', () => {
     render(<Input label="CEP" hint="Dica" error="CEP invalido" />);
     const input = screen.getByLabelText('CEP');
     expect(input).toHaveAttribute('aria-invalid', 'true');
-    expect(input).toHaveAccessibleDescription('Dica ⚠ CEP invalido');
+    expect(input).toHaveAccessibleDescription('Dica CEP invalido');
     expect(screen.getByRole('alert')).toHaveTextContent('CEP invalido');
   });
 
