@@ -124,3 +124,36 @@ Tres falhas de configuracao, nenhuma de codigo:
 4. Job `test`: `pnpm test --coverage` falha no pnpm 9 ("Unknown option:
    'coverage'"). Passou a `pnpm exec vitest run --coverage` (conferido no Mac:
    19 testes, exit 0).
+
+## Lighthouse no CI (descobertas da primeira execucao)
+
+- `npx wait-on` nao existe no repo e subir o servidor com `&` e fragil. O
+  proprio LHCI agora sobe e derruba o servidor (`collect.startServerCommand`),
+  sem dependencia nova; o job chama `pnpm lh`.
+- **O `settings.budgets` do `lighthouserc.json` nunca foi aplicado.** O
+  Lighthouse 13.6 (usado pelo `@lhci/cli` 0.16) nao tem mais a Budgets API:
+  `configSettings.budgets` vem `null` e a auditoria `performance-budget` nao
+  existe no relatorio, entao a assertion passava em silencio. Substituido pelas
+  chaves nativas `resource-summary:total:count` (<= 40), `:document:size` (<= 80
+  KB) e `:third-party:size` (<= 80 KB). JS e CSS ficam so no
+  `check-budgets.mjs` (gzip estatico), porque o LHCI mede bytes transferidos
+  com cabecalhos HTTP: 143.649 B no app vazio contra 135,7 KB de corpo gzip.
+- Medido no Mac (Chrome 150, 1 execucao por rota, throttling mobile): LCP 0,8-1,4 s,
+  CLS ~0, acessibilidade 100, 0 hosts de terceiros, 11-13 requisicoes. SEO 54
+  (`is-crawlable` e `robots-txt`, ambos intencionais ate a Fase 7), por isso
+  `categories:seo` esta em `warn` ate la (anotado no ROADMAP, Fase 7).
+- **Em aberto:** TBT oscilou de 227 a 1016 ms entre rotas com o mesmo bundle
+  (maquina local carregada, 1 execucao). A mediana de 3 execucoes no runner do
+  CI e o numero que vale; se o TBT estourar 200 ms la, o custo de hidratacao
+  do bundle base (ADR 0010) passa a ser o problema real.
+
+## Busca sem JavaScript
+
+Com `cacheComponents`, `searchParams` e dado de requisicao: o Next envia o
+shell estatico e faz stream do resultado em `<div hidden id="S:0">`, que o
+React so revela com JavaScript (verificado no build de producao). Sem JS o
+formulario aparece e envia por GET, mas o estado vazio / sem resultados nao fica
+visivel. `/s` e `noindex`, entao a regra de conteudo indexavel sem JS do
+CLAUDE.md nao se aplica; os 4 testes E2E desses estados rodam so com JS e o
+`nojs` continua validando H1, `main` e metadados. Revisitar na Fase 6, quando a
+busca tiver resultados reais.

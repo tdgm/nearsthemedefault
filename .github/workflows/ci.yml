@@ -84,9 +84,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - run: pnpm start &
-      - run: npx wait-on http://localhost:3000 -t 60000
-      - run: npx @lhci/cli autorun
+      # O proprio LHCI sobe e derruba o servidor (collect.startServerCommand em
+      # lighthouserc.json): sem `&` solto e sem dependencia extra tipo wait-on.
+      - run: pnpm lh
       - run: node scripts/check-third-party-hosts.mjs   # hosts distintos; LHCI nao tem assercao nativa para isso
 
   e2e:
