@@ -14,6 +14,8 @@ const departments = [
   { label: 'Ofertas', href: '/ofertas' },
 ];
 
+// O <dialog> fechado sai da arvore de acessibilidade: as queries usam `hidden: true`
+// (o conteudo existe no DOM/HTML inicial, so nao e anunciado ate abrir).
 describe('NavDrawer', () => {
   it('e um dialog nomeado com id nav-drawer, fechado, com landmark navigation', () => {
     const { container } = render(<NavDrawer departments={departments} />);
@@ -35,18 +37,18 @@ describe('NavDrawer', () => {
     const { container } = render(<NavDrawer departments={departments} />);
     expect(container.querySelectorAll('details')).toHaveLength(1);
     expect(within(container.querySelector('details')!).getByText('Feminino')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Ofertas' })).toHaveClass('min-h-11');
+    expect(screen.getByRole('link', { name: 'Ofertas', hidden: true })).toHaveClass('min-h-11');
   });
 
   it('inclui "Ver tudo" do departamento e todos os alvos de toque tem 44px', () => {
     const { container } = render(<NavDrawer departments={departments} />);
-    expect(screen.getByRole('link', { name: 'Ver tudo em Feminino' })).toHaveAttribute('href', '/feminino');
+    expect(screen.getByRole('link', { name: 'Ver tudo em Feminino', hidden: true })).toHaveAttribute('href', '/feminino');
     container.querySelectorAll('nav a').forEach((a) => expect(a).toHaveClass('min-h-11'));
   });
 
   it('labels sobrescrevem a microcopy', () => {
     render(<NavDrawer departments={departments} labels={{ title: 'Categorias' }} />);
-    expect(screen.getByRole('heading', { name: 'Categorias' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Categorias', hidden: true })).toBeInTheDocument();
   });
 });
 
