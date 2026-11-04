@@ -57,9 +57,12 @@ Implemente a Fase 1. O arquivo packages/tokens/tokens.json ja existe no repo
 com valores concretos - use-o como base, nao recomece do zero.
 
 Entregue o build Style Dictionary gerando CSS vars, preset Tailwind e JSON para
-Figma, e um teste automatizado que falha se qualquer par semantico (texto sobre
-superficie, borda sobre superficie, estado de foco) nao atingir AA. Mostre a
-tabela de contrastes calculados ao final.
+Figma, e o teste pnpm tokens:contrast: le contracts.yaml >
+gates.accessibility.contrastPairs, calcula o contraste real nos temas light e
+dark e falha se qualquer par ficar abaixo do minimo ou se os dois temas nao
+declararem as mesmas chaves. Bordas decorativas (border, border-strong) ficam
+fora de proposito; controles usam border-control. Mostre a tabela de contrastes
+calculados ao final (ver docs/adr/0004-contraste-e-tema-escuro.md).
 
 A fonte segue docs/adr/0001-tipografia-open-source.md: leia typography.font do
 tokens.json, carregue via next/font/local com adjustFontFallback contra o
