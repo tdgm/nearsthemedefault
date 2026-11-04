@@ -142,10 +142,10 @@ Tres falhas de configuracao, nenhuma de codigo:
   CLS ~0, acessibilidade 100, 0 hosts de terceiros, 11-13 requisicoes. SEO 54
   (`is-crawlable` e `robots-txt`, ambos intencionais ate a Fase 7), por isso
   `categories:seo` esta em `warn` ate la (anotado no ROADMAP, Fase 7).
-- **Em aberto:** TBT oscilou de 227 a 1016 ms entre rotas com o mesmo bundle
-  (maquina local carregada, 1 execucao). A mediana de 3 execucoes no runner do
-  CI e o numero que vale; se o TBT estourar 200 ms la, o custo de hidratacao
-  do bundle base (ADR 0010) passa a ser o problema real.
+- **TBT (resolvido):** oscilou de 227 a 1016 ms no Mac (maquina antiga e
+  carregada, 1 execucao), mas o job `lighthouse` do CI (mediana de 3 execucoes
+  no runner) passou em 78f4c7a com todas as assertions em `error`. Vale o
+  numero do CI; reavaliar quando a Fase 4 somar JS client.
 
 ## Busca sem JavaScript
 
@@ -157,3 +157,14 @@ visivel. `/s` e `noindex`, entao a regra de conteudo indexavel sem JS do
 CLAUDE.md nao se aplica; os 4 testes E2E desses estados rodam so com JS e o
 `nojs` continua validando H1, `main` e metadados. Revisitar na Fase 6, quando a
 busca tiver resultados reais.
+
+## Estado do CI em 78f4c7a (PR #6)
+
+Verdes: Lint/tipos/manifests, Unit + a11y do Storybook (axe), Orcamento de
+bundle, E2E (chromium e nojs), Core Web Vitals (LHCI + hosts de terceiros) e
+Segredos (gitleaks). Pulado por limite da plataforma: Revisao de dependencias.
+**Vermelho: CodeQL**, porque o repositorio privado nao tem Code scanning/GHAS
+("Code scanning is not enabled for this repository"); o resultado e analisado
+mas nao pode ser enviado. Decisao do mantenedor pendente: habilitar GHAS, tornar
+o repo publico, ou trocar por `upload: never` + SARIF como artefato com gate
+proprio.
