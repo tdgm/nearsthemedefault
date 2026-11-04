@@ -105,6 +105,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@nears/manifests':
+        specifier: workspace:*
+        version: link:../../packages/manifests
       '@nears/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
@@ -140,8 +143,34 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
 
-  packages/sections:
+  packages/manifests:
+    dependencies:
+      yaml:
+        specifier: ^2.9.1
+        version: 2.9.1
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
     devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/sections:
+    dependencies:
+      '@nears/manifests':
+        specifier: workspace:*
+        version: link:../manifests
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
+    devDependencies:
+      '@types/react':
+        specifier: ^19.3.0
+        version: 19.3.0
+      react:
+        specifier: 19.3.1
+        version: 19.3.1
       typescript:
         specifier: ~5.9.3
         version: 5.9.3

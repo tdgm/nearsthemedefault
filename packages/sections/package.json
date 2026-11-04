@@ -9,12 +9,13 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "typescript": "~5.9.3",
     "@types/react": "^19.3.0",
-    "react": "19.3.1"
+    "react": "19.3.1",
+    "typescript": "~5.9.3"
   },
   "dependencies": {
-    "@nears/manifests": "workspace:*"
+    "@nears/manifests": "workspace:*",
+    "zod": "^4.6.7"
   },
   "peerDependencies": {
     "react": "^19.0.0"
