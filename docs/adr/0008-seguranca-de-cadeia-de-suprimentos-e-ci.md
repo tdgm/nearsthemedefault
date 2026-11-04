@@ -29,9 +29,10 @@ apresentado antes deste ADR.
 3. **Scanner de segredos** (`gitleaks/gitleaks-action@v2`) como job
    independente (`secrets-scan`), com `fetch-depth: 0` - varre o historico
    completo do clone, nao so o commit atual.
-4. **CodeQL** (`javascript-typescript`) em workflow separado
-   (`.github/workflows/codeql.yml`), rodando em `push`/`pull_request` e
-   semanalmente (scan independente de atividade no repo).
+4. **CodeQL** pelo *default setup* do GitHub (javascript-typescript e actions),
+   habilitado em Settings > Code security. Nao ha workflow `codeql.yml` no
+   repositorio: com o default setup ativo, um workflow avancado falha com
+   "configuration error" (os dois nao coexistem). Revisao na Fase 1 (PR #8).
 5. **`actions/dependency-review-action`** no evento `pull_request`
    (`fail-on-severity: high`). Nota de honestidade: o repo e **privado**,
    e esse Action exige GitHub Advanced Security habilitado na organizacao.

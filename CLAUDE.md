@@ -142,8 +142,9 @@ mesmo em repo vazio. Detalhe completo em
 - `pnpm-lock.yaml` e obrigatorio e commitado; CI sempre instala com
   `--frozen-lockfile`. Dependabot mantem dependencias e GitHub Actions
   atualizados (`.github/dependabot.yml`).
-- Scanner de segredos (gitleaks) e CodeQL correm no CI a cada push/PR
-  (`.github/workflows/ci.yml` e `codeql.yml`).
+- Scanner de segredos (gitleaks) corre no CI a cada push/PR
+  (`.github/workflows/ci.yml`); CodeQL roda pelo *default setup* do GitHub
+  (Settings > Code security), sem workflow no repo (ver ADR 0008).
 - Headers de seguranca (CSP, HSTS, X-Content-Type-Options, Referrer-Policy,
   Permissions-Policy, `frame-ancestors`) vem de
   `nears.config.yaml > security.headers`, nunca hardcoded em componente ou

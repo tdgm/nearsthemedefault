@@ -165,7 +165,7 @@ gates:
     headers: enforced-in-ci
     dependencyAudit: enforced-in-ci
     secretScanning: enforced-in-ci
-    staticAnalysis: enforced-in-ci       # CodeQL, .github/workflows/codeql.yml
+    staticAnalysis: enforced-in-ci       # CodeQL via default setup do GitHub (ADR 0008)
     multiTenancyHostValidation: pending-fase-6
   seo:
     richResultsErrors: 0
