@@ -7,6 +7,8 @@
 
 /* Tailwind so gera as classes que encontra: este pacote inteiro. */
 @source '.';
+/* Sections usam as mesmas classes (Storybook compila so este arquivo). */
+@source '../../sections/src';
 
 @layer base {
   html {

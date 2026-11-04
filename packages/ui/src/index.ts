@@ -23,3 +23,6 @@ export { Tooltip, type TooltipProps } from './tooltip/tooltip';
 export { ToastProvider, useToast, type ToastMessage, type ToastProviderProps, type ToastTone } from './toast/toast';
 export { Modal, type ModalProps } from './modal/modal';
 export { Carousel, type CarouselProps } from './carousel/carousel';
+export { Overlay, type OverlayProps } from './overlay/overlay';
+export { OverlayTrigger, type OverlayTriggerProps } from './overlay/overlay-trigger';
+export * from './icons/icons';

@@ -9,7 +9,10 @@ import { fileURLToPath } from 'node:url';
 import { formatIssue, generateTypes } from '../packages/manifests/src/index.ts';
 import { ManifestError } from '../packages/manifests/src/manifests.ts';
 import { listPresets, loadManifests } from '../packages/manifests/src/node.ts';
-import { RegistryError, createRegistry, pendingSections, sectionModules } from '../packages/sections/src/index.ts';
+// Importa so a parte pura (sem JSX): Node nao executa .tsx. O componente de cada
+// section e conferido em packages/sections/src/modules.test.ts (pnpm test).
+import { RegistryError, createRegistry, pendingSections } from '../packages/sections/src/registry.ts';
+import { sectionSpecs } from '../packages/sections/src/specs.ts';
 
 const root = resolve(fileURLToPath(import.meta.url), '../..');
 const nearsDir = resolve(root, 'nears');
@@ -37,14 +40,14 @@ for (const t of targets) {
   }
 }
 
-// Registry: toda section implementada precisa de componente, schema, meta
+// Registry: toda section implementada precisa de schema, meta
 // (priority, cwv, a11y) e story, e bater com o manifest. Falha o build.
 if (generic) {
   try {
-    const registry = createRegistry(generic, sectionModules, (p) => existsSync(resolve(root, p)));
+    const registry = createRegistry(generic, sectionSpecs, (p) => existsSync(resolve(root, p)));
     const pending = pendingSections(generic, registry);
     console.log(
-      `ok      registry de sections            ${registry.size} implementadas, ${pending.length} pendentes (Fases 4 e 5)`,
+      `ok      registry de sections            ${registry.size} implementadas, ${pending.length} pendentes (Fase 5)`,
     );
   } catch (e) {
     failed = true;

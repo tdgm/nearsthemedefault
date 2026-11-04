@@ -1,5 +1,4 @@
 import type { ImgHTMLAttributes } from 'react';
-import { cn } from '../cn';
 
 export type ImageFormat = 'avif' | 'webp' | 'original';
 /** Monta a URL de uma largura/formato (CDN com transformacao on-the-fly). */
@@ -55,7 +54,7 @@ export function Image({
       loading={priority ? 'eager' : 'lazy'}
       decoding={priority ? 'sync' : 'async'}
       fetchPriority={priority ? 'high' : undefined}
-      className={cn('h-auto max-w-full', className)}
+      className={className}
       style={{ aspectRatio: `${width} / ${height}`, ...style }}
       {...rest}
     />

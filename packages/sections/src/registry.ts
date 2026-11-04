@@ -1,7 +1,7 @@
 // Registry de sections: cruza o que o codigo exporta com o que o manifest
 // declara e FALHA O BUILD se algo faltar (scripts/manifests-validate.mjs).
 import type { Manifests } from '@nears/manifests';
-import type { AnySectionModule } from './define.ts';
+import type { AnySectionSpec } from './define.ts';
 
 export type RegistryIssue = { section: string; message: string };
 
@@ -14,24 +14,26 @@ export class RegistryError extends Error {
   }
 }
 
-export type SectionRegistry = ReadonlyMap<string, AnySectionModule>;
+export type SectionRegistry = ReadonlyMap<string, AnySectionSpec>;
 
 const nonEmpty = (v: unknown) => typeof v === 'object' && v !== null && Object.keys(v).length > 0;
 
 /**
  * Valida as sections implementadas contra o manifest e devolve o registry.
+ * Recebe as SPECS (parte pura, carregavel em Node); que cada spec tem componente
+ * e conferido por `modules.test.ts`, que carrega os modulos completos.
  * `storyExists` e injetado (fs no build, fake nos testes).
  */
 export function createRegistry(
   manifests: Pick<Manifests, 'sections'>,
-  modules: readonly AnySectionModule[],
+  modules: readonly AnySectionSpec[],
   storyExists: (path: string) => boolean,
 ): SectionRegistry {
   const declared = new Map(
     [...manifests.sections.sections, ...manifests.sections.pdpSections, ...manifests.sections.globals].map((s) => [s.id, s]),
   );
   const issues: RegistryIssue[] = [];
-  const registry = new Map<string, AnySectionModule>();
+  const registry = new Map<string, AnySectionSpec>();
 
   for (const mod of modules) {
     const id = mod.id;
@@ -43,7 +45,6 @@ export function createRegistry(
     if (registry.has(id)) add('registrada duas vezes');
     const spec = declared.get(id);
     if (!spec) add('nao existe em sections.registry.yaml');
-    if (typeof mod.Component !== 'function') add('nao exporta o componente');
     if (!mod.schema || typeof mod.schema.safeParse !== 'function') add('nao exporta `schema` (Zod)');
     if (!mod.meta) add('nao exporta `meta`');
     else {

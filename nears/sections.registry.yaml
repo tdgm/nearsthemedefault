@@ -27,6 +27,7 @@ globals:
       countdown: { type: object, props: { endsAt: datetime } }
       dismissible: { type: boolean, default: true }
       rulesHref: { type: url }
+      labels: { type: object, note: "microcopy" }
     cwv: { reservedHeight: 48, cls: 0, ssrTime: true }
     a11y: { role: region, labelRequired: true, dismissKeyboard: true }
 
@@ -38,11 +39,19 @@ globals:
       - { pattern: "*/p", variant: minimal }
     props:
       logo: { type: image, required: true }
+      homeHref: { type: url, default: "/" }
       nav: { type: ref, to: navigation }
       search: { type: boolean, default: true }
+      searchHref: { type: url, default: "/s" }
       account: { type: boolean, default: true }
+      accountHref: { type: url, default: "/account" }
       wishlist: { type: boolean, default: true }
+      wishlistHref: { type: url, default: "/account/favoritos" }
       cart: { type: boolean, default: true }
+      cartCount: { type: number, default: 0 }
+      wishlistCount: { type: number, default: 0 }
+      variant: { type: enum, values: [full, minimal, none], default: full }
+      labels: { type: object, note: "microcopy (vem de vocabulary no app)" }
     cwv: { reservedHeight: 56, sticky: true }
     a11y: { landmark: banner, skipLink: required }
 

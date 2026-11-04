@@ -23,6 +23,17 @@ export type SectionModule<P = unknown> = {
 };
 
 /**
+ * Parte pura de uma section (sem JSX): e o que o registry valida e o que
+ * `scripts/manifests-validate.mjs` carrega em Node puro (type stripping nao
+ * executa .tsx). O componente fica em `<id>/index.ts` (SectionModule).
+ */
+export type SectionSpec<P = unknown> = Omit<SectionModule<P>, 'Component'>;
+export type AnySectionSpec = Omit<SectionSpec, 'schema'> & { schema: z.ZodType };
+
+/** Identidade tipada da spec. */
+export const defineSpec = <P>(spec: SectionSpec<P>): SectionSpec<P> => spec;
+
+/**
  * Forma apagada (sem o tipo das props) para listas heterogeneas: o registry
  * guarda sections de props diferentes, entao `Component` aceita `never`.
  */

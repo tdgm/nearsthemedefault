@@ -1,0 +1,97 @@
+import { render, screen, within } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { Header } from './header';
+import { headerSchema } from './header.schema';
+
+const logo = { src: '/logo.svg', width: 120, height: 32, alt: 'Loja' };
+const nav = { departments: [{ label: 'Feminino', href: '/feminino' }] };
+
+describe('Header', () => {
+  it('landmark banner com altura reservada de 56px', () => {
+    render(<Header logo={logo} nav={nav} />);
+    expect(screen.getByRole('banner')).toHaveClass('h-14', 'sticky');
+  });
+
+  it('skip link e o primeiro item focavel e aponta para #conteudo', () => {
+    render(<Header logo={logo} nav={nav} />);
+    const skip = screen.getAllByRole('link')[0];
+    expect(skip).toHaveTextContent('Ir para o conteúdo');
+    expect(skip).toHaveAttribute('href', '#conteudo');
+  });
+
+  it('logo centralizado e link para a home, com dimensoes e prioridade (LCP)', () => {
+    render(<Header logo={logo} nav={nav} homeHref="/inicio" />);
+    const img = screen.getByAltText('Loja');
+    expect(img).toHaveAttribute('width', '120');
+    expect(img).toHaveAttribute('fetchpriority', 'high');
+    expect(img.closest('a')).toHaveAttribute('href', '/inicio');
+  });
+
+  it('hamburger abre o nav-drawer e tem 44px', () => {
+    render(<Header logo={logo} nav={nav} />);
+    const menu = screen.getByRole('button', { name: 'Menu' });
+    expect(menu).toHaveAttribute('aria-controls', 'nav-drawer');
+    expect(menu).toHaveClass('size-11');
+  });
+
+  it('sem departamentos nao mostra o hamburger', () => {
+    render(<Header logo={logo} nav={{ departments: [] }} />);
+    expect(screen.queryByRole('button', { name: 'Menu' })).toBeNull();
+  });
+
+  it('busca: form GET para /s com input q e label', () => {
+    render(<Header logo={logo} nav={nav} />);
+    const form = screen.getByRole('search');
+    expect(form).toHaveAttribute('action', '/s');
+    expect(form).toHaveAttribute('method', 'get');
+    expect(within(form).getByLabelText('O que você procura?')).toHaveAttribute('name', 'q');
+  });
+
+  it('badges entram no nome acessivel (texto visivel contido no nome)', () => {
+    render(<Header logo={logo} nav={nav} cartCount={3} wishlistCount={1} />);
+    expect(screen.getByRole('button', { name: 'Carrinho, 3 itens' })).toHaveAttribute('aria-controls', 'minicart');
+    expect(screen.getByRole('link', { name: 'Favoritos, 1 item' })).toHaveAttribute('href', '/account/favoritos');
+  });
+
+  it('contador acima de 99 vira 99+', () => {
+    render(<Header logo={logo} nav={nav} cartCount={150} />);
+    expect(screen.getByRole('button', { name: 'Carrinho, 99+ itens' })).toBeInTheDocument();
+  });
+
+  it('variante minimal: so logo e carrinho', () => {
+    render(<Header logo={logo} nav={nav} variant="minimal" />);
+    expect(screen.queryByRole('search')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Menu' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Minha conta' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'Carrinho' })).toBeInTheDocument();
+  });
+
+  it('variante none: nao renderiza o header, so o skip link', () => {
+    render(<Header logo={logo} nav={nav} variant="none" />);
+    expect(screen.queryByRole('banner')).toBeNull();
+    expect(screen.getByRole('link', { name: 'Ir para o conteúdo' })).toBeInTheDocument();
+  });
+
+  it('flags desligam conta, favoritos e carrinho', () => {
+    render(<Header logo={logo} nav={nav} account={false} wishlist={false} cart={false} />);
+    expect(screen.queryByRole('link', { name: 'Minha conta' })).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Favoritos' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Carrinho' })).toBeNull();
+  });
+
+  it('labels sobrescrevem a microcopy (vocabulary do nicho)', () => {
+    render(<Header logo={logo} nav={nav} labels={{ cart: 'Sacola' }} />);
+    expect(screen.getByRole('button', { name: 'Sacola' })).toBeInTheDocument();
+  });
+});
+
+describe('headerSchema', () => {
+  it('exige logo com alt', () => {
+    expect(headerSchema.safeParse({ logo }).success).toBe(true);
+    expect(headerSchema.safeParse({ logo: { ...logo, alt: '' } }).success).toBe(false);
+    expect(headerSchema.safeParse({}).success).toBe(false);
+  });
+  it('variant so aceita full|minimal|none', () => {
+    expect(headerSchema.safeParse({ logo, variant: 'compact' }).success).toBe(false);
+  });
+});
