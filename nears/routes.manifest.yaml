@@ -41,19 +41,23 @@ routes:
     template: collection
     source: catalog
     priority: 0.7
+    enabledBy: catalog.flatAxis.enabled
     note: >
-      Eixo plano por tipo de peca, paralelo ao eixo de departamento.
+      Eixo plano por tipo de produto, paralelo ao eixo de departamento
+      (ex.: todos os itens de um tipo, independente do departamento).
       Indexavel apenas neste nivel.
 
-  - id: category-flat-fit
-    pattern: "/{productType}/{fit}"
+  - id: category-flat-attribute
+    pattern: "/{productType}/{attributeValue}"
     template: collection
     source: catalog
     indexable: false
     canonicalTo: department-category
+    enabledBy: catalog.flatAxis.secondLevelAttribute
     note: >
-      Nivel 2 do eixo plano duplica o eixo de departamento.
-      Rastreavel mas nao indexavel.
+      Nivel 2 do eixo plano, filtrado pelo atributo definido em
+      catalog.flatAxis.secondLevelAttribute. Duplica o eixo de departamento:
+      rastreavel mas nao indexavel.
 
   - id: longtail
     pattern: "/b/{keyword}"
@@ -121,7 +125,7 @@ routes:
 canonical:
   strategy: self-referencing
   rules:
-    - when: "route.id == 'category-flat-fit'"
+    - when: "route.id == 'category-flat-attribute'"
       canonicalTo: department-category
       reason: "Eixo de departamento e o canonico para nivel 2+"
     - when: "query has utm_* or gclid or fbclid"
@@ -130,7 +134,7 @@ canonical:
       robots: "noindex,follow"
 
 facets:
-  indexable: [category, size, color]
+  indexableFrom: catalog.facets.indexable   # definido por nicho em nears.config.yaml
   indexableAlone: true          # so indexa quando aplicada isoladamente
   neverIndexable: [price, sort, page_size, seller]
   pagination:
@@ -150,10 +154,11 @@ excluded:
     - "/api/*"
 
 forbiddenInProduction:
-  - "/design-system*"
-  - "/test*"
-  - "/teste*"
-  - "/qa*"
+  patterns:
+    - "/design-system*"
+    - "/test*"
+    - "/teste*"
+    - "/qa*"
   note: >
     O build de producao falha se alguma destas rotas resolver.
     Ambiente interno nunca vive na raiz do dominio publico.

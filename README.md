@@ -1,11 +1,22 @@
 # nearsthemedefault
 
 Template padrao white-label da plataforma **Nears**. E a base de front-end de
-todas as lojas criadas na plataforma: design system, arquitetura de sections,
-Core Web Vitals, SEO e GEO.
+todas as lojas criadas na plataforma, de qualquer nicho de varejo online:
+design system, arquitetura de sections, Core Web Vitals, SEO e GEO.
 
-Nao e um site unico. Trocar de marca significa trocar `tokens.json` e os
-manifests em `/nears` - nada de identidade visual vive no codigo.
+Nao e um site unico e nao assume nicho. Nada de identidade visual nem de
+segmento vive no codigo:
+
+| Para trocar... | Edite |
+| --- | --- |
+| Marca (cor, fonte, raio, espaco, midia) | `packages/tokens/tokens.json` |
+| Nicho (variacoes, facetas, atributos, microcopy) | `catalog` e `vocabulary` em `nears/nears.config.yaml` |
+| Estrutura de paginas e URLs | `nears/sections.registry.yaml` e `nears/routes.manifest.yaml` |
+
+Presets prontos para moda, eletronicos, casa, beleza, mercado e pet em
+[docs/adr/0002-template-multinicho.md](./docs/adr/0002-template-multinicho.md).
+Fontes: so open source (OFL/Apache), self-hosted, com fallback websafe -
+[docs/adr/0001-tipografia-open-source.md](./docs/adr/0001-tipografia-open-source.md).
 
 ## Por onde comecar
 
@@ -21,7 +32,7 @@ manifests em `/nears` - nada de identidade visual vive no codigo.
 | `CLAUDE.md` | Memoria persistente: stack, budgets, a11y, SEO/GEO, definition of done |
 | `docs/ROADMAP.md` | Fases 0 a 8 com entregavel e gate de cada uma |
 | `docs/PROMPTS.md` | Prompt de kickoff e prompts de continuacao por fase |
-| `nears/nears.config.yaml` | Identidade, tokens, budgets e politica de terceiros |
+| `nears/nears.config.yaml` | Catalogo por nicho, vocabulario, budgets e politica de terceiros |
 | `nears/routes.manifest.yaml` | Mapa de URLs, canonical, facetas e indexacao |
 | `nears/sections.registry.yaml` | Catalogo de blocos com props, CWV e a11y |
 | `nears/contracts.yaml` | Contratos de dados, SEO e GEO por template |
@@ -29,6 +40,7 @@ manifests em `/nears` - nada de identidade visual vive no codigo.
 | `.github/workflows/ci.yml` | Cinco jobs: validate, test, budgets, lighthouse, e2e |
 | `lighthouserc.json` | Assercoes de Core Web Vitals |
 | `scripts/check-budgets.mjs` | Falha o build quando o bundle estoura o limite |
+| `docs/adr/` | Decisoes de arquitetura (tipografia, multinicho) |
 
 ## Orcamentos
 
@@ -54,9 +66,9 @@ Dois pontos dependem de decisao de negocio antes do go-live:
 - **`onMissingGeoField`**: hoje `warn-build`. Deve virar `fail-build` ao fim
   da Fase 7, senao schema incompleto vira divida permanente.
 
-## Referencia estrutural
+## Padrao arquitetural
 
-A arquitetura foi derivada da analise de um e-commerce de moda em larga escala
-(VTEX FastStore + Next.js, ~18 mil URLs indexaveis, composicao por sections
-versionadas no CMS). Replicamos o **padrao estrutural**, nunca identidade
-visual, textos, imagens ou codigo de terceiros.
+Storefront headless com paginas compostas por sections versionadas no CMS,
+navegacao em multiplos eixos, landings de cauda longa e linkagem interna
+programatica. Nenhuma identidade visual, texto, imagem ou codigo de terceiros
+faz parte do template.

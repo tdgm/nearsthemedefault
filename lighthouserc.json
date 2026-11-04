@@ -3,7 +3,7 @@
     "collect": {
       "url": [
         "http://localhost:3000/",
-        "http://localhost:3000/feminino",
+        "http://localhost:3000/departamento-exemplo",
         "http://localhost:3000/produto-exemplo/p"
       ],
       "numberOfRuns": 3,

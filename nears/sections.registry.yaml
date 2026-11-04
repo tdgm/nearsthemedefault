@@ -188,7 +188,7 @@ sections:
         default: [relevance, price_asc, price_desc, newest, discount]
       facets:
         type: array
-        default: [category, size, color, price, age, fit]
+        from: catalog.facets.available   # definido por nicho
     cwv:
       ssr: true
       skeleton: true
@@ -213,11 +213,13 @@ sections:
       listPrice: money
       installments: object
       badges: array
-      colorSwatches: array
+      variantPreview:
+        type: array
+        note: "amostras do primeiro eixo de catalog.variantAxes; vazio se o nicho nao tem variacao"
       quickAdd: { type: boolean, default: false }
       wishlist: { type: boolean, default: true }
     cwv:
-      aspectRatio: "3/4"
+      aspectRatio: "{media.aspect[catalog.productMedia.aspect]}"
       intrinsicSize: required
       lazy: belowFold
       sizes: "{media.sizes.productCard}"
@@ -277,7 +279,7 @@ pdpSections:
     cwv:
       lcpCandidate: true
       firstImage: { fetchpriority: high }
-      aspectRatio: "3/4"
+      aspectRatio: "{media.aspect[catalog.productMedia.aspect]}"
     a11y: { keyboardNav: true, zoomEscClose: true }
 
   - id: pdp-buybox
@@ -287,15 +289,17 @@ pdpSections:
       rating: object
       price: money
       installments: object
-      colorSelector: array
-      sizeSelector: array
-      sizeGuideHref: url
-      cta: string
+      variantSelectors:
+        type: array
+        from: catalog.variantAxes      # um seletor por eixo; zero se nao ha variacao
+      guideHref:
+        type: url
+        enabledBy: catalog.guide.enabled
+      cta: string                      # default: vocabulary.addToCart
       stickyMobile: { type: boolean, default: true }
     cwv: { noLayoutShift: true, stickyReservedHeight: 72 }
     a11y:
-      sizeSelector: radiogroup
-      colorSelector: radiogroup
+      variantSelector: radiogroup      # swatch e option, sempre radiogroup
       liveRegion: addToCart
       minTouchTarget: 44
 
@@ -308,10 +312,18 @@ pdpSections:
   - id: pdp-details
     priority: lazy
     props:
-      composition: string
-      care: richtext
       description: richtext
-      measurements: table
+      specs:
+        type: table
+        enabledBy: catalog.specTable.enabled
+        note: "pares atributo/valor; vira additionalProperty no JSON-LD"
+      instructions:
+        type: richtext
+        note: "cuidados, uso, instalacao, conservacao - conforme o nicho"
+      guide:
+        type: table
+        enabledBy: catalog.guide.enabled
+        note: "medidas, compatibilidade, voltagem, tabela nutricional..."
     cwv: { contentVisibility: auto }
     a11y: { accordion: true, tableHeaders: scope }
     geo: { renderAsTable: true, neverAsImage: true }
@@ -326,9 +338,12 @@ pdpSections:
     a11y: { ratingTextAlternative: required }
     seo: { schema: [AggregateRating, Review] }
 
-  - id: pdp-buy-look
+  - id: pdp-bundle
     priority: lazy
-    props: { products: array }
+    props:
+      title: { type: string, default: vocabulary.bundle }
+      products: array
+    note: "produtos complementares: compre junto, kit, complete o look..."
     cwv: { scrollSnap: native }
     a11y: { role: list }
     seo: { schema: ItemList }
@@ -366,7 +381,7 @@ templates:
 
   pdp:
     sections: [breadcrumb, pdp-gallery, pdp-buybox, pdp-shipping, pdp-details,
-               pdp-reviews, pdp-buy-look, pdp-related, faq]
+               pdp-reviews, pdp-bundle, pdp-related, faq]
 
   landing:
     sections: [hero, banner-grid, showcase, banner-full, text-seo, related-links]

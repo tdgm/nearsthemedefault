@@ -61,8 +61,11 @@ Figma, e um teste automatizado que falha se qualquer par semantico (texto sobre
 superficie, borda sobre superficie, estado de foco) nao atingir AA. Mostre a
 tabela de contrastes calculados ao final.
 
-Calibre tambem o bloco typography.fallbackMetrics contra a fonte real quando
-ela existir; por ora os valores sao os da Inter.
+A fonte segue docs/adr/0001-tipografia-open-source.md: leia typography.font do
+tokens.json, carregue via next/font/local com adjustFontFallback contra o
+fallback declarado, e implemente tambem o modo source: system (zero download).
+O build deve falhar se a licenca nao for OFL-1.1 ou Apache-2.0. Nao escreva
+metricas de fallback a mao.
 ```
 
 ## Fase 2 - Manifests e registry
@@ -75,6 +78,11 @@ geracao de tipos TypeScript a partir deles.
 O section registry deve recusar o build se uma section nao declarar priority,
 cwv e a11y. Demonstre criando uma section invalida de proposito, mostrando o
 erro, e depois removendo.
+
+Resolva as referencias from: e enabledBy: contra os blocos catalog e vocabulary
+do nears.config.yaml. Prove que o template e multinicho: valide o preset
+generic e pelo menos dois presets de docs/adr/0002-template-multinicho.md
+(ex.: moda e mercado) e mostre os tipos gerados para cada um.
 ```
 
 ## Fase 3 - Design system
@@ -111,9 +119,10 @@ controles separados e acessiveis. Rode pnpm lh e me mostre o LCP.
 
 ```
 Implemente a Fase 6. A regra de canonical e critica: quando um produto aparece
-tanto em /{departamento}/{categoria} quanto em /{tipo-de-peca}/{modelagem}, o
+tanto em /{departamento}/{categoria} quanto em /{tipo-de-produto}/{atributo}, o
 canonical aponta para o eixo de departamento, e o eixo plano so e indexavel no
-nivel 1. Implemente tambem a rota de landing de cauda longa /b/{slug} com
+nivel 1. O eixo plano e o atributo do nivel 2 sao ligados/desligados por
+catalog.flatAxis. Implemente tambem a rota de landing de cauda longa /b/{slug} com
 filtros pre-aplicados, exigindo H1, introducao e FAQ unicos por pagina.
 Valide com JS desabilitado e me mostre o HTML renderizado de uma collection.
 ```
@@ -137,9 +146,11 @@ para eu validar no Rich Results.
 ```
 Implemente a Fase 8. Mova todos os scripts de terceiros para Partytown ou
 carregamento pos-interacao e prove com medicao antes/depois. Instrumente RUM de
-Core Web Vitals. Escreva os E2E do fluxo completo de compra ate a sacola.
+Core Web Vitals. Escreva os E2E do fluxo completo de compra ate o carrinho,
+rodando em pelo menos dois presets de nicho.
 Finalize com um guia de onboarding em /docs explicando como alguem cria uma
-nova loja na Nears trocando apenas tokens e manifests.
+nova loja na Nears trocando apenas tokens, fonte e os blocos catalog e
+vocabulary.
 ```
 
 ## Como conduzir
@@ -150,6 +161,6 @@ encher no meio de uma fase, peca um resumo do estado atual e abra sessao nova:
 o roadmap e os manifests ja no disco fazem o trabalho de reancoragem.
 
 Dois pontos valem revisao manual em vez de confiar no gate automatico: a
-calibragem do size-adjust da fonte na Fase 1, que o teste nao pega bem, e a
-decisao de quais agentes de IA permitir no llms.txt na Fase 7, que e escolha de
-negocio e nao tecnica.
+conferencia visual da troca de fonte na Fase 1 (o fallback e calculado no build,
+mas vale olhar com rede lenta), e a decisao de quais agentes de IA permitir no
+llms.txt na Fase 7, que e escolha de negocio e nao tecnica.

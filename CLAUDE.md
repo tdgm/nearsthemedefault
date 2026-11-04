@@ -3,14 +3,22 @@
 ## O que e este projeto
 
 Template padrao white-label da plataforma **Nears**: o front-end base de todas as
-lojas criadas na plataforma. Nao e um site unico. Tudo precisa ser parametrizavel
-por tokens e por manifests declarativos, sem valores de marca hardcoded.
+lojas criadas na plataforma, para **qualquer nicho de varejo online** (moda,
+eletronicos, casa, beleza, mercado, pet...). Nao e um site unico. Tudo precisa
+ser parametrizavel por tokens e por manifests declarativos, sem valores de marca
+nem conceitos de nicho hardcoded.
 
-Benchmark estrutural: hering.com.br (VTEX FastStore + Next.js). Replicamos o
-**padrao arquitetural** - composicao por sections versionadas no CMS, eixos
-multiplos de navegacao, landings de cauda longa, par TextSEO + RelatedLinks ao
-fim de todo template. **Nunca** copiamos identidade visual, textos, imagens ou
-codigo de terceiros.
+Padrao arquitetural adotado: composicao de paginas por sections versionadas no
+CMS, eixos multiplos de navegacao (departamento e tipo de produto), landings de
+cauda longa e o par TextSEO + RelatedLinks ao fim de todo template. **Nunca**
+copiamos identidade visual, textos, imagens ou codigo de terceiros.
+
+Onde cada coisa muda:
+
+- **Marca**: `packages/tokens/tokens.json` (cor, fonte, raio, espaco, midia).
+- **Nicho**: blocos `catalog` e `vocabulary` de `nears/nears.config.yaml`
+  (eixos de variacao, facetas, atributos GEO, microcopy). Presets em
+  `docs/adr/0002-template-multinicho.md`.
 
 ## Stack obrigatoria
 
@@ -66,8 +74,11 @@ Consequencias praticas:
 - Acima da dobra: `<picture>` com AVIF + WebP, `fetchpriority="high"`, sem lazy.
   Abaixo da dobra: `loading="lazy" decoding="async"`.
 - Carrossel usa scroll-snap nativo + `scrollIntoView`. Zero libs.
-- Fonte: uma familia variavel self-hosted, woff2 subsetado, `font-display: swap`,
-  preload so do peso 400, `size-adjust` calibrado contra o fallback.
+- Fonte: no maximo uma familia variavel **open source** (OFL ou Apache),
+  self-hosted via `next/font/local`, woff2 subsetado, `font-display: swap`,
+  preload so do peso 400. Fallback websafe (Arial/Times New Roman) com
+  `size-adjust` calculado no build, nunca a mao. Modo `system` = zero download.
+  Nunca CDN de fontes. Ver `docs/adr/0001-tipografia-open-source.md`.
 - Secoes abaixo da dobra recebem `content-visibility: auto` com
   `contain-intrinsic-size` declarado.
 - Script de terceiro nunca bloqueia render. Carrega via `afterInteractive`,
@@ -78,8 +89,9 @@ Consequencias praticas:
 WCAG 2.2 AA e gate de merge, nao aspiracao.
 
 - Alvo de toque >= 44x44px; foco visivel sempre; contraste testado automaticamente
-- Seletor de tamanho e `radiogroup`, nao lista de botoes
-- Adicionar a sacola anuncia resultado em `aria-live="polite"`
+- Seletor de variacao (cor, tamanho, voltagem, peso...) e `radiogroup`, nao
+  lista de botoes
+- Adicionar ao carrinho anuncia resultado em `aria-live="polite"`
 - Drawer e modal com focus trap e fechamento por Esc
 - `prefers-reduced-motion` respeitado em toda animacao
 - 0 violacoes do axe em todas as stories e em todos os E2E
@@ -92,7 +104,8 @@ WCAG 2.2 AA e gate de merge, nao aspiracao.
 - Schemas por template conforme `nears/contracts.yaml`. `Product` so e completo
   com `aggregateRating`, `shippingDetails` e `hasMerchantReturnPolicy`.
 - Toda collection e toda PDP tem bloco de FAQ com `FAQPage`.
-- Tabelas de medidas e composicao em HTML semantico. Nunca em imagem.
+- Tabelas de especificacao, medidas, composicao ou informacao nutricional em
+  HTML semantico. Nunca em imagem.
 - Primeiro paragrafo de todo bloco de texto responde diretamente a pergunta do
   heading (otimizacao para motores generativos).
 - `robots.txt` e `llms.txt` gerados a partir do manifest.
@@ -104,6 +117,9 @@ WCAG 2.2 AA e gate de merge, nao aspiracao.
 - Toda section exporta componente, `schema` (Zod), `meta` (priority, cwv, a11y)
   e story. Sem os quatro, o registry rejeita no build.
 - Nenhum valor de marca hardcoded. Cor, fonte, raio e espaco so via token.
+- Nenhum conceito de nicho hardcoded. Eixos de variacao, facetas, atributos e
+  microcopy vem de `catalog` e `vocabulary`. Comportamento nunca depende de
+  `catalog.vertical`: se algo muda por nicho, vira campo explicito.
 - Formatacao BR centralizada em `/lib/format`: R$ com virgula, parcelamento
   "Nx de R$ Y sem juros", CEP, CNPJ, data dd/mm/aaaa.
 - Commits em Conventional Commits. Um commit por entregavel coerente.

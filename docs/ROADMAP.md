@@ -17,22 +17,29 @@ Entregar: `packages/tokens/tokens.json` com escalas completas (neutral 0-1000,
 brand, accent, semanticos), tipografia fluida com clamp, espaco base 4, radii,
 shadows, z-index, breakpoints 360/768/1024/1280/1536 e motion. Build Style
 Dictionary gerando CSS vars + preset Tailwind + JSON para Figma. Tema claro e
-escuro. Troca de marca por substituicao de um unico arquivo.
+escuro. Troca de marca por substituicao de um unico arquivo. Loader de fonte
+via `next/font/local` lendo `typography.font` (open source, self-hosted,
+fallback websafe calculado no build) e modo `system` sem download.
 
-**Gate:** contraste AA validado por teste automatizado em todos os pares semanticos.
+**Gate:** contraste AA validado por teste automatizado em todos os pares semanticos;
+build falha se a licenca da fonte nao for OFL-1.1 ou Apache-2.0.
 
 ## Fase 2 - Manifests e registry
 
 Entregar: os quatro YAML em `/nears` com schemas Zod, loader tipado, geracao de
 tipos a partir dos manifests, e um section registry que falha o build se uma
-section nao declarar `priority`, `cwv` e `a11y`.
+section nao declarar `priority`, `cwv` e `a11y`. Resolucao das referencias
+`from:` e `enabledBy:` para os blocos `catalog` e `vocabulary`, gerando os tipos
+de eixos de variacao e facetas do nicho configurado.
 
-**Gate:** `pnpm validate` valida os manifests e gera os tipos.
+**Gate:** `pnpm validate` valida os manifests e gera os tipos para o preset
+`generic` e para pelo menos dois presets de `docs/adr/0002-template-multinicho.md`.
 
 ## Fase 3 - Design system (packages/ui)
 
 Entregar: Button, IconButton, Link, Input, Select, Checkbox, Radio, RadioGroup,
-Swatch, SizeSelector, Badge, Price, Rating, Skeleton, Toast, Tooltip, Accordion,
+VariantSelector (exibicao swatch ou option, sempre radiogroup), Badge, Price,
+Rating, Skeleton, Toast, Tooltip, Accordion,
 Tabs, Modal, Drawer, Breadcrumb, Pagination, Carousel (scroll-snap nativo) e Image
 (wrapper com picture + aspect-ratio obrigatorio).
 
@@ -58,7 +65,7 @@ QuickFilter, ProductGrid, ProductCard, Breadcrumb, TextSEO, FAQ e RelatedLinks.
 
 Entregar: home, collection, pdp, landing, page, search, sitemap HTML e 404.
 Roteamento a partir de `routes.manifest.yaml`, incluindo a regra de canonical entre
-o eixo de departamento e o eixo plano de tipo de peca. Data layer GraphQL com Zod
+o eixo de departamento e o eixo plano de tipo de produto. Data layer GraphQL com Zod
 validando toda resposta e mocks para desenvolvimento.
 
 **Gate:** todo conteudo indexavel presente com JS desabilitado.
@@ -75,8 +82,8 @@ atribuicao de trafego vindo de motores generativos.
 ## Fase 8 - Endurecimento
 
 Entregar: carregamento diferido de terceiros com Partytown, RUM de Core Web Vitals,
-testes E2E do fluxo descoberta -> PLP -> PDP -> sacola, auditoria final de
-acessibilidade por teclado e leitor de tela, e documentacao de onboarding para quem
-for criar uma loja na Nears.
+testes E2E do fluxo descoberta -> PLP -> PDP -> carrinho (rodando em pelo menos
+dois presets de nicho), auditoria final de acessibilidade por teclado e leitor de
+tela, e documentacao de onboarding para quem for criar uma loja na Nears.
 
 **Gate:** Lighthouse mobile >= 90 / >= 95 / 100 nas tres rotas principais.

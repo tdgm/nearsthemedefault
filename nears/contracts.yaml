@@ -28,15 +28,13 @@ data:
       - aggregateRating          # { ratingValue, reviewCount }
       - shippingDetails          # { deliveryTime, shippingRate, destination }
       - hasMerchantReturnPolicy  # { returnDays, returnMethod, returnFees }
-      - color
-      - material
-      - size
-      - sizeGuideUrl
-      - audience
-      - pattern
+      - additionalProperty       # specs da PDP como PropertyValue[] (catalog.specTable)
+    requiredForGeoFrom: catalog.geoAttributes   # extras do nicho (ex.: color, material)
     variants:
+      # So existe quando catalog.variantAxes nao esta vazio.
       isVariantOf: { groupId: string, name: string }
-      hasVariant: "array<{ sku, size, color, availability, price }>"
+      variesBy: catalog.variantAxes[].schemaOrg
+      hasVariant: "array<{ sku, axes: Record<variantAxisId, string>, availability, price }>"
     onMissingGeoField: warn-build    # vira fail-build ao fim da Fase 7
 
   collection:
@@ -60,7 +58,7 @@ seo:
     headings: { h1PerPage: 1, skipLevels: forbidden }
     altText:
       strategy: rule-based
-      pattern: "{productType} {color} {audience} {brand}"
+      pattern: "{name} {variantValues} {brand}"   # variantValues segue catalog.variantAxes; termos repetidos sao removidos
     noJsRender: required
 
   byTemplate:

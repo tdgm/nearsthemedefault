@@ -1,8 +1,47 @@
 # Configuracao raiz do template padrao Nears.
-# Trocar de marca = trocar tokens.json. Nada aqui e especifico de cliente.
+# Trocar de marca = trocar tokens.json. Trocar de nicho = trocar os blocos
+# `catalog` e `vocabulary` abaixo. Nada aqui e especifico de cliente ou de
+# segmento de varejo.
 platform: nears
 template: standard
 version: 1.0.0
+
+# Tudo o que muda de um nicho de varejo para outro (moda, eletronicos, casa,
+# beleza, mercado, pet...). O codigo nunca assume um nicho: le daqui.
+# Presets prontos em docs/adr/0002-template-multinicho.md.
+catalog:
+  vertical: generic              # rotulo informativo; nao muda comportamento
+  productMedia:
+    aspect: product              # chave de tokens.json > media.aspect
+    hoverImage: false            # segunda imagem no hover do card
+  variantAxes: []                # eixos de variacao do SKU, na ordem da PDP
+    # - { id: color, label: Cor, display: swatch, schemaOrg: color }
+    # - { id: size, label: Tamanho, display: option, schemaOrg: size }
+    # display: swatch (amostra visual) | option (texto). Ambos sao radiogroup.
+  facets:
+    available: [category, brand, price]   # filtros exibidos no grid
+    indexable: [category, brand]          # filtros com URL indexavel
+  geoAttributes: []              # propriedades schema.org exigidas no nicho
+                                 # (ex.: color, material, size, audience, weight)
+  specTable:
+    enabled: true                # especificacoes em <table> + additionalProperty
+  guide:
+    enabled: false               # guia auxiliar na PDP: medidas, compatibilidade,
+    label: ~                     # voltagem, tabela nutricional...
+  flatAxis:
+    enabled: true                # eixo plano /{productType}, paralelo aos departamentos
+    secondLevelAttribute: ~      # atributo do nivel 2 (/{productType}/{valor}); ~ desliga
+
+# Microcopy que muda por nicho ou por marca. Nenhum texto de interface fica no
+# codigo; componentes leem daqui (e, no futuro, do CMS).
+vocabulary:
+  cart: Carrinho                 # Sacola, Cesta, Pedido...
+  addToCart: Adicionar ao carrinho
+  wishlist: Favoritos            # Lista de desejos
+  department: Departamento
+  productType: Tipo de produto
+  bundle: Compre junto           # Complete o look, Monte seu kit...
+  guide: Guia                    # sobrescrito por catalog.guide.label
 
 locale:
   default: pt-BR
@@ -25,14 +64,19 @@ design:
     source: packages/tokens/tokens.json
     output: [css-vars, tailwind, figma]
   typography:
-    family: "var(--font-brand)"
-    weights: [400, 500, 700]        # maximo 3 - sem familias duplicadas
+    # Politica de carga. A ESCOLHA da fonte (nome, arquivo, licenca, fallback)
+    # e identidade de marca e vive em tokens.json > typography.font.
+    # Decisao registrada em docs/adr/0001-tipografia-open-source.md.
+    licenses: [OFL-1.1, Apache-2.0]  # so open source; build falha fora disso
+    hosting: self-hosted             # nunca CDN de fontes (host de terceiro + LGPD)
+    maxFamilies: 1
+    weights: [400, 500, 700]         # maximo 3, servidos por um unico arquivo variavel
     preload: [400]
     display: swap
     subset: [latin, latin-ext]
     fallback:
-      adjust: metric-override
-      stack: "system-ui, sans-serif"
+      adjust: metric-override        # automatico via next/font/local
+      stack: websafe                 # tokens.json > typography.family.system
   color:
     scales: [neutral, brand, accent]
     semantic:
