@@ -1,0 +1,14 @@
+# Preset: pet.
+preset: pet
+description: Pet, com peso e porte como eixos.
+catalog:
+  vertical: pet
+  productMedia: { aspect: product }
+  variantAxes:
+    - { id: weight, label: Peso, display: option, schemaOrg: weight }
+    - { id: petSize, label: Porte, display: option }
+  facets:
+    available: [category, brand, price, petSize, species]
+    indexable: [category, brand, species]
+  geoAttributes: [brand, weight]
+  guide: { enabled: true, label: Guia de porte }

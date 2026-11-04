@@ -15,3 +15,6 @@ packages/tokens/tokens.json
 # Gerados por packages/tokens/build.mjs (versionados, nao editar)
 packages/tokens/dist
 apps/web/app/_generated
+
+# Gerado por scripts/manifests-types.mjs (versionado, nao editar)
+packages/manifests/_generated
