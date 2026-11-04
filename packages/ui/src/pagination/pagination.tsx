@@ -54,7 +54,8 @@ export function Pagination({ currentPage, totalPages, hrefFor, siblings = 1, lab
               <span aria-hidden="true">‹</span>
             </a>
           ) : (
-            <span aria-disabled="true" aria-label={l.previous} className={disabled}>
+            <span aria-disabled="true" className={disabled}>
+              <span className="sr-only">{l.previous}</span>
               <span aria-hidden="true">‹</span>
             </span>
           )}
@@ -83,7 +84,8 @@ export function Pagination({ currentPage, totalPages, hrefFor, siblings = 1, lab
               <span aria-hidden="true">›</span>
             </a>
           ) : (
-            <span aria-disabled="true" aria-label={l.next} className={disabled}>
+            <span aria-disabled="true" className={disabled}>
+              <span className="sr-only">{l.next}</span>
               <span aria-hidden="true">›</span>
             </span>
           )}

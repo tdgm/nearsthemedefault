@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Link } from './link';
-import { buttonClasses } from '../button/button';
 
 const meta = {
   title: 'Átomos/Link',
@@ -21,7 +20,7 @@ export const NoTexto: Story = {
 export const Isolado: Story = { args: { variant: 'standalone' } };
 export const Externo: Story = { args: { href: 'https://example.com', external: true, children: 'Política do parceiro' } };
 export const ComAparenciaDeBotao: Story = {
-  render: (args) => <Link {...args} className={buttonClasses({ variant: 'primary' })} variant="standalone" />,
+  args: { appearance: { variant: 'primary' } },
 };
 export const Foco: Story = {
   play: async ({ canvasElement }) => {

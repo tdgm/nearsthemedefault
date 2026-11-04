@@ -21,6 +21,8 @@ describe('IconButton', () => {
   it('limita o contador visual a 99+', () => {
     render(<IconButton label="Carrinho" icon={icon} badge={150} />);
     expect(screen.getByText('99+')).toBeInTheDocument();
+    // O nome acessivel contem o texto visivel do contador (WCAG 2.5.3).
+    expect(screen.getByRole('button', { name: 'Carrinho, 99+ itens' })).toBeInTheDocument();
   });
 
   it('badge 0 nao aparece e tem alvo de 44px', () => {

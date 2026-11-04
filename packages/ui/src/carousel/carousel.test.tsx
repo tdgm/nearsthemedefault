@@ -30,7 +30,7 @@ describe('Carousel', () => {
 
   it('usa scroll-snap nativo', () => {
     render(<Carousel slides={slides} label="Destaques" />);
-    expect(screen.getAllByRole('list')[0]).toHaveClass('snap-x', 'snap-mandatory');
+    expect(screen.getByRole('region', { name: 'Destaques' }).firstElementChild).toHaveClass('snap-x', 'snap-mandatory');
   });
 
   it('anterior comeca desabilitado; proximo chama scrollIntoView', () => {

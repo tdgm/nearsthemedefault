@@ -15,10 +15,11 @@ export type IconButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'ari
 /** Botao quadrado de no minimo 44x44px (CLAUDE.md > Acessibilidade). */
 export function IconButton({ label, icon, variant = 'tertiary', badge, type = 'button', className, ...rest }: IconButtonProps) {
   const count = badge && badge > 0 ? badge : 0;
+  const shown = count > 99 ? '99+' : String(count);
   return (
     <button
       type={type}
-      aria-label={count ? `${label}, ${count} ${count === 1 ? 'item' : 'itens'}` : label}
+      aria-label={count ? `${label}, ${shown} ${count === 1 ? 'item' : 'itens'}` : label}
       className={cn(
         buttonClasses({ variant, size: 'sm' }),
         'relative size-11 min-w-11 p-0 no-underline',
@@ -34,7 +35,7 @@ export function IconButton({ label, icon, variant = 'tertiary', badge, type = 'b
           aria-hidden="true"
           className="absolute -top-1 -right-1 grid min-w-5 place-items-center rounded-full bg-badge-promo-bg px-1 text-2xs font-bold text-badge-promo-on"
         >
-          {count > 99 ? '99+' : count}
+          {shown}
         </span>
       )}
     </button>

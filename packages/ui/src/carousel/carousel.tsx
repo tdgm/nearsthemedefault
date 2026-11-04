@@ -31,8 +31,8 @@ const widths = { 1: 'basis-full', 2: 'basis-[85%] md:basis-1/2', 3: 'basis-[85%]
  */
 export function Carousel({ slides, label, perView = 1, labels = defaultLabels, className }: CarouselProps) {
   const l = { ...defaultLabels, ...labels };
-  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
-  const trackRef = useRef<HTMLUListElement>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const last = slides.length - 1;
 
@@ -55,14 +55,14 @@ export function Carousel({ slides, label, perView = 1, labels = defaultLabels, c
 
   return (
     <section role="region" aria-roledescription="carrossel" aria-label={label} className={cn('relative', className)}>
-      <ul
+      <div
         ref={trackRef}
         onScroll={onScroll}
         tabIndex={0}
         className="flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain scroll-smooth [scrollbar-width:none] motion-reduce:scroll-auto [&::-webkit-scrollbar]:hidden"
       >
         {slides.map((slide, i) => (
-          <li
+          <div
             key={i}
             ref={(el) => {
               itemRefs.current[i] = el;
@@ -73,9 +73,9 @@ export function Carousel({ slides, label, perView = 1, labels = defaultLabels, c
             className={cn('shrink-0 snap-start', widths[perView])}
           >
             {slide}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
       {slides.length > 1 && (
         <div className="mt-3 flex items-center justify-end gap-2">
           <button type="button" className={btn} aria-label={l.previous} disabled={index === 0} onClick={() => go(index - 1)}>

@@ -37,13 +37,13 @@ describe('Pagination', () => {
   it('na primeira pagina o anterior fica desabilitado e sem link', () => {
     render(<Pagination currentPage={1} totalPages={5} hrefFor={hrefFor} />);
     expect(screen.queryByRole('link', { name: 'Página anterior' })).toBeNull();
-    expect(screen.getByLabelText('Página anterior')).toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByText('Página anterior').parentElement).toHaveAttribute('aria-disabled', 'true');
   });
 
   it('na ultima pagina a proxima fica desabilitada', () => {
     render(<Pagination currentPage={5} totalPages={5} hrefFor={hrefFor} />);
     expect(screen.queryByRole('link', { name: 'Próxima página' })).toBeNull();
-    expect(screen.getByLabelText('Próxima página')).toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByText('Próxima página').parentElement).toHaveAttribute('aria-disabled', 'true');
   });
 
   it('e um landmark nav', () => {
