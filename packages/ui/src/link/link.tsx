@@ -33,7 +33,7 @@ export function Link({ variant = 'inline', as, external, className, children, ..
       {...rest}
     >
       {children}
-      {external && <span className="sr-only"> (abre em nova aba)</span>}
+      {external && <span className="sr-only">, abre em nova aba</span>}
     </Component>
   );
 }

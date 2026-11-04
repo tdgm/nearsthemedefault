@@ -48,7 +48,7 @@ describe('VariantSelector', () => {
 
   it('opcao indisponivel fica desabilitada e avisa no nome acessivel', () => {
     render(<VariantSelector legend="Tamanho" display="option" options={options} />);
-    expect(screen.getByRole('radio', { name: 'G (indisponível)' })).toBeDisabled();
+    expect(screen.getByRole('radio', { name: 'G, indisponível' })).toBeDisabled();
   });
 
   it('controlado reflete value', () => {

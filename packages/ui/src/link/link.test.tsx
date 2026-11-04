@@ -25,7 +25,7 @@ describe('Link', () => {
         Parceiro
       </Link>,
     );
-    const link = screen.getByRole('link', { name: 'Parceiro (abre em nova aba)' });
+    const link = screen.getByRole('link', { name: 'Parceiro, abre em nova aba' });
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   });

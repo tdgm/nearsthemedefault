@@ -115,7 +115,7 @@ export function VariantSelector({
                   )}
                 >
                   {o.label}
-                  {o.unavailable && <span className="sr-only"> ({unavailableLabel})</span>}
+                  {o.unavailable && <span className="sr-only">, {unavailableLabel}</span>}
                 </span>
               )}
             </label>

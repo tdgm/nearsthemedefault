@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import { formatBRL, formatCEP, formatCNPJ, formatDate, formatInstallments, installmentValue, percentOff } from './format';
 
-const nbsp = (s: string) => s.replace(/ /g, ' ');
+const nbsp = (s: string) => s.replace(/\u00a0/g, ' ');
 
 describe('format BR', () => {
   it('R$ com virgula e milhar com ponto', () => {
