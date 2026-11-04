@@ -168,3 +168,7 @@ Segredos (gitleaks). Pulado por limite da plataforma: Revisao de dependencias.
 mas nao pode ser enviado. Decisao do mantenedor pendente: habilitar GHAS, tornar
 o repo publico, ou trocar por `upload: never` + SARIF como artefato com gate
 proprio.
+
+**Atualizacao (Fase 1, PR #8):** o mantenedor habilitou o Code scanning (default
+setup). O workflow `codeql.yml` passou a falhar com "configuration error" (conflito
+com o default setup) e foi removido; a analise segue pelos checks `Analyze (...)`.

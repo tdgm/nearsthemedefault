@@ -16,6 +16,7 @@ export default tseslint.config(
       '**/test-results/**',
       '**/.lighthouseci/**',
       '**/next-env.d.ts',
+      '**/_generated/**',
       'pnpm-lock.yaml',
     ],
   },

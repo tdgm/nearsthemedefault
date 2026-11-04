@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { loadConfig } from '../lib/manifest';
+import { fontVariableClass } from './_generated/fonts';
 import './globals.css';
 
 const config = loadConfig();
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang={config.locale.default}>
+    <html lang={config.locale.default} className={fontVariableClass}>
       <body>{children}</body>
     </html>
   );

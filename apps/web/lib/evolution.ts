@@ -4,8 +4,8 @@
 export type PhaseStatus = 'concluida' | 'em-andamento' | 'pendente';
 
 export const phases: { id: number; name: string; status: PhaseStatus }[] = [
-  { id: 0, name: 'Fundação (monorepo, Next 16, testes, CI)', status: 'em-andamento' },
-  { id: 1, name: 'Tokens', status: 'pendente' },
+  { id: 0, name: 'Fundação (monorepo, Next 16, testes, CI)', status: 'concluida' },
+  { id: 1, name: 'Tokens', status: 'em-andamento' },
   { id: 2, name: 'Manifests e registry', status: 'pendente' },
   { id: 3, name: 'Design system (packages/ui)', status: 'pendente' },
   { id: 4, name: 'Sections globais', status: 'pendente' },

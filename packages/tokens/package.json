@@ -2,8 +2,19 @@
   "name": "@nears/tokens",
   "version": "0.1.0",
   "private": true,
-  "description": "Design tokens da Nears. Build (Style Dictionary) entra na Fase 1.",
+  "type": "module",
+  "description": "Design tokens da Nears: tokens.json -> CSS vars, @theme do Tailwind 4 e JSON para o Figma.",
   "exports": {
-    "./tokens.json": "./tokens.json"
+    "./tokens.json": "./tokens.json",
+    "./tokens.css": "./dist/tokens.css",
+    "./theme.css": "./dist/theme.css",
+    "./figma.tokens.json": "./dist/figma.tokens.json"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node build.mjs --check"
+  },
+  "devDependencies": {
+    "style-dictionary": "^5.8.0"
   }
 }

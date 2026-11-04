@@ -42,7 +42,6 @@ Fontes: so open source (OFL/Apache), self-hosted, com fallback websafe -
 | `scripts/check-budgets.mjs` | JS/CSS/HTML estatico por rota (lido de `routes.manifest.yaml > appRoute`) |
 | `scripts/check-third-party-hosts.mjs` | Conta hosts de terceiros distintos no relatorio do Lighthouse CI |
 | `.github/dependabot.yml` | Mantem dependencias (npm/pnpm) e GitHub Actions atualizadas |
-| `.github/workflows/codeql.yml` | Analise estatica (SAST) em push/PR/semanal |
 | `docs/adr/` | Decisoes de arquitetura (tipografia, multinicho, rotas e robots, contraste, enforcement de budgets, composicao de sections, Next.js 16, seguranca de CI) |
 
 ## Orcamentos
@@ -62,8 +61,8 @@ Fonte unica de verdade: `nears/nears.config.yaml`. O CI falha se estourar.
 
 ## Seguranca
 
-`pnpm audit`, scanner de segredos (gitleaks) e CodeQL correm no CI desde a
-Fase 0, mesmo em repo vazio. Headers de seguranca (CSP, HSTS, etc.) vem de
+`pnpm audit`, scanner de segredos (gitleaks) correm no CI e o CodeQL roda pelo default
+setup do GitHub, desde a Fase 0, mesmo em repo vazio. Headers de seguranca (CSP, HSTS, etc.) vem de
 `nears.config.yaml > security`, nunca hardcoded em componente. Detalhe
 completo em
 [docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md](./docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md).

@@ -150,6 +150,10 @@ gates:
       - { fg: on-inverse,       bg: [surface-inverse], min: text }
       - { fg: action-on,        bg: [action, action-hover], min: text }
       - { fg: badge-promo-on,   bg: [badge-promo-bg], min: text }
+      - { fg: success,         bg: [surface, surface-subtle, surface-raised], min: text }
+      - { fg: warning,         bg: [surface, surface-subtle, surface-raised], min: text }
+      - { fg: danger,          bg: [surface, surface-subtle, surface-raised], min: text }
+      - { fg: info,            bg: [surface, surface-subtle, surface-raised], min: text }
       - { fg: border-control,   bg: [surface, surface-subtle, surface-raised], min: ui }
       - { fg: focus-ring,       bg: [surface, surface-subtle, surface-raised], min: ui }
     # Tokens decorativos (border, border-strong) ficam fora de proposito:
@@ -161,7 +165,7 @@ gates:
     headers: enforced-in-ci
     dependencyAudit: enforced-in-ci
     secretScanning: enforced-in-ci
-    staticAnalysis: enforced-in-ci       # CodeQL, .github/workflows/codeql.yml
+    staticAnalysis: enforced-in-ci       # CodeQL via default setup do GitHub (ADR 0008)
     multiTenancyHostValidation: pending-fase-6
   seo:
     richResultsErrors: 0

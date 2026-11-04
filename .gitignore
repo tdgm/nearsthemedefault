@@ -164,3 +164,7 @@ storybook-static/
 *.key
 *.cert
 *.p12
+
+# Tokens gerados sao versionados de proposito (pnpm tokens:check falha se divergirem)
+!packages/tokens/dist
+!packages/tokens/dist/**
