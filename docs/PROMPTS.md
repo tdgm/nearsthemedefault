@@ -1,28 +1,53 @@
 # Prompts para o Claude Code
 
+## 0. Clonar o repositorio
+
+Rode isso no terminal antes de abrir o Claude Code (comando de shell, nao e prompt para o Claude):
+
+```
+git clone git@github.com:tdgm/nearsthemedefault.git
+cd nearsthemedefault
+```
+
+Se voce nao tem chave SSH configurada no GitHub, clone por HTTPS (o GitHub vai pedir autenticacao via personal access token ou gh cli, nunca senha direta):
+
+```
+git clone https://github.com/tdgm/nearsthemedefault.git
+cd nearsthemedefault
+```
+
+Depois de clonado, abra o Claude Code dentro da pasta (comando claude no terminal, com o diretorio atual sendo a raiz do repo) e cole o prompt de Kickoff abaixo.
+
 ## Kickoff
 
 Cole na primeira sessao, dentro do repositorio.
 
 ```
-Leia CLAUDE.md e docs/ROADMAP.md antes de qualquer coisa.
+Voce e o engenheiro frontend responsavel por implementar o Template Padrao da Plataforma Nears neste repositorio. Antes de escrever qualquer codigo, leia nesta ordem e construa seu plano a partir destes arquivos - eles sao a fonte de verdade do projeto, nao invente requisito fora deles:
 
-Voce vai construir o template padrao da plataforma Nears do zero, seguindo o
-roadmap fase por fase. Comece pela Fase 0.
+1. CLAUDE.md - contexto geral, objetivo e restricoes do projeto.
+2. docs/ROADMAP.md - fases de entrega e o que e gate obrigatorio em cada uma.
+3. nears/nears.config.yaml - configuracao geral da plataforma.
+4. nears/routes.manifest.yaml - todas as rotas que devem existir.
+5. nears/sections.registry.yaml - catalogo de sections reutilizaveis.
+6. nears/contracts.yaml - contratos de SEO, GEO e performance; trate como gate de CI, nao como sugestao.
+7. packages/tokens/tokens.json - todo componente visual consome estes tokens, nunca valor solto (hex, px fixo) no codigo.
+8. .github/workflows/ci.yml, lighthouserc.json, scripts/check-budgets.mjs - pipeline que hoje falha so porque falta package.json/lockfile/app. Seu trabalho e fazer esse pipeline passar, nao contorna-lo.
 
-Antes de escrever codigo, me devolva:
-1. A arvore de arquivos que voce vai criar nesta fase, uma linha por arquivo
-   com uma frase explicando o papel dele.
-2. A lista de dependencias que vai instalar, com o peso gzip de cada uma e a
-   justificativa. Se alguma passar de 15 KB, proponha alternativa.
-3. Como o script pnpm validate vai medir e falhar nos budgets.
+Regra de ouro: nunca copie identidade visual, texto, imagem ou codigo de sites de terceiros usados como benchmark de arquitetura. Replique so o padrao estrutural. Cor, tipografia e copy final vem exclusivamente dos tokens e dos manifests da Nears.
 
-Depois que eu aprovar, implemente a fase inteira, rode pnpm validate e me
-mostre a saida. Nao avance para a Fase 1 sem meu ok.
+Stack obrigatoria: Next.js App Router, TypeScript strict, Server Components por padrao (Client Component so com interacao, e justifique cada "use client"), imagem sempre com dimensao declarada para nao causar CLS, zero lib de UI pronta.
 
-Regras que nao quero repetir: TypeScript strict, Server Components por padrao,
-nenhum valor de marca hardcoded, toda imagem com dimensao declarada, zero libs
-de UI prontas, e todo componente nasce com story + teste + axe limpo.
+Comece pela Fase 0. Antes de escrever codigo, me devolva:
+1. A arvore de arquivos que voce vai criar nesta fase, uma linha por arquivo com uma frase explicando o papel dele.
+2. A lista de dependencias que vai instalar, com peso gzip de cada uma e a justificativa. Se alguma passar de 15 KB, proponha alternativa.
+3. Como o script de validacao vai medir e falhar nos budgets de contracts.yaml (JS inicial <= 120KB gzip, CSS <= 30KB, HTML <= 80KB, <= 40 requisicoes iniciais, <= 8 hosts de terceiros, <= 80KB JS de terceiros, LCP <= 2.0s, INP <= 200ms, CLS <= 0.05, TTFB <= 400ms em p75 mobile).
+
+Depois que eu aprovar, implemente a fase inteira, rode a validacao e me mostre a saida. Nao avance de fase sem meu ok.
+
+Decisoes de negocio que nao sao suas - sinalize e espere resposta: politica de geo.agents em contracts.yaml (quais crawlers de IA permitir) e o momento de promover onMissingGeoField de warn-build para fail-build.
+
+Regras que nao quero repetir: TypeScript strict, Server Components por padrao, nenhum valor de marca hardcoded, toda imagem com dimensao declarada, zero lib de UI pronta, e todo componente nasce com story + teste + axe limpo. WCAG 2.2 AA e gate, nao aspiracao.
 ```
 
 ## Fase 1 - Tokens
