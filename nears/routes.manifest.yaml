@@ -125,7 +125,7 @@ routes:
     template: pdp
     priority: 0.8
     headerVariant: minimal
-    appRoute: "/[productSlug]/p/page"   # sufixo literal "/p" - nao ambiguo
+    appRoute: "/[slug]/p/page"   # sufixo literal "/p" vence /[slug]/[sub]; o Next exige o mesmo nome de parametro ([slug]) no 1o segmento - docs/adr/0009
     jsBudgetCritical: true
 
   - id: search

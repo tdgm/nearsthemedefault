@@ -1,6 +1,9 @@
 {
   "ci": {
     "collect": {
+      "startServerCommand": "pnpm start",
+      "startServerReadyPattern": "Ready in",
+      "startServerReadyTimeout": 60000,
       "url": [
         "http://localhost:3000/",
         "http://localhost:3000/departamento-exemplo",
@@ -9,34 +12,22 @@
       "numberOfRuns": 3,
       "settings": {
         "formFactor": "mobile",
-        "screenEmulation": { "mobile": true, "width": 390, "height": 844, "deviceScaleFactor": 2 },
+        "screenEmulation": {
+          "mobile": true,
+          "width": 390,
+          "height": 844,
+          "deviceScaleFactor": 2
+        },
         "throttling": {
           "rttMs": 150,
           "throughputKbps": 1638,
           "cpuSlowdownMultiplier": 4
-        },
-        "budgets": [
-          {
-            "path": "/*",
-            "_comment": "Espelha nears/nears.config.yaml > budgets. resourceSizes/resourceCounts e' o Performance Budgets API nativo do Lighthouse (nao e' sintaxe especifica de LHCI). Hosts de terceiros DISTINTOS nao tem assercao nativa - ver scripts/check-third-party-hosts.mjs, que le o mesmo relatorio.",
-            "resourceSizes": [
-              { "resourceType": "script", "budget": 120 },
-              { "resourceType": "stylesheet", "budget": 30 },
-              { "resourceType": "document", "budget": 80 },
-              { "resourceType": "third-party", "budget": 80 }
-            ],
-            "resourceCounts": [
-              { "resourceType": "total", "budget": 40 },
-              { "resourceType": "third-party", "budget": 40 }
-            ]
-          }
-        ]
+        }
       }
     },
     "assert": {
-      "_comment": "performance-budget: audit nativo do Lighthouse que falha (score < 1) se QUALQUER limite do array `budgets` acima estourar - e' o que de fato aplica JS/CSS/HTML/third-party em KB e contagem de requisicoes. Nao confirmamos neste PR se o LHCI expoe tambem chaves granulares por tipo (ex.: resource-summary:script:size); antes de confiar so' no score agregado, confira a versao instalada de @lhci/cli (pnpm lh --view mostra o relatorio com a tabela de budgets por item). Ver docs/adr/0005-enforcement-de-budgets.md.",
+      "_comment": "Lighthouse 13 (usado pelo @lhci/cli 0.16) nao tem mais a Budgets API nem a auditoria performance-budget: o antigo bloco settings.budgets era ignorado e a assertion performance-budget nunca avaliava nada (confirmado em 2026-11-04: configSettings.budgets = null e nenhuma auditoria *budget* no relatorio). Os limites agora usam as chaves nativas resource-summary:<tipo>:size|count do LHCI (bytes transferidos, inclui cabecalhos HTTP). JS e CSS NAO sao repetidos aqui: scripts/check-budgets.mjs mede o gzip estatico, que e a fonte da verdade (docs/adr/0005 e 0010). categories:seo esta em warn ate a Fase 7: o noindex global e a falta de robots.txt sao intencionais ate la (ROADMAP Fase 7).",
       "assertions": {
-        "performance-budget": ["error", { "minScore": 1 }],
         "categories:performance": [
           "error",
           {
@@ -50,7 +41,7 @@
           }
         ],
         "categories:seo": [
-          "error",
+          "warn",
           {
             "minScore": 1
           }
@@ -95,6 +86,24 @@
           "error",
           {
             "minScore": 1
+          }
+        ],
+        "resource-summary:total:count": [
+          "error",
+          {
+            "maxNumericValue": 40
+          }
+        ],
+        "resource-summary:document:size": [
+          "error",
+          {
+            "maxNumericValue": 81920
+          }
+        ],
+        "resource-summary:third-party:size": [
+          "error",
+          {
+            "maxNumericValue": 81920
           }
         ]
       }

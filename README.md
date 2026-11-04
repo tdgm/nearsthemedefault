@@ -51,7 +51,7 @@ Fonte unica de verdade: `nears/nears.config.yaml`. O CI falha se estourar.
 
 | Metrica | Limite |
 | --- | --- |
-| JS inicial (rota critica) | 120 KB gzip |
+| JS inicial (rota critica) | 140 KB gzip (ver docs/adr/0010) |
 | CSS inicial | 30 KB |
 | HTML | 80 KB |
 | Requisicoes iniciais | 40 |

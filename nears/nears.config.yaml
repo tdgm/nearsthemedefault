@@ -42,6 +42,14 @@ vocabulary:
   productType: Tipo de produto
   bundle: Compre junto           # Complete o look, Monte seu kit...
   guide: Guia                    # sobrescrito por catalog.guide.label
+  # Busca (rota /s). Estados: sem termo e sem resultados.
+  search: Buscar
+  searchLabel: O que você procura?
+  searchPlaceholder: Digite o nome do produto
+  searchSubmit: Buscar
+  searchEmpty: Digite um termo para começar a buscar.
+  searchNoResults: Nenhum resultado para
+  searchNoResultsHint: Confira a ortografia ou tente termos mais gerais.
 
 locale:
   default: pt-BR
@@ -57,6 +65,7 @@ rendering:
   endpoint: /api/graphql
   streaming: true
   cacheComponents: true   # Next 16; substitui a PPR experimental do 15 (docs/adr/0007)
+  partialPrefetching: true  # recomendado pelo Next 16.4 para projetos novos; sem efeito no tamanho de JS (docs/adr/0010)
 
 design:
   theme: white-label
@@ -122,7 +131,7 @@ composition:
 #   third_party_js_kb, lcp/inp/cls/ttfb                -> lighthouserc.json (job lighthouse)
 #   third_party_hosts                                  -> scripts/check-third-party-hosts.mjs
 budgets:              # CI falha se estourar
-  js_initial_kb: 120
+  js_initial_kb: 140      # piso do Next 16.4 + React 19.3 = ~135,5 KB; era 120 (docs/adr/0010)
   css_initial_kb: 30
   html_kb: 80
   requests_initial: 40

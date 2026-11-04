@@ -17,7 +17,6 @@ permissions:
 
 env:
   NODE_VERSION: "22"
-  PNPM_VERSION: "9"
 
 jobs:
   validate:
@@ -25,9 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
+      - uses: pnpm/action-setup@v4   # versao vem de packageManager no package.json
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -45,16 +42,18 @@ jobs:
     needs: validate
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
+      - uses: pnpm/action-setup@v4   # versao vem de packageManager no package.json
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test -- --coverage
+      # `pnpm test --coverage` falha no pnpm 9 ("Unknown option: 'coverage'") e
+      # `pnpm test -- --coverage` repassa o "--" ao vitest, que acha 0 testes.
+      # Chamar o vitest direto evita os dois (docs/adr/0009).
+      - run: pnpm exec vitest run --coverage
       - run: pnpm build-storybook --quiet
+      - run: pnpm exec playwright install --with-deps chromium   # test-runner do Storybook usa Playwright
       - run: pnpm test:a11y            # axe em 100% das stories, 0 violacoes
 
   budgets:
@@ -63,9 +62,7 @@ jobs:
     needs: validate
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
+      - uses: pnpm/action-setup@v4   # versao vem de packageManager no package.json
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -80,18 +77,16 @@ jobs:
     needs: budgets
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
+      - uses: pnpm/action-setup@v4   # versao vem de packageManager no package.json
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - run: pnpm start &
-      - run: npx wait-on http://localhost:3000 -t 60000
-      - run: npx @lhci/cli autorun
+      # O proprio LHCI sobe e derruba o servidor (collect.startServerCommand em
+      # lighthouserc.json): sem `&` solto e sem dependencia extra tipo wait-on.
+      - run: pnpm lh
       - run: node scripts/check-third-party-hosts.mjs   # hosts distintos; LHCI nao tem assercao nativa para isso
 
   e2e:
@@ -100,9 +95,7 @@ jobs:
     needs: budgets
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
+      - uses: pnpm/action-setup@v4   # versao vem de packageManager no package.json
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -117,16 +110,23 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: read   # gitleaks-action lista os commits do PR pela API
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0   # gitleaks varre o historico inteiro, nao so o HEAD
       - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   dependency-review:
     name: Revisao de dependencias (PR)
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    # Nao roda em repo privado sem GHAS: o Action falha por limite da plataforma
+    # ("Dependency review is not supported on this repository"), nao por
+    # vulnerabilidade. O gate de dependencias nesse caso e o `pnpm audit
+    # --audit-level=high` do job validate (docs/adr/0008, 0009).
+    if: github.event_name == 'pull_request' && !github.event.repository.private
     permissions:
       contents: read
       pull-requests: read
