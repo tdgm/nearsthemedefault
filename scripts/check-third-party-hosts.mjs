@@ -1,12 +1,11 @@
 // Conta hosts de terceiros DISTINTOS a partir do relatorio que
-// `npx @lhci/cli autorun` grava em .lighthouseci/ antes do upload. O
-// Lighthouse Budgets API (lighthouserc.json > settings.budgets) cobre peso
-// de script, CSS, HTML e contagem de requisicoes - mas nao tem uma
-// assercao nativa para "numero de dominios de terceiros distintos"
+// `pnpm lh` (lhci autorun) grava em .lighthouseci/ antes do upload. As
+// assercoes resource-summary:* de lighthouserc.json cobrem contagem de
+// requisicoes, HTML e peso de terceiros - mas nao ha uma assercao nativa para "numero de dominios de terceiros distintos"
 // (CLAUDE.md: "Hosts de terceiros <= 8"). A auditoria `third-party-summary`
 // do proprio Lighthouse ja agrupa requisicoes por entidade/dominio; este
 // script so le esse agrupamento e aplica o limite. Roda no job `lighthouse`
-// do CI, depois de `npx @lhci/cli autorun` (ver docs/adr/0005).
+// do CI, depois de `pnpm lh` (ver docs/adr/0005).
 import { readFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
