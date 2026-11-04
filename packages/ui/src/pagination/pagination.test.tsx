@@ -7,7 +7,7 @@ const hrefFor = (p: number) => (p === 1 ? '/c' : `/c?page=${p}`);
 describe('pageWindow', () => {
   it('lista tudo quando cabe', () => expect(pageWindow(2, 3, 1)).toEqual([1, 2, 3]));
   it('insere reticencias nos dois lados', () => expect(pageWindow(10, 20, 1)).toEqual([1, 'gap', 9, 10, 11, 'gap', 20]));
-  it('sem reticencias quando o salto e de uma pagina', () => expect(pageWindow(3, 10, 1)).toEqual([1, 2, 3, 4, 5, 'gap', 10]));
+  it('colada ao inicio: reticencias so no lado distante', () => expect(pageWindow(3, 10, 1)).toEqual([1, 2, 3, 4, 'gap', 10]));
   it('respeita siblings', () => expect(pageWindow(10, 20, 2)).toEqual([1, 'gap', 8, 9, 10, 11, 12, 'gap', 20]));
 });
 
