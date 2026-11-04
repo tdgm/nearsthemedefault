@@ -11,3 +11,7 @@ nears
 docs
 packages/tokens/tokens.json
 *.md
+
+# Gerados por packages/tokens/build.mjs (versionados, nao editar)
+packages/tokens/dist
+apps/web/app/_generated

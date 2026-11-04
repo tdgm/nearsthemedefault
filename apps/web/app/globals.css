@@ -1,12 +1,36 @@
 @import 'tailwindcss';
+/* Tokens da marca (packages/tokens/tokens.json, gerados por `pnpm tokens:build`):
+   tokens.css = custom properties + temas claro/escuro; theme.css = @theme do Tailwind.
+   Caminho relativo de proposito: o resolvedor de pacotes do Tailwind falha no `next dev`
+   ("no valid target file") com exports de CSS, embora o build funcione (docs/adr/0011). */
+@import '../../../packages/tokens/dist/tokens.css';
+@import '../../../packages/tokens/dist/theme.css';
 
-/*
- * Fase 0: nenhuma cor, fonte ou raio de marca aqui. Cores vem do esquema do
- * navegador (color-scheme) ate a Fase 1 gerar as CSS custom properties a
- * partir de packages/tokens/tokens.json.
- */
-:root {
-  color-scheme: light dark;
+/* Nenhuma cor, fonte ou raio de marca escrito aqui: tudo vem de token. */
+@layer base {
+  html {
+    background-color: var(--nears-color-surface);
+    color: var(--nears-color-on-surface);
+    font-family: var(--nears-font-brand);
+    font-size: var(--nears-text-md);
+    line-height: var(--nears-leading-normal);
+  }
+
+  *,
+  ::before,
+  ::after {
+    border-color: var(--nears-color-border-control);
+  }
+
+  /* Foco visivel sempre (WCAG 2.2 AA, CLAUDE.md > Acessibilidade). */
+  :focus-visible {
+    outline: 2px solid var(--nears-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  a {
+    color: var(--nears-color-link);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

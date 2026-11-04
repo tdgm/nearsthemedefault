@@ -25,8 +25,10 @@
     "build-storybook": "storybook build",
     "manifests:validate": "node scripts/manifests-validate.mjs",
     "tokens:contrast": "node scripts/tokens-contrast.mjs",
+    "tokens:build": "pnpm --filter @nears/tokens build",
+    "tokens:check": "pnpm --filter @nears/tokens check",
     "check-budgets": "node scripts/check-budgets.mjs",
-    "validate": "pnpm lint && pnpm typecheck && pnpm manifests:validate && pnpm tokens:contrast && pnpm test && pnpm build && pnpm check-budgets"
+    "validate": "pnpm lint && pnpm typecheck && pnpm manifests:validate && pnpm tokens:check && pnpm tokens:contrast && pnpm test && pnpm build && pnpm check-budgets"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
