@@ -136,6 +136,6 @@ jobs:
       # na org/repo. Sem GHAS o job falha por falta de permissao da
       # plataforma, nao por vulnerabilidade real - confirme antes de tratar
       # isso como gate obrigatorio (docs/adr/0008).
-      - uses: actions/dependency-review-action@v4
+      - uses: actions/dependency-review-action@v5
         with:
           fail-on-severity: high
