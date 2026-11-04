@@ -1,8 +1,0 @@
-.next
-node_modules
-storybook-static
-coverage
-playwright-report
-test-results
-.lighthouseci
-pnpm-lock.yaml
