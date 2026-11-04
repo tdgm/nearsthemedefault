@@ -45,7 +45,9 @@ Renomeações:
 
 ## Presets por nicho
 
-Ponto de partida. Copie o bloco para `catalog` e `vocabulary` e ajuste.
+Ponto de partida. Os presets vivem como arquivos em `nears/presets/*.yaml`
+(fonte da verdade, validados no CI; ADR 0012). Os blocos abaixo sao ilustrativos:
+copie o bloco para `catalog` e `vocabulary` e ajuste.
 
 ### Moda e calçados
 

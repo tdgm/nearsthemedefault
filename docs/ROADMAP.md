@@ -43,6 +43,10 @@ de eixos de variacao e facetas do nicho configurado.
 **Gate:** `pnpm validate` valida os manifests e gera os tipos para o preset
 `generic` e para pelo menos dois presets de `docs/adr/0002-template-multinicho.md`.
 
+**Entregue:** `packages/manifests` (schemas, referencias, props->Zod, tipos
+gerados), `nears/presets/*.yaml` (6 nichos, todos validados no CI) e o registry em
+`packages/sections`. Decisoes em `docs/adr/0012-manifests-zod-e-registry.md`.
+
 ## Fase 3 - Design system (packages/ui)
 
 Entregar: Button, IconButton, Link, Input, Select, Checkbox, Radio, RadioGroup,
