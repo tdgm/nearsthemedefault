@@ -108,7 +108,20 @@ design:
     durations: [120, 200, 320]
     respectsReducedMotion: true
 
-budgets:              # lidos por scripts/check-budgets.mjs - CI falha se estourar
+composition:
+  home:
+    # Alem deste numero, os demais departamentos continuam indexaveis via
+    # nav-drawer (links no HTML inicial) e via /mapa-do-site (route
+    # sitemap-html, obrigatoria) - so nao ganham bloco dedicado na home.
+    # Ver docs/adr/0006-composicao-e-limite-de-sections.md.
+    featuredDepartments: 6
+
+# Enforcement por linha (docs/adr/0005-enforcement-de-budgets.md):
+#   js_initial_kb, css_initial_kb, html_kb (rota SSG)  -> scripts/check-budgets.mjs
+#   html_kb (rota dinamica/ISR), requests_initial,
+#   third_party_js_kb, lcp/inp/cls/ttfb                -> lighthouserc.json (job lighthouse)
+#   third_party_hosts                                  -> scripts/check-third-party-hosts.mjs
+budgets:              # CI falha se estourar
   js_initial_kb: 120
   css_initial_kb: 30
   html_kb: 80

@@ -1,4 +1,17 @@
 # Mapa de URLs. O roteador do app e gerado a partir deste arquivo.
+#
+# `appRoute`: caminho real do arquivo no App Router (sem extensao), fonte
+# unica da verdade para o roteador E para scripts/check-budgets.mjs - nenhum
+# dos dois adivinha nome de pasta a partir do `pattern`. Varias rotas
+# compartilham o mesmo appRoute de proposito: elas sao formas diferentes do
+# MESMO arquivo fisico, que resolve a fonte certa em runtime pelo indice de
+# slugs (ver bloco `resolution` abaixo e docs/adr/0003). Isso e' inevitavel no
+# App Router: nao existe "/[department]/page" e "/[productType]/page" como
+# irmaos no mesmo nivel, so' um nome de parametro por posicao de segmento.
+#
+# `jsBudgetCritical`: true marca rotas de descoberta/compra cobertas pelo
+# limite de 120KB gzip (CLAUDE.md > Performance). Paginas institucionais,
+# busca (CSR) e o hub de sitemap ficam de fora: nao sao caminho de conversao.
 version: 1.0.0
 
 defaults:
@@ -13,12 +26,16 @@ routes:
     template: home
     render: ssg
     priority: 1.0
+    appRoute: "/page"
+    jsBudgetCritical: true
 
   - id: department
     pattern: "/{department}"
     template: collection
     source: cms
     priority: 0.9
+    appRoute: "/[slug]/page"     # grupo ambiguo de 1o segmento - ver nota do topo
+    jsBudgetCritical: true
     params:
       department:
         type: enum
@@ -29,18 +46,24 @@ routes:
     template: collection
     source: cms
     priority: 0.8
+    appRoute: "/[slug]/[sub]/page"   # grupo ambiguo de 2o segmento
+    jsBudgetCritical: true
 
   - id: department-category-sub
     pattern: "/{department}/{category}/{subcategory}"
     template: collection
     source: cms
     priority: 0.7
+    appRoute: "/[slug]/[sub]/[subsub]/page"
+    jsBudgetCritical: true
 
   - id: category-flat
     pattern: "/{productType}"
     template: collection
     source: catalog
     priority: 0.7
+    appRoute: "/[slug]/page"     # mesmo grupo ambiguo de department
+    jsBudgetCritical: true
     enabledBy: catalog.flatAxis.enabled
     note: >
       Eixo plano por tipo de produto, paralelo ao eixo de departamento
@@ -53,6 +76,8 @@ routes:
     source: catalog
     indexable: false
     canonicalTo: department-category
+    appRoute: "/[slug]/[sub]/page"   # mesmo grupo ambiguo de department-category
+    jsBudgetCritical: true
     enabledBy: catalog.flatAxis.secondLevelAttribute
     note: >
       Nivel 2 do eixo plano, filtrado pelo atributo definido em
@@ -65,6 +90,8 @@ routes:
     source: query-preset
     priority: 0.6
     scale: high
+    appRoute: "/b/[keyword]/page"   # prefixo literal "b" - nao ambiguo
+    jsBudgetCritical: true
     requires:
       - uniqueH1
       - uniqueIntro
@@ -79,6 +106,8 @@ routes:
     template: landing
     priority: 0.5
     indexable: conditional
+    appRoute: "/[slug]/page"     # mesmo grupo ambiguo de department
+    jsBudgetCritical: true
     schedule:
       startField: startsAt
       endField: endsAt
@@ -88,12 +117,16 @@ routes:
     pattern: "/{campaign}/{segment}"
     template: landing
     indexable: conditional
+    appRoute: "/[slug]/[sub]/page"   # mesmo grupo ambiguo de department-category
+    jsBudgetCritical: true
 
   - id: pdp
     pattern: "/{productSlug}/p"
     template: pdp
     priority: 0.8
     headerVariant: minimal
+    appRoute: "/[productSlug]/p/page"   # sufixo literal "/p" - nao ambiguo
+    jsBudgetCritical: true
 
   - id: search
     pattern: "/s"
@@ -101,12 +134,16 @@ routes:
     render: csr
     indexable: false
     robots: "noindex,nofollow"
+    appRoute: "/s/page"
+    jsBudgetCritical: false   # CSR, sem conteudo indexavel: fora do budget de rota critica
 
   - id: institutional
     pattern: "/{pageSlug}"
     template: page
     render: ssg
     priority: 0.4
+    appRoute: "/[slug]/page"   # mesmo grupo ambiguo de department; bundle ja' coberto por ele
+    jsBudgetCritical: false
 
   - id: sitemap-html
     pattern: "/mapa-do-site"
@@ -114,6 +151,8 @@ routes:
     render: ssg
     required: true
     priority: 0.5
+    appRoute: "/mapa-do-site/page"
+    jsBudgetCritical: false   # hub de links, nao rota de conversao
     note: "Hub de linkagem interna. Obrigatorio no template padrao."
 
   - id: not-found
@@ -121,6 +160,8 @@ routes:
     template: notfound
     indexable: false
     robots: "noindex,nofollow"
+    appRoute: ~   # app/not-found.tsx - arquivo especial do Next, fora do mapa de paginas
+    jsBudgetCritical: false
 
 # Varios padroes tem a mesma forma de URL: /{department}, /{productType},
 # /{campaign} e /{pageSlug} (um segmento); /{department}/{category},

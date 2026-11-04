@@ -85,6 +85,7 @@ jobs:
       - run: pnpm start &
       - run: npx wait-on http://localhost:3000 -t 60000
       - run: npx @lhci/cli autorun
+      - run: node scripts/check-third-party-hosts.mjs   # hosts distintos; LHCI nao tem assercao nativa para isso
 
   e2e:
     name: E2E

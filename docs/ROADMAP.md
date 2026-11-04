@@ -5,11 +5,16 @@ Oito fases. Cada uma tem entregavel e gate. Nao avance com gate vermelho.
 ## Fase 0 - Fundacao
 
 Entregar: monorepo pnpm, Next 15 App Router, TS strict, ESLint/Prettier, Vitest,
-Playwright, Storybook, Lighthouse CI, GitHub Actions. O script `pnpm validate` ja
-deve falhar corretamente ao estourar budget - teste com um import gigante
-proposital e depois remova.
+Playwright, Storybook, Lighthouse CI, GitHub Actions. As paginas criadas devem
+usar exatamente os caminhos de `routes.manifest.yaml > appRoute` (inclusive o
+grupo ambiguo compartilhando `/[slug]/page` e `/[slug]/[sub]/page` - ver nota no
+topo do manifest e docs/adr/0003). O script `pnpm validate` ja deve falhar
+corretamente ao estourar budget - teste com um import gigante proposital e
+depois remova. Ver docs/adr/0005 para qual script/assertion cobre cada linha
+do orcamento.
 
-**Gate:** CI verde em repo vazio.
+**Gate:** CI verde em repo vazio; `scripts/check-budgets.mjs` roda sem erro
+mesmo sem nenhuma rota implementada (so avisa "ainda nao implementadas").
 
 ## Fase 1 - Tokens
 
@@ -50,6 +55,9 @@ Tabs, Modal, Drawer, Breadcrumb, Pagination, Carousel (scroll-snap nativo) e Ima
 Entregar: PromoBar com countdown (altura reservada, CLS zero), Header com variantes
 full/minimal/none por padrao de rota, NavDrawer multi-eixo carregado so na
 interacao, Minicart, Footer com colunas colapsaveis e CustomerService.
+Componentes que usam `priority: inherit` (ex.: ProductCard) recebem a priority
+resolvida do container como prop - nunca leem um valor fixo proprio
+(docs/adr/0006).
 
 **Gate:** JS inicial ainda <= 120 KB com header e footer montados.
 
@@ -64,7 +72,9 @@ QuickFilter, ProductGrid, ProductCard, Breadcrumb, TextSEO, FAQ e RelatedLinks.
 ## Fase 6 - Templates e rotas
 
 Entregar: home, collection, pdp, landing, page, search, sitemap HTML e 404.
-Roteamento a partir de `routes.manifest.yaml`, incluindo a regra de canonical entre
+A home respeita `nears.config.yaml > composition.home.featuredDepartments`
+(docs/adr/0006): alem desse numero, departamentos ficam so no nav-drawer e no
+mapa do site. Roteamento a partir de `routes.manifest.yaml`, incluindo a regra de canonical entre
 o eixo de departamento e o eixo plano de tipo de produto, e a resolucao de URLs
 ambiguas por indice de slugs unicos com slugs reservados
 (`docs/adr/0003-resolucao-de-rotas-e-robots.md`). Data layer GraphQL com Zod
@@ -90,5 +100,9 @@ Entregar: carregamento diferido de terceiros com Partytown, RUM de Core Web Vita
 testes E2E do fluxo descoberta -> PLP -> PDP -> carrinho (rodando em pelo menos
 dois presets de nicho), auditoria final de acessibilidade por teclado e leitor de
 tela, e documentacao de onboarding para quem for criar uma loja na Nears.
+Confira a nota de honestidade em docs/adr/0005 sobre assertions granulares de
+`resource-summary` no Lighthouse CI e feche-a se a versao instalada suportar.
 
-**Gate:** Lighthouse mobile >= 90 / >= 95 / 100 nas tres rotas principais.
+**Gate:** Lighthouse mobile >= 90 / >= 95 / 100 nas tres rotas principais;
+`performance-budget` com score 1 (nenhum budget de `settings.budgets` estourado)
+e `scripts/check-third-party-hosts.mjs` passando.

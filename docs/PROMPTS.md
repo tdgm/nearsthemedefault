@@ -45,6 +45,12 @@ Comece pela Fase 0. Antes de escrever codigo, me devolva:
 
 Depois que eu aprovar, implemente a fase inteira, rode a validacao e me mostre a saida. Nao avance de fase sem meu ok.
 
+As paginas que voce criar devem usar exatamente os caminhos declarados em
+routes.manifest.yaml > appRoute (inclusive os grupos que compartilham o mesmo
+arquivo fisico - /[slug]/page e /[slug]/[sub]/page - porque resolvem a fonte em
+runtime, nao por nome de pasta; ver a nota no topo do manifest e
+docs/adr/0003). scripts/check-budgets.mjs le esse campo direto, sem adivinhar.
+
 Decisoes de negocio que nao sao suas - sinalize e espere resposta: politica de geo.agents em contracts.yaml (quais crawlers de IA permitir) e o momento de promover onMissingGeoField de warn-build para fail-build.
 
 Regras que nao quero repetir: TypeScript strict, Server Components por padrao, nenhum valor de marca hardcoded, toda imagem com dimensao declarada, zero lib de UI pronta, e todo componente nasce com story + teste + axe limpo. WCAG 2.2 AA e gate, nao aspiracao.
@@ -96,6 +102,11 @@ overlay, depois compostos. O Carousel usa scroll-snap nativo com navegacao por
 teclado e botoes reais - nao quero nenhuma lib. O componente Image deve ser
 impossivel de usar sem passar aspect-ratio ou width+height: force isso pelos
 tipos. Reporte o bundle size do pacote ao final.
+
+ProductCard tem priority: inherit no registry (docs/adr/0006): implemente-o
+recebendo a priority resolvida como prop vinda do container (ProductGrid passa
+critical, Showcase/PdpBundle/PdpRelated passam lazy) - o componente nunca
+assume um valor fixo proprio.
 ```
 
 ## Fase 4 - Sections globais
@@ -161,6 +172,11 @@ Implemente a Fase 8. Mova todos os scripts de terceiros para Partytown ou
 carregamento pos-interacao e prove com medicao antes/depois. Instrumente RUM de
 Core Web Vitals. Escreva os E2E do fluxo completo de compra ate o carrinho,
 rodando em pelo menos dois presets de nicho.
+
+Ligue scripts/check-third-party-hosts.mjs no job lighthouse do CI, depois do
+autorun. Se a versao instalada de @lhci/cli expuser assertions granulares de
+resource-summary (ver nota de honestidade em docs/adr/0005), adicione-as e
+feche a nota.
 Finalize com um guia de onboarding em /docs explicando como alguem cria uma
 nova loja na Nears trocando apenas tokens, fonte e os blocos catalog e
 vocabulary.

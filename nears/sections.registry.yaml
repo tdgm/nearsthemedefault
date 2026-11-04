@@ -8,6 +8,14 @@ priorityLevels:
   lazy: "fora da dobra, content-visibility auto"
   on-interaction: "JS so entra ao interagir"
   idle: "requestIdleCallback"
+  inherit: >
+    Nao e um nivel proprio: resolve em build time para a priority da section
+    que instancia este bloco (ver `nestedOnlyIn` na definicao da section).
+    Ex.: product-card dentro de product-grid (critical) => critical; dentro
+    de showcase, pdp-bundle ou pdp-related (lazy) => lazy. Uma section com
+    `priority: inherit` so pode aparecer dentro de um container listado em
+    `nestedOnlyIn`; usa-la direto na lista `sections` de um template falha o
+    build (nao ha mae de quem herdar).
 
 globals:
   - id: promo-bar
@@ -116,7 +124,10 @@ sections:
     a11y: { role: list }
 
   - id: section-title
-    priority: inherit
+    # So titulo + link opcional, sem midia: custo fixo e desprezivel em
+    # qualquer posicao. Prioridade propria (nao herda) para poder ser usada
+    # direto na lista de um template, inclusive dentro de `repeat`.
+    priority: high
     props:
       text: { type: string, required: true }
       level: { type: enum, values: [h2, h3], default: h2 }
@@ -205,6 +216,7 @@ sections:
 
   - id: product-card
     priority: inherit
+    nestedOnlyIn: [product-grid, showcase, pdp-bundle, pdp-related]
     props:
       image: { type: image, required: true }
       hoverImage: image
@@ -362,9 +374,9 @@ templates:
       - benefit-bar
       - repeat:
           over: departments
+          limit: { from: composition.home.featuredDepartments }
           blocks: [section-title, banner-grid, category-hub]
       - event-banner
-      - hero
       - showcase:tabs
       - showcase:wishlist
       - event-banner
@@ -403,5 +415,13 @@ templates:
 validation:
   everySectionMustDeclare: [priority, cwv, a11y]
   onMissing: fail-build
+  # Tipos DISTINTOS de section usados num template (superficie de
+  # composicao/numero de chunks JS possiveis), contado uma vez por tipo
+  # independente de quantas vezes um `repeat` o instancia.
   maxSectionsPerPage: 24
+  # Instancias RENDERIZADAS apos expandir todo `repeat` (o numero real de
+  # blocos na pagina). Cada instancia reusa o mesmo chunk JS do seu tipo, mas
+  # ainda pesa HTML/DOM - por isso o teto e mais generoso, nao ausente.
+  maxSectionInstancesPerPage: 40
+  # Instancias com priority critical (sem lazy, podem ser candidatas a LCP).
   maxCriticalSections: 4

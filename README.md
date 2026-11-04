@@ -39,8 +39,9 @@ Fontes: so open source (OFL/Apache), self-hosted, com fallback websafe -
 | `packages/tokens/tokens.json` | Design tokens com valores concretos e contrastes medidos |
 | `.github/workflows/ci.yml` | Cinco jobs: validate, test, budgets, lighthouse, e2e |
 | `lighthouserc.json` | Assercoes de Core Web Vitals |
-| `scripts/check-budgets.mjs` | Falha o build quando o bundle estoura o limite |
-| `docs/adr/` | Decisoes de arquitetura (tipografia, multinicho, rotas e robots, contraste) |
+| `scripts/check-budgets.mjs` | JS/CSS/HTML estatico por rota (lido de `routes.manifest.yaml > appRoute`) |
+| `scripts/check-third-party-hosts.mjs` | Conta hosts de terceiros distintos no relatorio do Lighthouse CI |
+| `docs/adr/` | Decisoes de arquitetura (tipografia, multinicho, rotas e robots, contraste, enforcement de budgets, composicao de sections) |
 
 ## Orcamentos
 

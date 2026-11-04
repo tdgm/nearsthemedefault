@@ -8,16 +8,35 @@
       ],
       "numberOfRuns": 3,
       "settings": {
-        "emulatedFormFactor": "mobile",
+        "formFactor": "mobile",
+        "screenEmulation": { "mobile": true, "width": 390, "height": 844, "deviceScaleFactor": 2 },
         "throttling": {
           "rttMs": 150,
           "throughputKbps": 1638,
           "cpuSlowdownMultiplier": 4
-        }
+        },
+        "budgets": [
+          {
+            "path": "/*",
+            "_comment": "Espelha nears/nears.config.yaml > budgets. resourceSizes/resourceCounts e' o Performance Budgets API nativo do Lighthouse (nao e' sintaxe especifica de LHCI). Hosts de terceiros DISTINTOS nao tem assercao nativa - ver scripts/check-third-party-hosts.mjs, que le o mesmo relatorio.",
+            "resourceSizes": [
+              { "resourceType": "script", "budget": 120 },
+              { "resourceType": "stylesheet", "budget": 30 },
+              { "resourceType": "document", "budget": 80 },
+              { "resourceType": "third-party", "budget": 80 }
+            ],
+            "resourceCounts": [
+              { "resourceType": "total", "budget": 40 },
+              { "resourceType": "third-party", "budget": 40 }
+            ]
+          }
+        ]
       }
     },
     "assert": {
+      "_comment": "performance-budget: audit nativo do Lighthouse que falha (score < 1) se QUALQUER limite do array `budgets` acima estourar - e' o que de fato aplica JS/CSS/HTML/third-party em KB e contagem de requisicoes. Nao confirmamos neste PR se o LHCI expoe tambem chaves granulares por tipo (ex.: resource-summary:script:size); antes de confiar so' no score agregado, confira a versao instalada de @lhci/cli (pnpm lh --view mostra o relatorio com a tabela de budgets por item). Ver docs/adr/0005-enforcement-de-budgets.md.",
       "assertions": {
+        "performance-budget": ["error", { "minScore": 1 }],
         "categories:performance": [
           "error",
           {
@@ -70,12 +89,6 @@
           "error",
           {
             "minScore": 0.9
-          }
-        ],
-        "third-party-summary": [
-          "warn",
-          {
-            "maxNumericValue": 80000
           }
         ],
         "font-display": [
