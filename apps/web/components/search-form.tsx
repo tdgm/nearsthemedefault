@@ -14,7 +14,7 @@ type SearchFormProps = {
  */
 export function SearchForm({ action, label, placeholder, submit, defaultValue = '' }: SearchFormProps) {
   return (
-    <form role="search" action={action} method="get" className="my-4 flex gap-2">
+    <form role="search" aria-label={label} action={action} method="get" className="my-4 flex gap-2">
       <label htmlFor="q" className="sr-only">
         {label}
       </label>

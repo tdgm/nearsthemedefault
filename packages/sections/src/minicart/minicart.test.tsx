@@ -4,7 +4,7 @@ import { Minicart } from './minicart';
 import { minicartSchema } from './minicart.schema';
 
 const items = [
-  { id: '1', name: 'Camiseta básica', href: '/camiseta/p', variant: 'Azul / M', quantity: 2, unitPrice: 50 },
+  { id: '1', name: 'Camiseta básica', href: '/camiseta/p', variant: 'Azul / M', quantity: 2, unitPrice: 60 },
   { id: '2', name: 'Calça', quantity: 1, unitPrice: 100 },
 ];
 
@@ -24,7 +24,7 @@ describe('Minicart', () => {
     const status = screen.getByRole('status', { hidden: true });
     expect(status).toHaveAttribute('aria-live', 'polite');
     expect(status).toHaveTextContent(/3 itens/);
-    expect(status).toHaveTextContent(/Subtotal R\$\s200,00/);
+    expect(status).toHaveTextContent(/Subtotal R\$\s220,00/);
   });
 
   it('singular para um unico item', () => {
@@ -37,7 +37,7 @@ describe('Minicart', () => {
     expect(screen.getByRole('link', { name: 'Camiseta básica', hidden: true })).toHaveAttribute('href', '/camiseta/p');
     expect(screen.getByText('Azul / M')).toBeInTheDocument();
     expect(screen.getByText('Qtd. 2')).toBeInTheDocument();
-    expect(screen.getByText(/R\$\s100,00/, { selector: 'p.font-bold' })).toBeInTheDocument();
+    expect(screen.getByText(/R\$\s120,00/, { selector: 'p.font-bold' })).toBeInTheDocument();
   });
 
   it('CTAs levam ao checkout e ao carrinho', () => {
@@ -55,7 +55,7 @@ describe('Minicart', () => {
 
   it('frete gratis: mostra quanto falta e depois a confirmacao', () => {
     const { rerender } = render(<Minicart items={items} freeShippingFrom={500} />);
-    expect(screen.getByRole('status', { hidden: true })).toHaveTextContent(/Faltam R\$\s300,00 para frete grátis/);
+    expect(screen.getByRole('status', { hidden: true })).toHaveTextContent(/Faltam R\$\s280,00 para frete grátis/);
     rerender(<Minicart items={items} freeShippingFrom={150} />);
     expect(screen.getByRole('status', { hidden: true })).toHaveTextContent('Você ganhou frete grátis!');
   });

@@ -7,3 +7,4 @@ export { headerSchema, type HeaderProps } from './header.schema.ts';
 export { headerSpec };
 
 export const header = defineSection({ ...headerSpec, Component: Header });
+export { matchesPattern, resolveHeaderVariant, type HeaderVariant, type VariantRule } from './variant.ts';

@@ -94,7 +94,7 @@ export function Header({
                   <a href={searchHref} aria-label={l.search} className={`${iconBox} md:hidden`}>
                     <SearchIcon />
                   </a>
-                  <form role="search" action={searchHref} method="get" className="hidden items-center md:flex">
+                  <form role="search" aria-label={l.search} action={searchHref} method="get" className="hidden items-center md:flex">
                     <label htmlFor="header-search" className="sr-only">
                       {l.searchLabel}
                     </label>
