@@ -40,7 +40,7 @@ Fontes: so open source (OFL/Apache), self-hosted, com fallback websafe -
 | `packages/tokens/tokens.json` | Design tokens com valores concretos e contrastes medidos |
 | `packages/ui` | Design system: atomos e moleculas (ADR 0013) |
 | `packages/manifests` | Schemas Zod, loader, referencias e tipos gerados dos manifests (ADR 0012) |
-| `packages/sections` | Contrato e registry de sections (`defineSection`, `createRegistry`) |
+| `packages/sections` | Contrato, registry e sections implementadas (globais da Fase 4; `defineSection`, `createRegistry`) |
 | `.github/workflows/ci.yml` | Cinco jobs: validate, test, budgets, lighthouse, e2e |
 | `lighthouserc.json` | Assercoes de Core Web Vitals |
 | `scripts/check-budgets.mjs` | JS/CSS/HTML estatico por rota (lido de `routes.manifest.yaml > appRoute`) |

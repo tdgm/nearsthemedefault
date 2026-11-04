@@ -4,7 +4,7 @@
 export type HeaderVariant = 'full' | 'minimal' | 'none';
 export type VariantRule = { pattern: string; variant: HeaderVariant };
 
-/** Glob de caminho: `*` casa exatamente um segmento (`*/p` -> `/camiseta/p`). */
+// Glob de caminho: um asterisco casa exatamente um segmento (ex.: padrao "asterisco/p" casa "/camiseta/p").
 export function matchesPattern(pattern: string, path: string): boolean {
   const segments = (v: string) => v.split('/').filter(Boolean);
   const p = segments(pattern);
