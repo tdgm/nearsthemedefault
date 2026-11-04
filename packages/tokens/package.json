@@ -1,0 +1,6 @@
+{
+  "name": "@nears/tokens",
+  "version": "1.0.0",
+  "private": true,
+  "description": "tokens.json + build Style Dictionary (CSS vars, preset Tailwind, JSON Figma). Build real chega na Fase 1."
+}
