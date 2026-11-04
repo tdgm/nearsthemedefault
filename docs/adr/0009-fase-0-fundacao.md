@@ -107,3 +107,17 @@ Verificado e passando:
 - `pnpm check-budgets` verde no Mac (JS 135,7 KB <= 140; CSS 2,2 KB; HTML 4 KB).
 - Teste de estouro de proposito feito: com `js_initial_kb: 100` o script falha
   (exit != 0) nas 6 rotas criticas; config restaurado em seguida.
+
+## Primeira execucao do CI (PR #6, 2026-11-04)
+
+Tres falhas de configuracao, nenhuma de codigo:
+
+1. `pnpm/action-setup`: "Multiple versions of pnpm specified" (`version: 9` no
+   workflow + `packageManager` no package.json). Removido o `version`; a fonte
+   unica e o `packageManager` (pnpm 9.15.9).
+2. `gitleaks-action`: `GITHUB_TOKEN` passou a ser obrigatorio em PRs. Adicionado
+   o env e `pull-requests: read` (least-privilege) so nesse job.
+3. `dependency-review-action`: "not supported on this repository" (repo privado
+   sem Dependency graph + GitHub Advanced Security). O job so roda em repo
+   publico; em privado o gate de dependencias e o `pnpm audit
+   --audit-level=high` do job `validate`. Para reativar, habilitar GHAS.

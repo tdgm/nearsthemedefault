@@ -17,7 +17,6 @@ permissions:
 
 env:
   NODE_VERSION: "22"
-  PNPM_VERSION: "9"
 
 jobs:
   validate:
@@ -25,9 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
+      - uses: pnpm/action-setup@v4   # versao vem de packageManager no package.json
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -45,9 +42,7 @@ jobs:
     needs: validate
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
+      - uses: pnpm/action-setup@v4   # versao vem de packageManager no package.json
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -66,9 +61,7 @@ jobs:
     needs: validate
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
+      - uses: pnpm/action-setup@v4   # versao vem de packageManager no package.json
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -83,9 +76,7 @@ jobs:
     needs: budgets
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
+      - uses: pnpm/action-setup@v4   # versao vem de packageManager no package.json
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -103,9 +94,7 @@ jobs:
     needs: budgets
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
+      - uses: pnpm/action-setup@v4   # versao vem de packageManager no package.json
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -120,16 +109,23 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: read   # gitleaks-action lista os commits do PR pela API
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0   # gitleaks varre o historico inteiro, nao so o HEAD
       - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   dependency-review:
     name: Revisao de dependencias (PR)
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    # Nao roda em repo privado sem GHAS: o Action falha por limite da plataforma
+    # ("Dependency review is not supported on this repository"), nao por
+    # vulnerabilidade. O gate de dependencias nesse caso e o `pnpm audit
+    # --audit-level=high` do job validate (docs/adr/0008, 0009).
+    if: github.event_name == 'pull_request' && !github.event.repository.private
     permissions:
       contents: read
       pull-requests: read
