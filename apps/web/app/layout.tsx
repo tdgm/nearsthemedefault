@@ -4,6 +4,7 @@ import { CustomerService, Footer, Header, Minicart, NavDrawer, PromoBar } from '
 import { getStorefront } from '../lib/storefront';
 import { getStore } from '../lib/data/client';
 import { loadAllManifests, loadConfig } from '../lib/manifest';
+import { RumScript } from '../lib/rum';
 import { AiReferralScript, siteUrl } from '../lib/seo';
 import { fontVariableClass } from './_generated/fonts';
 import './globals.css';
@@ -41,6 +42,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Minicart {...s.minicart} />
         <CustomerService {...s.customerService} />
         <AiReferralScript />
+        <RumScript />
       </body>
     </html>
   );

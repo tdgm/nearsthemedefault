@@ -47,17 +47,18 @@ assertion nativa no Lighthouse Budgets API (que conta requisições, não
 domínios). O script lê a mesma auditoria `third-party-summary` que o
 Lighthouse já calcula e aplica o limite de `nears.config.yaml`.
 
-## Nota de honestidade
+## Nota de honestidade (fechada na Fase 8)
 
-Não foi possível, nesta sessão, confirmar contra a documentação oficial se
-o Lighthouse CI expõe assertions granulares por tipo de recurso (algo como
-`resource-summary:script:size`) além do score agregado de `performance-budget`.
-Por isso o `lighthouserc.json` usa só `performance-budget: { minScore: 1 }`,
-que falha se QUALQUER limite do array `budgets` estourar, mas não discrimina
-qual linha quebrou na saída do `pnpm lh` sozinho - para isso, abra o relatório
-HTML do Lighthouse (`pnpm lh --view`), que lista os budgets violados item a
-item. Se a Fase 8 confirmar que as chaves granulares existem na versão de
-`@lhci/cli` instalada, adicione-as a `lighthouserc.json` e feche esta nota.
+Esta nota perguntava se o Lighthouse CI expõe assertions granulares por tipo de
+recurso. **Expõe**: o `@lhci/cli` 0.16 (Lighthouse 13) aceita as chaves
+`resource-summary:<tipo>:size|count` (bytes transferidos, com cabeçalhos HTTP) e o
+`lighthouserc.json` já as usa para contagem total de requisições, HTML e peso de
+terceiros. O Lighthouse 13 removeu a Budgets API e a auditoria `performance-budget`
+(o antigo `settings.budgets` era ignorado; ver o `_comment` do `lighthouserc.json`),
+então a assertion `performance-budget: { minScore: 1 }` que esta nota descrevia nunca
+avaliava nada e saiu. JS e CSS iniciais continuam medidos por `scripts/check-budgets.mjs`
+(gzip estático, fonte da verdade; ADR 0010), e hosts de terceiros por
+`scripts/check-third-party-hosts.mjs`. Cada violação aponta a linha exata que quebrou.
 
 ## Consequências
 
