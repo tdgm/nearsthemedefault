@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { allSegmentPaths, resolveSegments } from '../../../lib/routing/resolve';
 import { RoutePage, routeMetadata } from '../../../lib/templates/route-page';
 
@@ -21,5 +22,8 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
 export default async function Page({ params, searchParams }: Props) {
   const { slug, sub } = await params;
-  return <RoutePage resolved={await resolveSegments([slug, sub])} searchParams={searchParams} />;
+  // Resolve ANTES de montar o JSX: so assim o notFound() vira status 404 (e nao um soft 404 com HTTP 200).
+  const resolved = await resolveSegments([slug, sub]);
+  if (!resolved) notFound();
+  return <RoutePage resolved={resolved} searchParams={searchParams} />;
 }

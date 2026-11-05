@@ -24,7 +24,8 @@ export async function landingMetadata(r: Landing) {
   return buildMetadata({ template: 'landing', title: landingTitle(r), description: landingDescription(landingTitle(r)), path: landingPath(r) });
 }
 
-async function LandingBody({ resolved }: { resolved: Landing }) {
+/** `jsonLd` so na renderizacao resolvida (atras do guard): fallback e resultado vao juntos no HTML. */
+async function LandingBody({ resolved, jsonLd = false }: { resolved: Landing; jsonLd?: boolean }) {
   const { config, sections } = loadAllManifests();
   const [departments, products] = await Promise.all([getDepartments(), getProducts()]);
   const aspect = cardAspect(config);
@@ -65,7 +66,7 @@ async function LandingBody({ resolved }: { resolved: Landing }) {
 
   return (
     <>
-      <JsonLdScript data={graph(organizationNode(ctx), webPageNode(ctx, { name: title, description: landingDescription(title), path }), breadcrumbNode(crumbs, path, ctx.site))} />
+      {jsonLd && <JsonLdScript data={graph(organizationNode(ctx), webPageNode(ctx, { name: title, description: landingDescription(title), path }), breadcrumbNode(crumbs, path, ctx.site))} />}
       <h1 className="sr-only">{title}</h1>
       {renderInstances(instances, propsFor)}
     </>
@@ -84,7 +85,7 @@ export function LandingPage({ resolved }: { resolved: Landing }) {
     <main>
       <Suspense fallback={<LandingBody resolved={resolved} />}>
         <ActiveGuard resolved={resolved}>
-          <LandingBody resolved={resolved} />
+          <LandingBody resolved={resolved} jsonLd />
         </ActiveGuard>
       </Suspense>
     </main>

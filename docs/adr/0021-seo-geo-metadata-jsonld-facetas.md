@@ -86,6 +86,14 @@ Suspense) e os crawlers do Google renderizam JavaScript, entao a URL canonica de
 faceta indexavel enxerga os produtos da faceta. Se a medicao mostrar o contrario, a
 saida e dar caminho proprio a facetas indexaveis (`/dep/marca/x`), decisao fora desta fase.
 
+Colecoes e landings enviam o fallback do `Suspense` e o resultado final na mesma
+resposta. O JSON-LD sai so da renderizacao resolvida (a que le a URL): assim o HTML
+bruto tem um unico bloco, sempre coerente com a URL pedida, mesmo para quem nao executa JS.
+
+Correcao herdada da Fase 6b: as rotas de 1, 2 e 3 segmentos e a de cauda longa chamavam
+`notFound()` dentro de um componente filho e respondiam 200 (soft 404). Agora a resolucao
+e a chamada acontecem em `Page`, antes do JSX, e o status e 404 de verdade (ADR 0003).
+
 ### 5. Atribuicao de trafego de IA
 
 O servidor nao ve o `Referer` de paginas estaticas (ler header as tornaria dinamicas).
@@ -105,7 +113,8 @@ manual no Rich Results Test fica no checklist de pre-deploy de cada loja.
 ## Consequencias
 
 - `SITE_URL` passa a ser obrigatoria em producao (sem ela, o build avisa e usa
-  `http://localhost:3000` em canonical, sitemap e JSON-LD). Com multi-tenancy
+  `http://localhost:3000` em canonical, sitemap e JSON-LD). Ela e lida no BUILD (paginas
+  estaticas, `robots.txt`, `llms.txt`) e no runtime (sitemap, colecoes): defina nos dois. Com multi-tenancy
   (ADR 0016) a base vem do resolver de dominio, nunca do header `Host`.
 - `generateMetadata` das colecoes le `searchParams`: o metadata dessas rotas e resolvido
   no request. Paginas sem faceta continuam servindo o shell estatico.

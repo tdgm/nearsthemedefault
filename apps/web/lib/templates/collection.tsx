@@ -47,7 +47,12 @@ export async function collectionMetadata(view: CollectionView, raw: RawQuery = {
   });
 }
 
-async function CollectionBody({ view, query }: { view: CollectionView; query: CollectionQuery }) {
+/**
+ * `jsonLd` so na renderizacao resolvida (a que le a URL): o fallback do Suspense e o
+ * resultado final vao juntos no HTML, e dois blocos (um da colecao sem filtro) dariam
+ * dado conflitante a quem nao executa JavaScript.
+ */
+async function CollectionBody({ view, query, jsonLd = false }: { view: CollectionView; query: CollectionQuery; jsonLd?: boolean }) {
   const { config, sections } = loadAllManifests();
   const facetIds = config.catalog.facets.available;
   const merged: CollectionQuery = { ...query, filters: { ...view.presetFilters, ...query.filters } };
@@ -109,7 +114,7 @@ async function CollectionBody({ view, query }: { view: CollectionView; query: Co
 
   return (
     <>
-      <JsonLdScript data={data} />
+      {jsonLd && <JsonLdScript data={data} />}
       {renderInstances(instances, propsFor)}
     </>
   );
@@ -118,7 +123,7 @@ async function CollectionBody({ view, query }: { view: CollectionView; query: Co
 async function DynamicBody({ view, searchParams }: { view: CollectionView; searchParams: Promise<RawQuery> }) {
   const raw = await searchParams;
   const query = parseCollectionQuery(raw, loadConfig().catalog.facets.available, PAGE_SIZE);
-  return <CollectionBody view={view} query={query} />;
+  return <CollectionBody view={view} query={query} jsonLd />;
 }
 
 /**

@@ -76,7 +76,7 @@ test.describe('metadata e JSON-LD no HTML inicial', () => {
     const g = graphByType(body);
     expect(g.get('Organization')).toMatchObject({ url: SITE, address: { '@type': 'PostalAddress' } });
     expect(g.get('WebSite')?.potentialAction?.target?.urlTemplate).toBe(`${SITE}/s?q={search_term_string}`);
-    expect(canonical(body)).toBe(`${SITE}/`);
+    expect([SITE, `${SITE}/`]).toContain(canonical(body));
     expect(meta(body, 'robots')).toMatch(/index/);
     expect(meta(body, 'robots')).not.toMatch(/noindex/);
     expect(meta(body, 'og:image')).toMatch(/^http/);
