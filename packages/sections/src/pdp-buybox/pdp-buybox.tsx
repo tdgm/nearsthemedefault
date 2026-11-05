@@ -1,4 +1,4 @@
-import { Badge, Price, Rating, VariantSelector, formatBRL } from '@nears/ui';
+import { Badge, Price, Rating, VariantSelector, buttonClasses, formatBRL } from '@nears/ui';
 import { AddToCartForm } from './add-to-cart-form.tsx';
 import type { PdpBuyboxProps } from './pdp-buybox.schema';
 
@@ -66,6 +66,7 @@ export function PdpBuybox({
         sku={sku}
         cta={cta}
         disabledLabel={out ? l.outOfStock : undefined}
+        buttonClass={buttonClasses({ size: 'lg', fullWidth: true })}
         barPrice={formatBRL(price)}
         stickyMobile={stickyMobile}
         labels={{ adding: l.adding, added: l.added, addError: l.addError }}

@@ -3,8 +3,7 @@
 // a pagina e anunciar o resultado em aria-live="polite" (CLAUDE.md > Acessibilidade).
 // Sem JS o <form method="post"> envia direto ao endpoint e a validacao `required`
 // dos radios e nativa. Os seletores chegam como `children` (renderizados no servidor).
-import { useId, useState, type FormEvent, type ReactNode } from 'react';
-import { Button } from '@nears/ui';
+import { useState, type FormEvent, type ReactNode } from 'react';
 
 type Phase = 'idle' | 'pending' | 'done' | 'error';
 
@@ -15,14 +14,18 @@ export type AddToCartFormProps = {
   cta: string;
   /** CTA indisponivel (sem estoque / sem endpoint): botao desabilitado com este rotulo. */
   disabledLabel?: string;
+  /** Classes do botao (calculadas no servidor: o cliente nao importa o Button do DS, ~0,7 KB a menos). */
+  buttonClass: string;
   /** Preco curto exibido na barra fixa do mobile. */
   barPrice: string;
   stickyMobile: boolean;
   labels: { adding: string; added: string; addError: string };
 };
 
-export function AddToCartForm({ action, sku, children, cta, disabledLabel, barPrice, stickyMobile, labels }: AddToCartFormProps) {
-  const formId = useId();
+const FORM_ID = 'pdp-form';
+
+export function AddToCartForm({ action, sku, children, cta, disabledLabel, buttonClass, barPrice, stickyMobile, labels }: AddToCartFormProps) {
+  const formId = FORM_ID;
   const [phase, setPhase] = useState<Phase>('idle');
   const disabled = Boolean(disabledLabel);
 
@@ -42,9 +45,9 @@ export function AddToCartForm({ action, sku, children, cta, disabledLabel, barPr
   const message = phase === 'done' ? labels.added : phase === 'error' ? labels.addError : phase === 'pending' ? labels.adding : '';
   const blocked = disabled || !action;
   const button = (cls: string, form?: string) => (
-    <Button type="submit" form={form} size="lg" fullWidth disabled={blocked} aria-disabled={phase === 'pending' || undefined} className={cls}>
+    <button type="submit" form={form} disabled={blocked} aria-disabled={phase === 'pending' || undefined} className={`${buttonClass} ${cls}`}>
       {label}
-    </Button>
+    </button>
   );
 
   return (
