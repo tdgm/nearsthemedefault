@@ -9,7 +9,7 @@ import YAML from 'yaml';
 const cfg = YAML.parse(
   readFileSync(resolve(process.cwd(), '../../nears/nears.config.yaml'), 'utf8'),
 ) as {
-  rendering: { cacheComponents: boolean; partialPrefetching: boolean };
+  rendering: { cacheComponents: boolean; partialPrefetching: boolean; blockingMetadata: boolean };
   security: {
     headers: {
       hsts: { enabled: boolean; maxAgeSeconds: number; includeSubDomains: boolean; preload: boolean };

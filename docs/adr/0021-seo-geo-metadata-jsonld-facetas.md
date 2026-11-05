@@ -131,3 +131,18 @@ manual no Rich Results Test fica no checklist de pre-deploy de cada loja.
   no request. Paginas sem faceta continuam servindo o shell estatico.
 - Nenhuma dependencia nova; JS inicial inalterado (todo o codigo novo roda no servidor).
 - `categories:seo` do Lighthouse CI voltou a `error`.
+
+### 6. Metadados bloqueantes no `<head>` (`rendering.blockingMetadata`)
+
+`generateMetadata` das colecoes le `searchParams` (canonical, robots e prev/next de facetas e
+paginas). Com `cacheComponents` isso torna os metadados dinamicos e o Next os transmite no
+FIM do `<body>` para todo cliente fora da sua lista de bots (`htmlLimitedBots`): title,
+description, canonical e robots nao estavam no `<head>`. Medido: Lighthouse mobile reprovou
+`meta-description` (SEO 0,92) e crawlers sem JS (GPTBot, ClaudeBot, PerplexityBot) so
+encontrariam as tags no corpo. Decisao: `rendering.blockingMetadata: true` no manifest ->
+`htmlLimitedBots: /.*/` no `next.config.ts`; todo cliente recebe os metadados no `<head>`.
+Medido localmente: head completo (title, description, robots, canonical) em home, colecao,
+colecao com faceta, PDP e 404; TTFB de pagina quente ~0,1 s (a 1a requisicao a frio ~1,2 s
+e o custo de inicializacao do servidor, nao da opcao). Alternativa descartada: mover
+canonical/robots para headers `Link`/`X-Robots-Tag` no proxy (perde o canonical no HTML e
+duplica a regra de facetas fora de `lib/seo`).

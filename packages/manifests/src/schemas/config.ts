@@ -129,6 +129,8 @@ export const configSchema = z.strictObject({
     streaming: z.boolean(),
     cacheComponents: z.boolean(),
     partialPrefetching: z.boolean(),
+    // true: title, description, canonical e robots saem no <head> para todo cliente (ver docs/adr/0021).
+    blockingMetadata: z.boolean(),
   }),
   design: z.looseObject({
     tokens: z.looseObject({ source: z.string().min(1) }),
