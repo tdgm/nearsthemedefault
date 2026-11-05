@@ -16,7 +16,7 @@ let cached: Manifests | undefined;
  * nears.config.yaml. So aceita o formato de nome de arquivo de preset: a
  * variavel vira caminho de leitura, entao nada de `..` ou `/`.
  */
-export function selectedPreset(env: NodeJS.ProcessEnv = process.env): string | undefined {
+export function selectedPreset(env: Record<string, string | undefined> = process.env): string | undefined {
   const name = env.NEARS_PRESET?.trim();
   if (!name) return undefined;
   if (!/^[a-z][a-z0-9-]*$/.test(name)) throw new Error(`NEARS_PRESET invalido: "${name}"`);

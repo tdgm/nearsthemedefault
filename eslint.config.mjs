@@ -10,6 +10,7 @@ export default tseslint.config(
     ignores: [
       '**/node_modules/**',
       '**/.next/**',
+      'apps/web/public/~partytown/**',   // copia gerada por `pnpm partytown:copy` (gitignored)
       '**/storybook-static/**',
       '**/coverage/**',
       '**/playwright-report/**',
