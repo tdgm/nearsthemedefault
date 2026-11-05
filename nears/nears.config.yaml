@@ -50,6 +50,10 @@ vocabulary:
   searchEmpty: Digite um termo para começar a buscar.
   searchNoResults: Nenhum resultado para
   searchNoResultsHint: Confira a ortografia ou tente termos mais gerais.
+  # Rotulos das facetas de catalog.facets.available (chave: facet + Id com inicial maiuscula).
+  facetCategory: Categoria
+  facetBrand: Marca
+  facetPrice: Preço
 
 locale:
   default: pt-BR

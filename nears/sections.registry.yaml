@@ -159,7 +159,7 @@ sections:
     priority: high
     props:
       text: { type: string, required: true }
-      level: { type: enum, values: [h2, h3], default: h2 }
+      level: { type: enum, values: [h1, h2, h3], default: h2 }
       href: url
     cwv: { noLayoutShift: true }
     a11y: { headingOrder: enforced }
@@ -466,6 +466,9 @@ templates:
     sections:
       - section-title
       - repeat: { over: departments, blocks: [related-links] }
+      # Tipos de produto, campanhas e paginas institucionais: sem este bloco
+      # nada alem do rodape linkaria para eles (zero links orfaos).
+      - related-links
 
   notfound:
     sections: [section-title, showcase:recommended]

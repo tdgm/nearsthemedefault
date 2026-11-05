@@ -1,7 +1,26 @@
-import { RoutePlaceholder } from '../../../components/route-placeholder';
+import type { Metadata } from 'next';
+import { getLongtails } from '../../../lib/data/client';
+import { resolveLongtail } from '../../../lib/routing/resolve';
+import { RoutePage, routeMetadata } from '../../../lib/templates/route-page';
 
 // Landing de cauda longa com filtros pre-aplicados. Exige H1, intro e FAQ
-// unicos por pagina (routes.manifest.yaml > longtail.requires). Fase 6.
-export default function Page({ params }: { params: Promise<{ keyword: string }> }) {
-  return <RoutePlaceholder id="longtail" template="collection" params={params} />;
+// unicos por pagina (routes.manifest.yaml > longtail.requires): o schema da
+// longtail os torna obrigatorios, entao sem conteudo unico ela nem existe.
+export async function generateStaticParams() {
+  return (await getLongtails()).map((l) => ({ keyword: l.keyword }));
+}
+
+type Props = {
+  params: Promise<{ keyword: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { keyword } = await params;
+  return routeMetadata(await resolveLongtail(keyword));
+}
+
+export default async function Page({ params, searchParams }: Props) {
+  const { keyword } = await params;
+  return <RoutePage resolved={await resolveLongtail(keyword)} searchParams={searchParams} />;
 }

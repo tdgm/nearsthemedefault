@@ -1,7 +1,7 @@
 import type { SectionTitleProps } from './section-title.schema';
 
 /**
- * Titulo de secao. O nivel (h2/h3) e escolhido pelo template para nao pular
+ * Titulo de secao. O nivel (h1/h2/h3) e escolhido pelo template para nao pular
  * nivel de heading. Com `href`, o texto inteiro e o link (alvo >= 44px) e o
  * ancora continua descritiva.
  */
