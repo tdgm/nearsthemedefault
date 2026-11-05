@@ -174,8 +174,10 @@ describe('Product JSON-LD (contracts.yaml > data.product)', () => {
 
   it('nunca inventa campo ausente: sem avaliacao, o aggregateRating some', async () => {
     const view = (await buildPdpView('produto-exemplo'))!;
-    const { rating: _r, ...semRating } = view.product;
-    const p = asObj(productNode(await ctx(), { product: { ...semRating, reviews: [] }, path: '/x/p', breadcrumb: view.breadcrumb }));
+    const semRating = structuredClone(view.product);
+    delete semRating.rating;
+    semRating.reviews = [];
+    const p = asObj(productNode(await ctx(), { product: semRating, path: '/x/p', breadcrumb: view.breadcrumb }));
     expect(p.aggregateRating).toBeUndefined();
     expect(p.review).toBeUndefined();
   });
@@ -187,9 +189,10 @@ describe('Product JSON-LD (contracts.yaml > data.product)', () => {
 
 describe('onMissingGeoField', () => {
   const incomplete = async () => {
-    const view = (await buildPdpView('produto-exemplo'))!;
-    const { rating: _r, ...rest } = view.product;
-    return { ...rest, specs: [] };
+    const product = structuredClone((await buildPdpView('produto-exemplo'))!.product);
+    delete product.rating;
+    product.specs = [];
+    return product;
   };
 
   it('lista o que falta: avaliacao e tabela de specs', async () => {

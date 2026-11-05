@@ -92,8 +92,10 @@ describe('template pdp (manifest)', () => {
   it('produto sem avaliacoes nao tem agregado e a section explica o vazio', async () => {
     const client = await import('../lib/data/client');
     const all = await client.getProducts();
-    const { rating: _rating, ...base } = all[3]!;
-    const spy = vi.spyOn(client, 'getProducts').mockResolvedValue(all.map((p) => (p.slug === base.slug ? { ...base, reviews: [] } : p)));
+    const base = structuredClone(all[3]!);
+    delete base.rating;
+    base.reviews = [];
+    const spy = vi.spyOn(client, 'getProducts').mockResolvedValue(all.map((p) => (p.slug === base.slug ? base : p)));
     const view = (await buildPdpView(base.slug))!;
     spy.mockRestore();
     const props = view.propsFor({ id: 'pdp-reviews' }) as { aggregate?: unknown; items: unknown[] };
