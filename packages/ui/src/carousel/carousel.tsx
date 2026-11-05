@@ -30,8 +30,8 @@ const REDUCED = '(prefers-reduced-motion: reduce)';
 const prefersReducedMotion = () => typeof window !== 'undefined' && Boolean(window.matchMedia?.(REDUCED).matches);
 const subscribeReducedMotion = (onChange: () => void) => {
   const query = typeof window !== 'undefined' ? window.matchMedia?.(REDUCED) : undefined;
-  query?.addEventListener('change', onChange);
-  return () => query?.removeEventListener('change', onChange);
+  query?.addEventListener?.('change', onChange);
+  return () => query?.removeEventListener?.('change', onChange);
 };
 
 const widths = { 1: 'basis-full', 2: 'basis-[85%] md:basis-1/2', 3: 'basis-[85%] md:basis-1/3', 4: 'basis-[45%] md:basis-1/4' } as const;

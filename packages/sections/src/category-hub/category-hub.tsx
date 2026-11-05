@@ -28,7 +28,7 @@ export function CategoryHub({ items, limit = 6, labels }: CategoryHubProps) {
                 sizes="(min-width: 1024px) 16vw, (min-width: 768px) 33vw, 144px"
                 className="h-auto w-full rounded-md"
               />
-              <span className="font-medium underline-offset-4 group-hover:underline">{item.label}</span>
+              <span className="font-medium underline-offset-4 group-hover:underline">{item.label}</span>{' '}
               {item.fromPrice !== undefined && (
                 <span className="text-sm text-on-surface-muted">
                   {l.fromPrice} {formatBRL(item.fromPrice)}
