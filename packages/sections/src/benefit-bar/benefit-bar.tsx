@@ -9,7 +9,6 @@ export function BenefitBar({ items, label = 'Vantagens' }: BenefitBarProps) {
   return (
     <section aria-label={label} className="border-y border-border bg-surface-subtle">
       <ul
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- regiao rolavel precisa de foco para rolagem por teclado (axe: scrollable-region-focusable).
         tabIndex={0}
         className="mx-auto flex min-h-11 max-w-7xl snap-x snap-mandatory items-center gap-6 overflow-x-auto px-4 [scrollbar-width:none] md:justify-between [&::-webkit-scrollbar]:hidden"
       >

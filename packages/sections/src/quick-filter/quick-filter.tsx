@@ -12,7 +12,6 @@ export function QuickFilter({ chips, basePath = '', current = {}, labels }: Quic
   return (
     <nav aria-label={labels?.region ?? 'Filtros rápidos'} className="mx-auto min-h-12 max-w-7xl px-4 py-2">
       <ul
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- faixa rolavel precisa de foco para rolagem por teclado (axe: scrollable-region-focusable).
         tabIndex={0}
         className="flex snap-x snap-mandatory gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >

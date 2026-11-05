@@ -10,7 +10,6 @@ export function EventBanner({ imageDesktop, imageMobile, alt, href }: EventBanne
   const picture = (
     <picture>
       <source media="(min-width: 768px)" srcSet={imageDesktop.src} width={imageDesktop.width} height={imageDesktop.height} />
-      {/* eslint-disable-next-line @next/next/no-img-element -- art direction com <picture>; o primitivo Image nao cobre dois formatos de arte. */}
       <img
         src={imageMobile.src}
         alt={alt}

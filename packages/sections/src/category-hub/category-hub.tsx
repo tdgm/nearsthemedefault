@@ -14,7 +14,6 @@ export function CategoryHub({ items, limit = 6, labels }: CategoryHubProps) {
   return (
     <section aria-label={l.region} className="mx-auto max-w-7xl px-4 py-4 [contain-intrinsic-size:auto_280px] [content-visibility:auto]">
       <ul
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- faixa rolavel precisa de foco para rolagem por teclado (axe: scrollable-region-focusable).
         tabIndex={0}
         className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] md:grid md:grid-cols-3 md:overflow-visible lg:grid-cols-6 [&::-webkit-scrollbar]:hidden"
       >
