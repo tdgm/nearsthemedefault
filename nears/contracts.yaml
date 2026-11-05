@@ -110,13 +110,16 @@ geo:
     robotsTxt: generated
     llmsTxt: generated
   agents:
-    # Decisao de negocio, nao tecnica. Definir antes do go-live.
-    GPTBot: decide
+    # Decisao registrada em docs/adr/0016-politica-de-agentes-e-multitenancy.md.
+    # Padrao do template: permitir crawlers que citam a loja em respostas de IA
+    # e bloquear o que so alimenta corpus de treino sem retorno. Cada loja pode
+    # sobrescrever no proprio nears.config.yaml.
+    GPTBot: allow
     OAI-SearchBot: allow
-    PerplexityBot: decide
-    ClaudeBot: decide
-    Google-Extended: decide
-    CCBot: decide
+    PerplexityBot: allow
+    ClaudeBot: allow
+    Google-Extended: allow
+    CCBot: disallow
   attribution:
     trackAiReferrals: true
     referrerPatterns:

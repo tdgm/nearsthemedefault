@@ -48,7 +48,12 @@ describe('saidas do build', () => {
   });
 
   it('modo system nao importa next/font (zero download)', async () => {
-    const fonts = dist(await generate(), 'fonts.ts');
+    const dir = await mkdtemp(join(tmpdir(), 'nears-tokens-'));
+    const t = structuredClone(base);
+    t.typography.font.brand.source.value = 'system';
+    const tokensPath = join(dir, 'tokens.json');
+    await writeFile(tokensPath, JSON.stringify(t));
+    const fonts = dist(await generate({ tokensPath, fontsOut: join(dir, 'fonts.ts') }), 'fonts.ts');
     expect(fonts).toContain('export const fontVariableClass = "";');
     expect(fonts).not.toContain('next/font/local');
   });

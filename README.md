@@ -71,18 +71,16 @@ setup do GitHub, desde a Fase 0, mesmo em repo vazio. Headers de seguranca (CSP,
 completo em
 [docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md](./docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md).
 
-## Decisoes em aberto
+## Decisoes de negocio (registradas)
 
-Tres pontos dependem de decisao de negocio antes do go-live:
+Decididas em [docs/adr/0016](./docs/adr/0016-politica-de-agentes-e-multitenancy.md):
 
-- **`geo.agents`** em `nears/contracts.yaml`: quais crawlers de IA permitir.
-  Quase tudo esta como `decide` de proposito.
-- **`onMissingGeoField`**: hoje `warn-build`. Deve virar `fail-build` ao fim
-  da Fase 7, senao schema incompleto vira divida permanente.
-- **`security.multiTenancy.allowlistSource`** em `nears/nears.config.yaml`:
-  como o frontend valida o dominio personalizado de cada loja contra uma
-  lista de dominios verificados pelo painel, antes de rotear (evita host
-  header injection / cache poisoning). Mecanismo exato fica para a Fase 6.
+- **`geo.agents`**: permitir GPTBot, OAI-SearchBot, PerplexityBot, ClaudeBot e
+  Google-Extended; bloquear CCBot. Cada loja pode sobrescrever.
+- **`onMissingGeoField`**: `warn-build` agora; vira `fail-build` ao fim da
+  Fase 7 (criterio de saida no ROADMAP).
+- **`security.multiTenancy.allowlistSource`**: `panel-endpoint` (consulta
+  server-only, cache curto, fail-closed). Implementacao na Fase 6/8.
 
 ## Padrao arquitetural
 
