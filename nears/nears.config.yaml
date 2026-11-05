@@ -175,10 +175,9 @@ security:
     # roteamento NUNCA pode confiar direto no header Host: precisa validar
     # contra a lista de dominios verificados pelo painel antes de resolver
     # qual loja renderizar (risco: host header injection, cache poisoning,
-    # SSRF por Host forjado). Mecanismo exato e decisao de arquitetura/negocio
-    # ainda em aberto - ver docs/PROMPTS.md > Decisoes de negocio.
+    # SSRF por Host forjado). Decisao em docs/adr/0016-politica-de-agentes-e-multitenancy.md.
     hostValidation: allowlist-only
-    allowlistSource: decide   # endpoint do painel, arquivo gerado no build, ou resolucao upstream; definir antes da Fase 6
+    allowlistSource: panel-endpoint   # consulta server-only a lista de dominios verificados do painel; cache curto + cache negativo; fail-closed
 
 integrations:
   # provider vazio significa "a loja define".

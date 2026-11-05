@@ -63,8 +63,8 @@ apresentado antes deste ADR.
     que a resolucao de loja por dominio personalizado nao pode confiar
     direto no header `Host` sem validar contra uma lista de dominios
     verificados (risco: host header injection, cache poisoning, SSRF por
-    Host forjado). O mecanismo exato (`allowlistSource`) e decisao de
-    arquitetura/negocio ainda em aberto - adicionada a
+    Host forjado). O mecanismo exato (`allowlistSource`) foi decidido
+    depois no ADR 0016 (`panel-endpoint`); antes estava em aberto, registrada em
     `docs/PROMPTS.md > Decisoes de negocio que nao sao suas`, ao lado de
     `geo.agents` e `onMissingGeoField`, que ja seguiam esse padrao.
 11. **`contracts.yaml > gates.security`**, espelhando o bloco acima no

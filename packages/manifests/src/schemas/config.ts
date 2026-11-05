@@ -161,7 +161,10 @@ export const configSchema = z.strictObject({
       permissionsPolicy: z.string().min(1),
       frameAncestors: z.enum(['none', 'self']),
     }),
-    multiTenancy: z.looseObject({ hostValidation: z.literal('allowlist-only') }),
+    multiTenancy: z.looseObject({
+      hostValidation: z.literal('allowlist-only'),
+      allowlistSource: z.enum(['panel-endpoint', 'build-file', 'upstream']),
+    }),
   }),
   integrations: z.record(z.string(), z.record(z.string(), z.unknown())),
 });

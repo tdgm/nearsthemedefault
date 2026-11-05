@@ -107,8 +107,8 @@ status 404.
 
 Nota: esta fase NAO inclui o mecanismo de resolucao de loja por dominio
 personalizado (multi-tenant, ex.: `followin.com.br`) - isso depende da
-decisao ainda aberta em `nears.config.yaml > security.multiTenancy.allowlistSource`
-(docs/PROMPTS.md > Decisoes de negocio, docs/adr/0008). Rotas aqui assumem
+decisao registrada em `nears.config.yaml > security.multiTenancy.allowlistSource`
+(`panel-endpoint`, docs/adr/0016; a implementacao do resolver e desta fase em diante). Rotas aqui assumem
 uma loja ja resolvida.
 
 ## Fase 7 - SEO e GEO
@@ -119,7 +119,7 @@ llms.txt a partir do manifest, alt automatico por regra,
 politica de indexacao de facetas, bloco de FAQ por collection e por PDP, e
 atribuicao de trafego vindo de motores generativos.
 
-**Gate:** Rich Results sem erro em Product, Breadcrumb, ItemList e FAQPage. `categories:seo` do `lighthouserc.json` volta de `warn` para `error` (o noindex global do layout sai e o robots.txt passa a existir).
+**Gate:** Rich Results sem erro em Product, Breadcrumb, ItemList e FAQPage. `categories:seo` do `lighthouserc.json` volta de `warn` para `error` (o noindex global do layout sai e o robots.txt passa a existir). `contracts.yaml > onMissingGeoField` passa de `warn-build` para `fail-build` no PR final desta fase (docs/adr/0016).
 
 ## Fase 8 - Endurecimento
 
