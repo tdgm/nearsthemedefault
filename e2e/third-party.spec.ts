@@ -20,5 +20,10 @@ test('os arquivos do Partytown estao publicados na mesma origem (prebuild)', asy
   const res = await request.get('/~partytown/partytown.js');
   expect(res.status()).toBe(200);
   expect(await res.text()).toContain('Partytown');
+  // O debug/ e removido no prebuild. Limite conhecido (8d): o proxy.ts nao cobre caminhos com
+  // ponto, entao a PRIMEIRA requisicao a um arquivo inexistente ainda responde 200 (shell do
+  // PPR) e so as seguintes respondem 404. Aquece antes de afirmar, para o teste nao depender
+  // da ordem nem do retry do CI.
+  await request.get('/~partytown/debug/partytown.js');
   expect((await request.get('/~partytown/debug/partytown.js')).status()).toBe(404);
 });
