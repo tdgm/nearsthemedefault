@@ -19,7 +19,7 @@ function loadMutated(file: string, edit: (text: string) => string, preset?: stri
   const after = edit(before);
   expect(after, `a edicao nao alterou ${file}`).not.toBe(before);
   writeFileSync(path, after);
-  return () => loadManifests({ nearsDir: dir, tokensFile, preset });
+  return () => loadManifests({ nearsDir: dir, tokensFile, preset, repoRoot: root });
 }
 
 const messages = (fn: () => unknown) => {
@@ -237,5 +237,43 @@ describe('observability.rum', () => {
   it('aceita coletor externo https', () => {
     const m = loadMutated('nears.config.yaml', (t) => t.replace('endpoint: /api/rum', 'endpoint: https://rum.nears.example/v1'))();
     expect(m.config.observability.rum.endpoint).toBe('https://rum.nears.example/v1');
+  });
+});
+
+describe('thirdParties', () => {
+  const ADR = 'docs/adr/0023-terceiros-com-partytown.md';
+  const withScripts = (yaml: string) => loadMutated('nears.config.yaml', (t) => t.replace('  scripts: []', yaml));
+  const gtm = (extra = '') =>
+    `  scripts:\n    - id: gtm\n      integration: tagManager\n      src: https://www.googletagmanager.com/gtm.js?id=GTM-XXXX\n      forward: [dataLayer.push]\n      adr: ${ADR}\n${extra}`;
+
+  it('padrao: nenhum terceiro (zero custo)', () => {
+    expect(loadManifests({ nearsDir, tokensFile }).config.thirdParties.scripts).toEqual([]);
+  });
+
+  it('aceita um terceiro em worker com ADR existente e aplica os defaults', () => {
+    const [script] = withScripts(gtm())().config.thirdParties.scripts;
+    expect(script).toMatchObject({ id: 'gtm', strategy: 'partytown', forward: ['dataLayer.push'] });
+  });
+
+  it('recusa src http, ADR inexistente e id repetido', () => {
+    expect(messages(withScripts(gtm().replace('https://', 'http://')))).toContain('thirdParties.scripts.0.src');
+    expect(messages(withScripts(gtm().replace('0023-terceiros-com-partytown', '9999-nao-existe')))).toContain('nao existe');
+    expect(messages(withScripts(gtm() + gtm().replace('  scripts:\n', '')))).toContain('repetido');
+  });
+
+  it('thread principal exige mainThreadReason e nao aceita forward', () => {
+    const main = gtm('      strategy: idle\n');
+    const text = messages(withScripts(main));
+    expect(text).toContain('mainThreadReason');
+    expect(text).toContain('forward so existe com strategy partytown');
+    const ok = withScripts(
+      `  scripts:\n    - id: reviews\n      integration: reviews\n      src: https://cdn.reviews.example/widget.js\n      strategy: post-interaction\n      adr: ${ADR}\n      mainThreadReason: Widget de avaliacoes manipula o DOM da pagina.\n`,
+    )();
+    expect(ok.config.thirdParties.scripts[0]?.strategy).toBe('post-interaction');
+  });
+
+  it('limite de hosts distintos vem de budgets.third_party_hosts', () => {
+    const hosts = Array.from({ length: 9 }, (_, i) => `    - id: s${i}\n      integration: analytics\n      src: https://h${i}.example/a.js\n      adr: ${ADR}\n`).join('');
+    expect(messages(withScripts(`  scripts:\n${hosts}`))).toContain('limite budgets.third_party_hosts = 8');
   });
 });

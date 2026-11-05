@@ -4,12 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "pnpm partytown:copy",
     "dev": "next dev",
+    "prebuild": "pnpm partytown:copy",
     "build": "next build",
     "start": "next start",
+    "partytown:copy": "partytown copylib public/~partytown && rm -rf public/~partytown/debug",
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@builder.io/partytown": "0.10.3",
     "@nears/manifests": "workspace:*",
     "@nears/sections": "workspace:*",
     "@nears/tokens": "workspace:*",

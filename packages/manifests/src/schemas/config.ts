@@ -111,6 +111,33 @@ export const budgetsSchema = z.strictObject({
   onExceed: z.enum(['fail', 'warn']),
 });
 
+/** Chamada global que o script de terceiro expoe e o Partytown encaminha do worker (ex.: `dataLayer.push`). */
+const forwardedCall = z.string().regex(/^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*)*$/, 'nome de funcao global, ex.: dataLayer.push');
+
+const thirdPartyScriptSchema = z
+  .strictObject({
+    id: identifier,
+    integration: z.enum(['tagManager', 'analytics', 'reviews', 'personalization', 'search', 'consent']),
+    src: z.url({ protocol: /^https$/ }),
+    // partytown = web worker (padrao, thirdPartyPolicy.sandbox). Os outros rodam na thread principal.
+    strategy: z.enum(['partytown', 'post-interaction', 'idle']).default('partytown'),
+    forward: z.array(forwardedCall).default([]),
+    // Todo terceiro exige um ADR que justifique o custo (integrations.thirdPartyPolicy.requiresAdr).
+    adr: z.string().regex(/^docs\/adr\/\d{4}-[a-z0-9-]+\.md$/, 'caminho de um ADR em docs/adr/NNNN-nome.md'),
+    mainThreadReason: z.string().min(20, 'explique por que este script nao pode rodar no worker').optional(),
+  })
+  .superRefine((t, ctx) => {
+    if (t.strategy !== 'partytown' && !t.mainThreadReason) {
+      ctx.addIssue({ code: 'custom', path: ['mainThreadReason'], message: `strategy "${t.strategy}" roda na thread principal: informe mainThreadReason` });
+    }
+    if (t.strategy !== 'partytown' && t.forward.length > 0) {
+      ctx.addIssue({ code: 'custom', path: ['forward'], message: 'forward so existe com strategy partytown' });
+    }
+  });
+
+export const thirdPartiesSchema = z.strictObject({ scripts: z.array(thirdPartyScriptSchema) });
+export type ThirdPartyScript = z.output<typeof thirdPartyScriptSchema>;
+
 export const configSchema = z.strictObject({
   platform: z.string().min(1),
   template: z.string().min(1),
@@ -175,6 +202,7 @@ export const configSchema = z.strictObject({
       sampleRate: z.number().min(0).max(1),
     }),
   }),
+  thirdParties: thirdPartiesSchema,
   integrations: z.record(z.string(), z.record(z.string(), z.unknown())),
 });
 

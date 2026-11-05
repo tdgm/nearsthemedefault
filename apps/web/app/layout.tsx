@@ -5,6 +5,7 @@ import { getStorefront } from '../lib/storefront';
 import { getStore } from '../lib/data/client';
 import { loadAllManifests, loadConfig } from '../lib/manifest';
 import { RumScript } from '../lib/rum';
+import { ThirdPartyScripts } from '../lib/third-party';
 import { AiReferralScript, siteUrl } from '../lib/seo';
 import { fontVariableClass } from './_generated/fonts';
 import './globals.css';
@@ -43,6 +44,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <CustomerService {...s.customerService} />
         <AiReferralScript />
         <RumScript />
+        <ThirdPartyScripts />
       </body>
     </html>
   );

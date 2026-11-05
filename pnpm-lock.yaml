@@ -113,6 +113,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@builder.io/partytown':
+        specifier: 0.10.3
+        version: 0.10.3
       '@nears/manifests':
         specifier: workspace:*
         version: link:../../packages/manifests
@@ -432,6 +435,12 @@ packages:
 
   '@bramus/specificity@2.4.3':
     resolution: {integrity: sha512-0GEz8qJWokkUVYQYRukmkSHIFNoBH8QTreeHrAFbvz1XFYc3Y+puhMs8PQ5x8GNugiC2l5jvDBXKLbBIByeSBw==}
+    hasBin: true
+
+  '@builder.io/partytown@0.10.3':
+    resolution: {integrity: sha512-N2SWA3c5vEad3rgdAFM3zMb6uc7aXqibkgAz4ijvYzycgQXJ4dE5oH6fGFMXSQWj6ayVlLT1/CmpflYUJHfmQg==}
+    engines: {node: '>=18.0.0'}
+    deprecated: Use @qwik.dev/partytown instead
     hasBin: true
 
   '@bundled-es-modules/deepmerge@4.3.2':
@@ -6027,6 +6036,8 @@ snapshots:
   '@bramus/specificity@2.4.3':
     dependencies:
       css-tree: 3.2.1
+
+  '@builder.io/partytown@0.10.3': {}
 
   '@bundled-es-modules/deepmerge@4.3.2':
     dependencies:
