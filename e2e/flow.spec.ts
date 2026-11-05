@@ -126,6 +126,25 @@ test.describe('fluxo de compra por nicho', () => {
     for (const attr of e.geoSpecs) expect(names, `additionalProperty.${attr}`).toContain(attr);
   });
 
+  test('PDP: setas movem a selecao dentro do radiogroup, pulam opcao indisponivel e o foco fica no grupo', async ({ page }) => {
+    const e = expected!;
+    await page.goto(PRODUCT_HREF);
+    const axis = e.axes[0]!;
+    const group = page.locator('#pdp-form').getByRole('radiogroup', { name: new RegExp(`^${escapeRe(axis.label)}`) });
+    const radios = group.locator('input[type="radio"]');
+    await radios.first().focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(radios.nth(1)).toBeChecked();
+    expect(await group.evaluate((el) => el.contains(document.activeElement))).toBe(true);
+    // Volta com a seta oposta; opcao `disabled` nunca recebe a selecao.
+    await page.keyboard.press('ArrowLeft');
+    await expect(radios.first()).toBeChecked();
+    for (let i = 0; i < 6; i++) {
+      await page.keyboard.press('ArrowRight');
+      expect(await group.locator('input[type="radio"]:checked').evaluate((el) => (el as HTMLInputElement).disabled)).toBe(false);
+    }
+  });
+
   test('PDP -> carrinho: eixo obrigatorio, anuncio em aria-live e minicart no vocabulario do nicho', async ({ page }) => {
     const e = expected!;
     await page.goto(PRODUCT_HREF);
