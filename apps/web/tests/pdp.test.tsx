@@ -1,5 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, onTestFinished, vi } from 'vitest';
+import { getProducts } from '../lib/data/client';
+import { mockVariantsFor } from '../lib/data/mock';
 import { loadAllManifests, loadConfig, type NearsConfig } from '../lib/manifest';
 import { buildPdpView } from '../lib/templates/pdp-content';
 import { expandTemplate } from '../lib/templates/expand';
@@ -75,7 +77,14 @@ describe('template pdp (manifest)', () => {
     const generic = (await buildPdpView('produto-exemplo'))!;
     expect((generic.propsFor({ id: 'pdp-buybox' }) as { variantSelectors: unknown[] }).variantSelectors).toEqual([]);
 
+    // O catalogo padrao nao tem eixos: o produto passa a oferecer os do nicho (restaurado ao fim).
     const config = withAxes();
+    const product = (await getProducts()).find((p) => p.slug === 'produto-exemplo')!;
+    const original = product.variants;
+    product.variants = mockVariantsFor(config.catalog.variantAxes);
+    onTestFinished(() => {
+      product.variants = original;
+    });
     const view = (await buildPdpView('produto-exemplo', config))!;
     const buybox = view.propsFor({ id: 'pdp-buybox' }) as { variantSelectors: { id: string }[]; guideHref?: string };
     expect(buybox.variantSelectors.map((v) => v.id)).toEqual(['color', 'size']);

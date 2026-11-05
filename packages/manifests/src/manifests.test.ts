@@ -54,7 +54,7 @@ describe('manifests reais', () => {
     const m = loadManifests({ nearsDir, tokensFile, preset: 'fashion' });
     expect(m.config.vocabulary.cart).toBe('Sacola');
     expect(m.config.vocabulary.bundle).toBe('Complete o look');
-    expect(m.config.vocabulary.addToCart).toBe('Adicionar ao carrinho');
+    expect(m.config.vocabulary.wishlist).toBe('Favoritos');
   });
 });
 

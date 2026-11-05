@@ -16,7 +16,7 @@ export type MockCatalog = {
 
 const SWATCHES = ['#1b4d89', '#8a2b2b', '#2f6b3f'] as const;
 
-const variantsFor = (axes: MockCatalog['variantAxes']): CatalogSnapshot['products'][number]['variants'] =>
+export const mockVariantsFor = (axes: MockCatalog['variantAxes']): CatalogSnapshot['products'][number]['variants'] =>
   axes.map((axis) => ({
     axis: axis.id,
     options: [1, 2, 3].map((n) => ({
@@ -118,7 +118,7 @@ const buildProducts = (catalog: MockCatalog): CatalogSnapshot['products'] => Arr
       { author: 'Cliente 1', rating: 5, date: '2026-03-10T12:00:00-03:00', title: 'Recomendo', body: 'Chegou no prazo e é como descrito.' },
       { author: 'Cliente 2', rating: 4, date: '2026-04-02T09:30:00-03:00', body: 'Bom custo-benefício.' },
     ],
-    variants: variantsFor(catalog.variantAxes),
+    variants: mockVariantsFor(catalog.variantAxes),
     bundle: [slugOf(((i + 1) % 24) + 1), slugOf(((i + 2) % 24) + 1)],
     related: [3, 4, 5, 6].map((d) => slugOf(((i + d) % 24) + 1)),
   };
