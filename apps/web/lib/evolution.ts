@@ -11,7 +11,7 @@ export const phases: { id: number; name: string; status: PhaseStatus }[] = [
   { id: 4, name: 'Sections globais', status: 'concluida' },
   { id: 5, name: 'Sections de conteúdo', status: 'concluida' },
   { id: 6, name: 'Templates e rotas', status: 'concluida' },
-  { id: 7, name: 'SEO e GEO', status: 'pendente' },
+  { id: 7, name: 'SEO e GEO', status: 'concluida' },
   { id: 8, name: 'Endurecimento', status: 'pendente' },
 ];
 

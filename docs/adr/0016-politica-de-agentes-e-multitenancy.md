@@ -30,9 +30,9 @@ como imposicao a cada marca.
 
 ### 2. `onMissingGeoField`
 
-Permanece `warn-build` ate o fim da Fase 7. A promocao para `fail-build` e criterio
-de saida da Fase 7 (registrada no ROADMAP): promover antes quebraria o build de
-templates que ainda nao emitem todos os campos GEO.
+Permaneceu `warn-build` ate o fim da Fase 7 e foi promovido a `fail-build` no PR final
+dela (docs/adr/0021): promover antes quebraria o build de templates que ainda nao
+emitiam todos os campos GEO.
 
 ### 3. `security.multiTenancy.allowlistSource = panel-endpoint`
 

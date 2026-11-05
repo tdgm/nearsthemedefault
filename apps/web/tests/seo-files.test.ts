@@ -193,3 +193,40 @@ describe('llms.txt', () => {
     expect(txt.endsWith('\n')).toBe(true);
   });
 });
+
+describe('atribuicao de trafego de IA', () => {
+  const patterns = loadAllManifests().contracts.geo.attribution.referrerPatterns;
+
+  it('classifica por referrer (dominio e subdominio) e por utm_source', async () => {
+    const { classifyAiReferral } = await import('../lib/seo');
+    expect(classifyAiReferral({ referrer: 'https://chatgpt.com/' }, patterns)).toBe('chatgpt.com');
+    expect(classifyAiReferral({ referrer: 'https://www.perplexity.ai/search?q=x' }, patterns)).toBe('perplexity.ai');
+    expect(classifyAiReferral({ referrer: '', utmSource: 'chatgpt.com' }, patterns)).toBe('chatgpt.com');
+    expect(classifyAiReferral({ referrer: 'https://claude.ai/chat/1' }, patterns)).toBe('claude.ai');
+  });
+
+  it('nao confunde dominio parecido nem busca comum', async () => {
+    const { classifyAiReferral } = await import('../lib/seo');
+    expect(classifyAiReferral({ referrer: 'https://notchatgpt.com/' }, patterns)).toBeNull();
+    expect(classifyAiReferral({ referrer: 'https://chatgpt.com.evil.example/' }, patterns)).toBeNull();
+    expect(classifyAiReferral({ referrer: 'https://www.google.com/' }, patterns)).toBeNull();
+    expect(classifyAiReferral({}, patterns)).toBeNull();
+  });
+
+  it('o script inline e pequeno, deterministico e se comporta como a funcao pura', async () => {
+    const { aiReferralScript } = await import('../lib/seo');
+    const script = aiReferralScript(patterns);
+    expect(script).toBe(aiReferralScript(patterns));
+    expect(script.length).toBeLessThan(1000);
+    const run = (referrer: string, search: string) => {
+      const dataLayer: unknown[] = [];
+      const fakeWindow = { dataLayer } as { dataLayer: unknown[] };
+      new Function('document', 'location', 'window', 'URL', 'URLSearchParams', script)({ referrer }, { search }, fakeWindow, URL, URLSearchParams);
+      return dataLayer;
+    };
+    expect(run('https://chatgpt.com/', '')).toEqual([{ event: 'ai_referral', ai_source: 'chatgpt.com' }]);
+    expect(run('', '?utm_source=perplexity.ai')).toEqual([{ event: 'ai_referral', ai_source: 'perplexity.ai' }]);
+    expect(run('https://www.google.com/', '')).toEqual([]);
+    expect(run('https://notchatgpt.com/', '')).toEqual([]);
+  });
+});

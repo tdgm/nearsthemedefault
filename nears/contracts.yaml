@@ -35,7 +35,7 @@ data:
       isVariantOf: { groupId: string, name: string }
       variesBy: catalog.variantAxes[].schemaOrg
       hasVariant: "array<{ sku, axes: Record<variantAxisId, string>, availability, price }>"
-    onMissingGeoField: warn-build    # vira fail-build ao fim da Fase 7
+    onMissingGeoField: fail-build    # Fase 7 concluida (docs/adr/0021): produto sem campo GEO derruba o build; loja sem avaliacoes ainda pode rebaixar para warn-build no proprio config
 
   collection:
     required: [id, name, slug, breadcrumb, productCount]

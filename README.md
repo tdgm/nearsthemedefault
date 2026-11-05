@@ -77,8 +77,8 @@ Decididas em [docs/adr/0016](./docs/adr/0016-politica-de-agentes-e-multitenancy.
 
 - **`geo.agents`**: permitir GPTBot, OAI-SearchBot, PerplexityBot, ClaudeBot e
   Google-Extended; bloquear CCBot. Cada loja pode sobrescrever.
-- **`onMissingGeoField`**: `warn-build` agora; vira `fail-build` ao fim da
-  Fase 7 (criterio de saida no ROADMAP).
+- **`onMissingGeoField`**: `fail-build` desde o fim da Fase 7
+  ([docs/adr/0021](./docs/adr/0021-seo-geo-metadata-jsonld-facetas.md)).
 - **`security.multiTenancy.allowlistSource`**: `panel-endpoint` (consulta
   server-only, cache curto, fail-closed). Implementacao na Fase 6/8.
 
