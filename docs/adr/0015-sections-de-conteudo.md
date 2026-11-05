@@ -81,8 +81,21 @@ A Fase 5 (docs/ROADMAP.md) entrega as sections de conteudo. Gate: Hero e LCP em
 
 ## Consequencias
 
-- Nenhuma dependencia nova. JS inicial: ver o resultado do `pnpm validate` no PR (gate de
-  140 KB, ADR 0010); se estourar, o Carousel do Hero passa a carregar sob demanda.
+- Nenhuma dependencia nova.
+- Medicao (`pnpm validate`, Mac, Node 24), com as sections ainda NAO montadas nos templates:
+
+  | Metrica | Fase 4 | Fase 5 | Limite |
+  | --- | --- | --- | --- |
+  | JS inicial (gzip) | 136.6 KB | 138 KB | 140 KB |
+  | CSS total | 7 KB | 7.7 KB | 30 KB |
+  | HTML home (gzip) | 8.8 KB | 8.8 KB | 80 KB |
+  | `@nears/ui` (gzip) | 9.26 KB | 9.65 KB | 25 KB |
+
+- **Risco para a Fase 6:** a folga de JS e de ~2 KB e a home vai montar Hero (`Carousel`,
+  client), Showcase em abas (`Tabs`, client) e o filtro do grid (`OverlayTrigger`, ja no
+  bundle). Gate: medir apos montar cada template; se estourar, reduzir ilhas antes de
+  subir o limite - primeira opcao: carregar o `Carousel` do Hero e o `Tabs` sob demanda
+  (import dinamico) e manter o 1o slide e a 1a aba renderizados no servidor.
 - Fica para a Fase 6: data layer (produtos, facetas, ordenacao), endpoints de favoritar e
   adicionar, escolha de `priority` por template, loader de imagem AVIF/WebP.
 - Fica para a Fase 7: JSON-LD (ItemList, FAQPage, BreadcrumbList) a partir dos mesmos props.

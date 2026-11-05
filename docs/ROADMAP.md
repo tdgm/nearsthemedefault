@@ -86,8 +86,9 @@ QuickFilter, ProductGrid, ProductCard, Breadcrumb, TextSEO, FAQ e RelatedLinks.
 
 **Entregue:** as 15 sections de conteudo (spec, schema, meta, story e teste cada), `ArtImage`
 e helpers compartilhados, autoplay opt-in no `Carousel` e decisoes em
-`docs/adr/0015-sections-de-conteudo.md`. Medicao de LCP no perfil throttled fica para a
-Fase 6, quando houver pagina real com Hero (o `pnpm lh` ja cobre a home).
+`docs/adr/0015-sections-de-conteudo.md`. JS inicial 138 KB (limite 140; folga de ~2 KB, risco anotado no ADR). Medicao de LCP no
+perfil throttled fica para a Fase 6, quando houver pagina real com Hero (o `pnpm lh` ja
+cobre a home).
 
 ## Fase 6 - Templates e rotas
 
