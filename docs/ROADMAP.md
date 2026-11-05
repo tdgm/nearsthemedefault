@@ -57,6 +57,10 @@ Tabs, Modal, Drawer, Breadcrumb, Pagination, Carousel (scroll-snap nativo) e Ima
 
 **Gate:** 100% com story, teste e axe limpo. Bundle do pacote <= 25 KB gzip.
 
+**Entregue:** `packages/ui` com os 21 componentes, `@nears/ui/format` (formatacao BR),
+`scripts/check-ui-bundle.mjs` (gate de 25 KB) e decisoes em
+`docs/adr/0013-design-system-packages-ui.md`.
+
 ## Fase 4 - Sections globais
 
 Entregar: PromoBar com countdown (altura reservada, CLS zero), Header com variantes

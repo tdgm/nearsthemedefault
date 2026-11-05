@@ -27,7 +27,7 @@ invariantes de rotas.
    `erasableSyntaxOnly` (sem `enum`, sem parameter properties).
 4. **Schemas estritos** (`z.strictObject`) em `catalog`, rotas e sections: campo
    desconhecido e erro, para pegar typo no YAML. Blocos de infraestrutura que o
-   codigo ainda nao le (`rendering`, `design`, `security`, `contracts.data`) usam
+   codigo ainda nao le (`rendering`, `design`, `security`) usam
    `z.looseObject` com os campos criticos tipados.
 5. **Referencias** (`refs.ts`). `from:`, `enabledBy:`, `indexableFrom`,
    `requiredForGeoFrom`, `variesBy`, `default: vocabulary.x` e placeholders
@@ -75,5 +75,8 @@ invariantes de rotas.
   nicho, rode `pnpm manifests:types` e commite.
 - `validation.everySectionMustDeclare` e um contrato fixo `[priority, cwv, a11y]`
   no schema; remover um deles do YAML falha em vez de afrouxar o gate.
-- Fora do escopo: schema Zod do `tokens.json` (segue com `core.mjs`, ADR 0011) e
-  `contracts.data` completo (Fase 7, quando os helpers de JSON-LD forem gerados).
+- Fora do escopo: schema Zod do `tokens.json` (segue com `core.mjs`, ADR 0011).
+- Atualizacao (commit `7192d82`): `contracts.yaml` ganhou schema Zod completo e
+  estrito (`data`, `seo`, `geo`, `gates`), em vez do `looseObject` adiado para a
+  Fase 7. O CLAUDE.md exige Zod em todo manifest, sem excecao; a Fase 7 apenas
+  consome os tipos para gerar os helpers de JSON-LD.

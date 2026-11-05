@@ -1,2 +1,25 @@
-// Design system (atomos e moleculas). Os componentes reais entram na Fase 3.
-export { FoundationsNote } from './foundations-note';
+// Design system (atomos e moleculas). Componentes de servidor por padrao;
+// os que precisam de estado/efeito declaram "use client" com justificativa.
+export { cn } from './cn';
+export * from './format';
+export { Button, buttonClasses, type ButtonProps, type ButtonSize, type ButtonVariant } from './button/button';
+export { IconButton, type IconButtonProps } from './icon-button/icon-button';
+export { Link, type LinkProps } from './link/link';
+export { Badge, type BadgeProps, type BadgeTone } from './badge/badge';
+export { Skeleton, type SkeletonProps } from './skeleton/skeleton';
+export { Input, type InputProps } from './input/input';
+export { Select, type SelectOption, type SelectProps } from './select/select';
+export { Checkbox, type CheckboxProps } from './checkbox/checkbox';
+export { Radio, RadioGroup, type RadioGroupProps, type RadioProps } from './radio/radio';
+export { VariantSelector, type VariantOption, type VariantSelectorProps } from './variant-selector/variant-selector';
+export { Price, type PriceProps } from './price/price';
+export { Rating, type RatingProps } from './rating/rating';
+export { Image, buildAlt, type ImageFormat, type ImageLoader, type ImageProps } from './image/image';
+export { Breadcrumb, type BreadcrumbItem, type BreadcrumbProps } from './breadcrumb/breadcrumb';
+export { Pagination, pageWindow, type PaginationProps } from './pagination/pagination';
+export { Accordion, type AccordionItem, type AccordionProps } from './accordion/accordion';
+export { Tabs, type TabItem, type TabsProps } from './tabs/tabs';
+export { Tooltip, type TooltipProps } from './tooltip/tooltip';
+export { ToastProvider, useToast, type ToastMessage, type ToastProviderProps, type ToastTone } from './toast/toast';
+export { Modal, type ModalProps } from './modal/modal';
+export { Carousel, type CarouselProps } from './carousel/carousel';
