@@ -25,6 +25,9 @@ export function ThirdPartyScripts({ scripts = loadConfig().thirdParties.scripts 
         <script data-partytown="" dangerouslySetInnerHTML={{ __html: partytownSnippet({ lib: PARTYTOWN_LIB, forward, debug: false }) }} />
       )}
       {inWorker.map((s) => (
+        // type="text/partytown" nao e executado pelo navegador (o worker busca e roda o script):
+        // a regra de script sincrono do Next nao se aplica.
+        // eslint-disable-next-line @next/next/no-sync-scripts
         <script key={s.id} type="text/partytown" src={s.src} data-third-party={s.id} />
       ))}
       {onMainThread.length > 0 && (
