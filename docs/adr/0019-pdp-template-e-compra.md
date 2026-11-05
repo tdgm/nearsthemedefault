@@ -43,7 +43,7 @@ rota: 140 KB gzip (ADR 0010).
 7. **Header da PDP.** Segue `full`. A variante `minimal` (`headerVariant` do manifest) exige
    decidir o header por rota no layout raiz; isso pede grupos de rota e mexer em `appRoute`, no
    teste do manifest e no mapa de budgets, sem ganho de performance. Fica registrada como
-   divida para a Fase 8, sem custo de CWV.
+   divida para a Fase 8, sem custo de CWV. **Resolvido no ADR 0025:** o header segue `full` e os manifests passam a dizer o mesmo.
 
 ## Consequencias
 

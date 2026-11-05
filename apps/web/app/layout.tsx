@@ -25,9 +25,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// Sections globais (docs/adr/0014). Variante do header: `full` em todas as rotas por
-// enquanto; a variante `minimal` da PDP (`*/p`) entra com o template real na Fase 6
-// (resolveHeaderVariant ja existe e e testada). `#conteudo` e o destino do skip link.
+// Sections globais (docs/adr/0014). Variante do header: `full` em todas as rotas
+// (docs/adr/0025: `minimal` por rota exigiria grupos de rota; resolveHeaderVariant segue
+// disponivel e testada). `#conteudo` e o destino do skip link.
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const s = await getStorefront();
   return (

@@ -144,5 +144,6 @@ Confira a nota de honestidade em docs/adr/0005 sobre assertions granulares de
 `resource-summary` no Lighthouse CI e feche-a se a versao instalada suportar.
 
 **Gate:** Lighthouse mobile >= 90 / >= 95 / 100 nas tres rotas principais;
-`performance-budget` com score 1 (nenhum budget de `settings.budgets` estourado)
-e `scripts/check-third-party-hosts.mjs` passando.
+`pnpm check-budgets` (JS, CSS e HTML por rota, gzip estatico) e as assertions
+`resource-summary:*` do Lighthouse CI sem estouro (o Lighthouse 13 nao tem mais a
+auditoria `performance-budget`; ver ADR 0005) e `scripts/check-third-party-hosts.mjs` passando.

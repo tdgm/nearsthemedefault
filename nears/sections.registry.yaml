@@ -35,8 +35,7 @@ globals:
     slot: header
     priority: critical
     variants: [full, minimal, none]
-    variantRules:
-      - { pattern: "*/p", variant: minimal }
+    variantRules: []   # ex.: [{ pattern: "*/p", variant: minimal }]; o layout raiz usa `full` em todas as rotas (docs/adr/0025)
     props:
       logo: { type: image, required: true }
       homeHref: { type: url, default: "/" }
