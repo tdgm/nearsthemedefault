@@ -13,4 +13,4 @@ catalog:
   geoAttributes: [color, size, material, audience]
   guide: { enabled: true, label: Guia de medidas }
   flatAxis: { enabled: true, secondLevelAttribute: fit }
-vocabulary: { cart: Sacola, bundle: Complete o look }
+vocabulary: { cart: Sacola, addToCart: Adicionar à sacola, addedToCart: Adicionado à sacola., bundle: Complete o look, facetSize: Tamanho, facetColor: Cor }

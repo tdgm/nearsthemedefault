@@ -12,4 +12,4 @@ catalog:
     indexable: [category, brand]
   geoAttributes: [brand, size]
   guide: { enabled: true, label: Modo de uso }
-vocabulary: { cart: Sacola, bundle: Monte seu kit }
+vocabulary: { cart: Sacola, addToCart: Adicionar à sacola, addedToCart: Adicionado à sacola., bundle: Monte seu kit }

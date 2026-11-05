@@ -19,6 +19,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test --project=chromium",
     "test:nojs": "playwright test --project=nojs",
+    "test:e2e:presets": "node --disable-warning=ExperimentalWarning scripts/test-e2e-presets.mjs",
     "test:a11y": "node scripts/test-a11y.mjs",
     "lh": "lhci autorun",
     "storybook": "storybook dev -p 6006",

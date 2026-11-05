@@ -2,12 +2,14 @@
 // backend publicar o schema GraphQL, `loadSnapshot` troca de fonte aqui (via
 // graphqlRequest) sem tocar em rota nem em section. Sempre validado por Zod.
 import { catalogSnapshotSchema, type CatalogSnapshot, type Campaign, type Department, type Longtail, type Page, type Product, type ProductType } from './schemas';
-import { mockSnapshot } from './mock';
+import { loadConfig } from '../manifest';
+import { buildMockSnapshot } from './mock';
 
 let cached: CatalogSnapshot | undefined;
 
 export async function getSnapshot(): Promise<CatalogSnapshot> {
-  cached ??= catalogSnapshotSchema.parse(mockSnapshot);
+  // O mock acompanha o nicho da loja (catalog.variantAxes / geoAttributes), inclusive em presets.
+  cached ??= catalogSnapshotSchema.parse(buildMockSnapshot(loadConfig().catalog));
   return cached;
 }
 

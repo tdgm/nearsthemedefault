@@ -88,7 +88,7 @@ export async function buildPdpView(slug: string, config: NearsConfig = loadConfi
           variantSelectors,
           ...(guideEnabled ? { guideHref: '#guia' } : {}),
           cta: vocab('addToCart'),
-          labels: { guide: `Ver ${guideLabel.toLowerCase()}` },
+          labels: { guide: `Ver ${guideLabel.toLowerCase()}`, added: vocab('addedToCart') },
         };
       case 'pdp-shipping':
         return { zipInput: true, ...(extra?.cep ? { cep: extra.cep } : {}), ...(extra?.quote ? { quote: extra.quote } : {}) };

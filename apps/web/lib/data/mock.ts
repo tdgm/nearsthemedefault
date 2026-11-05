@@ -3,6 +3,31 @@
 // "-exemplo" sao os mesmos de exampleHref (lib/evolution.ts) e dos E2E.
 import type { CatalogSnapshot } from './schemas';
 
+/**
+ * Parte do `catalog` (nears.config.yaml) que molda o produto de exemplo: o mock
+ * oferece uma variacao por eixo declarado e uma especificacao por atributo GEO
+ * exigido, para que qualquer preset de nicho gere um produto completo (o build
+ * falha com `onMissingGeoField: fail-build`). Valores neutros, sem nicho.
+ */
+export type MockCatalog = {
+  variantAxes: readonly { id: string; label: string; display: 'swatch' | 'option'; schemaOrg?: string | undefined }[];
+  geoAttributes: readonly string[];
+};
+
+const SWATCHES = ['#1b4d89', '#8a2b2b', '#2f6b3f'] as const;
+
+export const mockVariantsFor = (axes: MockCatalog['variantAxes']): CatalogSnapshot['products'][number]['variants'] =>
+  axes.map((axis) => ({
+    axis: axis.id,
+    options: [1, 2, 3].map((n) => ({
+      value: `${axis.id}-${n}`,
+      label: `${axis.label} ${n}`,
+      ...(axis.display === 'swatch' ? { swatch: SWATCHES[n - 1]! } : {}),
+      // Uma opcao indisponivel por eixo de amostra: exercita o estado desabilitado do radiogroup.
+      ...(axis.display === 'swatch' && n === 3 ? { unavailable: true } : {}),
+    })),
+  }));
+
 const PRODUCT_IMAGE = { src: '/placeholders/product.svg', width: 800, height: 1000 } as const;
 
 const departments: CatalogSnapshot['departments'] = [
@@ -52,7 +77,7 @@ const gtin13 = (n: number) => {
 const slugOf = (n: number) => (n === 1 ? 'produto-exemplo' : `produto-${n}`);
 
 /** 24 produtos distribuidos entre departamentos, categorias e tipos. */
-const products: CatalogSnapshot['products'] = Array.from({ length: 24 }, (_, i) => {
+const buildProducts = (catalog: MockCatalog): CatalogSnapshot['products'] => Array.from({ length: 24 }, (_, i) => {
   const n = i + 1;
   const department = departments[i % departments.length]!;
   const category = department.categories[i % department.categories.length]!;
@@ -82,6 +107,10 @@ const products: CatalogSnapshot['products'] = Array.from({ length: 24 }, (_, i) 
       { name: 'Marca', value: `Marca ${(i % 3) + 1}` },
       { name: 'Código', value: `SKU-${String(n).padStart(4, '0')}` },
       { name: 'Garantia', value: '12 meses' },
+      // Atributos GEO do nicho que nenhum eixo de variacao cobre (ex.: material, peso).
+      ...catalog.geoAttributes
+        .filter((attr) => !catalog.variantAxes.some((a) => a.schemaOrg === attr))
+        .map((attr) => ({ name: attr, value: `Valor de exemplo ${n}` })),
     ],
     instructions: 'Siga as orientações de uso e conservação que acompanham o produto.',
     rating: { value: 3.5 + (n % 3) * 0.5, count: 10 + n },
@@ -89,23 +118,13 @@ const products: CatalogSnapshot['products'] = Array.from({ length: 24 }, (_, i) 
       { author: 'Cliente 1', rating: 5, date: '2026-03-10T12:00:00-03:00', title: 'Recomendo', body: 'Chegou no prazo e é como descrito.' },
       { author: 'Cliente 2', rating: 4, date: '2026-04-02T09:30:00-03:00', body: 'Bom custo-benefício.' },
     ],
-    variants: [
-      {
-        axis: 'color',
-        options: [
-          { value: 'cor-1', label: 'Cor 1', swatch: '#1b4d89' },
-          { value: 'cor-2', label: 'Cor 2', swatch: '#8a2b2b' },
-          { value: 'cor-3', label: 'Cor 3', swatch: '#2f6b3f', unavailable: true },
-        ],
-      },
-      { axis: 'size', options: ['P', 'M', 'G'].map((v) => ({ value: v.toLowerCase(), label: v })) },
-    ],
+    variants: mockVariantsFor(catalog.variantAxes),
     bundle: [slugOf(((i + 1) % 24) + 1), slugOf(((i + 2) % 24) + 1)],
     related: [3, 4, 5, 6].map((d) => slugOf(((i + d) % 24) + 1)),
   };
 });
 
-export const mockSnapshot: CatalogSnapshot = {
+export const buildMockSnapshot = (catalog: MockCatalog): CatalogSnapshot => ({
   store: {
     name: 'Loja',
     logo: { src: '/logo-placeholder.svg', width: 120, height: 32, alt: 'Loja' },
@@ -155,5 +174,5 @@ export const mockSnapshot: CatalogSnapshot = {
       ],
     },
   ],
-  products,
-};
+  products: buildProducts(catalog),
+});

@@ -10,13 +10,28 @@ export type { NearsConfig, VocabularyKey };
 let cached: Manifests | undefined;
 
 /**
+ * Preset de nicho (nears/presets/*.yaml) escolhido por variavel de ambiente
+ * server-only (nunca NEXT_PUBLIC_*). Serve para rodar o mesmo build de teste em
+ * mais de um nicho (E2E da Fase 8, ADR 0024). Vazio = catalogo do
+ * nears.config.yaml. So aceita o formato de nome de arquivo de preset: a
+ * variavel vira caminho de leitura, entao nada de `..` ou `/`.
+ */
+export function selectedPreset(env: Record<string, string | undefined> = process.env): string | undefined {
+  const name = env.NEARS_PRESET?.trim();
+  if (!name) return undefined;
+  if (!/^[a-z][a-z0-9-]*$/.test(name)) throw new Error(`NEARS_PRESET invalido: "${name}"`);
+  return name;
+}
+
+/**
  * Manifests validados (schemas Zod + referencias cruzadas). Sync de proposito:
  * roda so no servidor, em build/prerender. Em producao le uma vez por processo;
  * em dev le a cada chamada para refletir edicoes nos YAML.
  */
 export function loadAllManifests(): Manifests {
   if (cached && process.env.NODE_ENV === 'production') return cached;
-  cached = loadManifests({ nearsDir, tokensFile: resolve(repoRoot, 'packages/tokens/tokens.json') });
+  const preset = selectedPreset();
+  cached = loadManifests({ nearsDir, tokensFile: resolve(repoRoot, 'packages/tokens/tokens.json'), ...(preset ? { preset } : {}) });
   return cached;
 }
 

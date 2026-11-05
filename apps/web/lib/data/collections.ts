@@ -41,13 +41,14 @@ function facetValues(p: Product, facet: string): string[] {
   if (facet === 'category') return [p.category];
   if (facet === 'brand') return p.brand ? [slugify(p.brand)] : [];
   if (facet === 'price') return PRICE_RANGES.filter((r) => r.test(p)).map((r) => r.value);
-  return [];
+  // Faceta de eixo de variacao (cor, tamanho, voltagem...): vale o que o produto oferece.
+  return p.variants.find((v) => v.axis === facet)?.options.map((o) => o.value) ?? [];
 }
 
 function facetLabel(p: Product, facet: string, value: string): string {
   if (facet === 'brand') return p.brand ?? value;
   if (facet === 'price') return PRICE_RANGES.find((r) => r.value === value)?.label ?? value;
-  return value;
+  return p.variants.find((v) => v.axis === facet)?.options.find((o) => o.value === value)?.label ?? value;
 }
 
 const discount = (p: Product) => (p.listPrice && p.listPrice > p.price ? (p.listPrice - p.price) / p.listPrice : 0);

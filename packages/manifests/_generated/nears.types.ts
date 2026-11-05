@@ -15,7 +15,7 @@ export type IndexableFacetId = (typeof indexableFacetIds)[number];
 export const geoAttributeIds = [] as const;
 export type GeoAttributeId = (typeof geoAttributeIds)[number];
 
-export const vocabularyKeys = ["cart", "addToCart", "wishlist", "department", "productType", "bundle", "guide", "search", "searchLabel", "searchPlaceholder", "searchSubmit", "searchEmpty", "searchNoResults", "searchNoResultsHint", "facetCategory", "facetBrand", "facetPrice"] as const;
+export const vocabularyKeys = ["cart", "addToCart", "addedToCart", "wishlist", "department", "productType", "bundle", "guide", "search", "searchLabel", "searchPlaceholder", "searchSubmit", "searchEmpty", "searchNoResults", "searchNoResultsHint", "facetCategory", "facetBrand", "facetPrice"] as const;
 export type VocabularyKey = (typeof vocabularyKeys)[number];
 
 export const sectionIds = ["hero", "benefit-bar", "section-title", "banner-grid", "category-hub", "showcase", "event-banner", "banner-full", "quick-filter", "product-grid", "product-card", "breadcrumb", "text-seo", "faq", "related-links", "pdp-gallery", "pdp-buybox", "pdp-shipping", "pdp-details", "pdp-reviews", "pdp-bundle", "pdp-related"] as const;

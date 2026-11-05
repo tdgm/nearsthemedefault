@@ -14,4 +14,4 @@ catalog:
   geoAttributes: [model, mpn, weight]
   guide: { enabled: true, label: Compatibilidade }
   flatAxis: { enabled: true, secondLevelAttribute: ~ }
-vocabulary: { bundle: Compre junto }
+vocabulary: { bundle: Compre junto, facetVoltage: Voltagem, facetStorage: Armazenamento }

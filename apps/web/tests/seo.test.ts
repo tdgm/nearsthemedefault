@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { getProducts, getStore } from '../lib/data/client';
+import { mockVariantsFor } from '../lib/data/mock';
 import { loadAllManifests } from '../lib/manifest';
 import {
   absoluteAsset,
@@ -207,7 +208,8 @@ describe('onMissingGeoField', () => {
     expect(missingGeoFields({ ...view.product, specs: [...view.product.specs, { name: 'Material', value: 'Algodão' }] }, m)).toEqual([]);
     m.config.catalog.geoAttributes = ['color'];
     m.config.catalog.variantAxes = [{ id: 'color', label: 'Cor', display: 'swatch', schemaOrg: 'color' }];
-    expect(missingGeoFields(view.product, m)).toEqual([]);
+    // O catalogo padrao nao tem eixos: o produto passa a oferecer o eixo declarado.
+    expect(missingGeoFields({ ...view.product, variants: mockVariantsFor(m.config.catalog.variantAxes) }, m)).toEqual([]);
   });
 
   it('segue o modo do contrato: warn-build avisa, fail-build derruba o build', async () => {
