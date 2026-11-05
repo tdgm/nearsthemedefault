@@ -106,10 +106,13 @@ test.describe('fluxo de compra por nicho', () => {
     const legends = await form.locator('legend').allTextContents();
     expect(legends.map((l) => l.split(':')[0]!.trim())).toEqual(e.axes.map((a) => a.label));
 
-    // Atributos GEO que nenhum eixo cobre: tabela de especificacao em HTML semantico.
+    // Atributos GEO que nenhum eixo cobre: tabela de especificacao em HTML semantico. Fica
+    // num accordion fechado, entao o que importa e existir no HTML (includeHidden), nao estar visivel.
     const specs = page.locator('table').filter({ hasText: e.geoSpecs[0]! }).first();
-    await expect(specs).toBeVisible();
-    for (const attr of e.geoSpecs) await expect(specs.getByRole('rowheader', { name: new RegExp(`^${escapeRe(attr)}$`, 'i') })).toBeVisible();
+    await expect(specs).toHaveCount(1);
+    for (const attr of e.geoSpecs) {
+      await expect(specs.getByRole('rowheader', { name: new RegExp(`^${escapeRe(attr)}$`, 'i'), includeHidden: true })).toHaveCount(1);
+    }
 
     // JSON-LD do HTML inicial: Product com os atributos do nicho em additionalProperty.
     const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
