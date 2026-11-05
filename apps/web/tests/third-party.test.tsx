@@ -5,7 +5,7 @@ import { INTERACTION_EVENTS, PARTYTOWN_LIB, ThirdPartyScripts, loaderScript } fr
 type Props = Parameters<typeof ThirdPartyScripts>[0];
 type Script = NonNullable<Props['scripts']>[number];
 
-const base = { integration: 'analytics', adr: 'docs/adr/0023-terceiros-com-partytown.md', forward: [] } as const;
+const base: Pick<Script, 'integration' | 'adr' | 'forward'> = { integration: 'analytics', adr: 'docs/adr/0023-terceiros-com-partytown.md', forward: [] };
 const gtm: Script = { ...base, id: 'gtm', integration: 'tagManager', src: 'https://www.googletagmanager.com/gtm.js?id=GTM-X', strategy: 'partytown', forward: ['dataLayer.push'] };
 const idle: Script = { ...base, id: 'chat', src: 'https://chat.example/w.js', strategy: 'idle', mainThreadReason: 'Widget de chat manipula o DOM.' };
 const inter: Script = { ...base, id: 'ga', src: 'https://stats.example/a.js', strategy: 'post-interaction', mainThreadReason: 'Medicao precisa do DOM real.' };
