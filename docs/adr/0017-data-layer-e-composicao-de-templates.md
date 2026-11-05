@@ -38,10 +38,15 @@ que nao duplique o que ja esta em `nears/sections.registry.yaml > templates`.
 
 ## Imagens
 
-Os mocks usam SVGs em `public/placeholders/`. A transformacao AVIF/WebP por CDN
-(`<picture>` com varias fontes) depende do provedor de imagem da loja e fica para o
-momento em que `integrations` definir o provedor; `ArtImage` ja reserva
-`width`/`height` e usa `fetchpriority` so no candidato a LCP.
+`ArtImage` e o `imageProp` aceitam `avif` e `webp` alem de `src` (fallback JPEG/PNG): cada
+breakpoint emite `<source>` AVIF, depois WebP, e `<img>` com `width`/`height` (CLAUDE.md >
+Performance). Os mocks usam rasters sinteticos de 12 a 26 KB em `public/placeholders/`
+(hero desktop e mobile nos tres formatos) e SVGs pequenos para categoria e produto.
+Placeholders SVG de ~800 bytes nao servem de mock do hero: o Chrome ignora imagens de
+baixa entropia no LCP (menos de 0,05 bit por pixel) e o LCP medido passava a ser outro
+elemento, o que mascarava o comportamento real da home. A transformacao sob demanda por
+CDN (preencher `avif`/`webp` a partir de um provedor) entra quando `integrations` definir
+o provedor de imagem.
 
 ## Consequencias
 

@@ -11,8 +11,8 @@ import { renderInstances } from './render';
 type Landing = Extract<Resolved, { kind: 'landing' }>;
 
 const BANNER = {
-  desktop: { src: '/placeholders/banner-desktop.svg', width: 1440, height: 560 },
-  mobile: { src: '/placeholders/banner-mobile.svg', width: 750, height: 900 },
+  desktop: { src: '/placeholders/hero-desktop.jpg', webp: '/placeholders/hero-desktop.webp', avif: '/placeholders/hero-desktop.avif', width: 1440, height: 560 },
+  mobile: { src: '/placeholders/hero-mobile.jpg', webp: '/placeholders/hero-mobile.webp', avif: '/placeholders/hero-mobile.avif', width: 750, height: 900 },
 } as const;
 
 export const landingTitle = (r: Landing) => (r.route === 'campaign-segment' ? `${r.campaign.name}: ${r.segment.name}` : r.campaign.name);

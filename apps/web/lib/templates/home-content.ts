@@ -8,8 +8,8 @@ import { loadConfig } from '../manifest';
 import type { SectionInstance } from './expand';
 
 const BANNER = {
-  desktop: { src: '/placeholders/banner-desktop.svg', width: 1440, height: 560 },
-  mobile: { src: '/placeholders/banner-mobile.svg', width: 750, height: 900 },
+  desktop: { src: '/placeholders/hero-desktop.jpg', webp: '/placeholders/hero-desktop.webp', avif: '/placeholders/hero-desktop.avif', width: 1440, height: 560 },
+  mobile: { src: '/placeholders/hero-mobile.jpg', webp: '/placeholders/hero-mobile.webp', avif: '/placeholders/hero-mobile.avif', width: 750, height: 900 },
 } as const;
 const SQUARE = { src: '/placeholders/category.svg', width: 600, height: 600 } as const;
 

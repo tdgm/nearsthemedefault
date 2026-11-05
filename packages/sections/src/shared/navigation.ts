@@ -29,4 +29,7 @@ export const imageProp = z.strictObject({
   width: z.number().int().positive(),
   height: z.number().int().positive(),
   alt: z.string().optional(),
+  /** Variantes por formato da mesma arte (CDN de imagem). `src` e o fallback (JPEG/PNG). */
+  avif: z.string().min(1).optional(),
+  webp: z.string().min(1).optional(),
 });
