@@ -10,6 +10,7 @@
     "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@builder.io/partytown": "0.10.3",
     "@nears/manifests": "workspace:*",
     "@nears/sections": "workspace:*",
     "@nears/tokens": "workspace:*",
