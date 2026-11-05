@@ -168,6 +168,13 @@ export const configSchema = z.strictObject({
       allowlistSource: z.enum(['panel-endpoint', 'build-file', 'upstream']),
     }),
   }),
+  observability: z.strictObject({
+    rum: z.strictObject({
+      enabled: z.boolean(),
+      endpoint: z.string().regex(/^(\/(?!\/)|https:\/\/)/, 'caminho local (/...) ou URL https'),
+      sampleRate: z.number().min(0).max(1),
+    }),
+  }),
   integrations: z.record(z.string(), z.record(z.string(), z.unknown())),
 });
 

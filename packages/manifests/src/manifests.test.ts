@@ -219,3 +219,23 @@ describe('props -> Zod', () => {
     }
   });
 });
+
+describe('observability.rum', () => {
+  it('carrega o bloco padrao (ligado, endpoint local, amostragem total)', () => {
+    const m = loadManifests({ nearsDir, tokensFile });
+    expect(m.config.observability.rum).toEqual({ enabled: true, endpoint: '/api/rum', sampleRate: 1 });
+  });
+  it('rejeita endpoint protocol-relative ou http e amostragem fora de 0..1', () => {
+    for (const [from, to] of [
+      ['endpoint: /api/rum', 'endpoint: //coletor.example/rum'],
+      ['endpoint: /api/rum', 'endpoint: http://coletor.example/rum'],
+      ['sampleRate: 1 ', 'sampleRate: 2 '],
+    ] as const) {
+      expect(messages(loadMutated('nears.config.yaml', (t) => t.replace(from, to))), to).toContain('observability');
+    }
+  });
+  it('aceita coletor externo https', () => {
+    const m = loadMutated('nears.config.yaml', (t) => t.replace('endpoint: /api/rum', 'endpoint: https://rum.nears.example/v1'))();
+    expect(m.config.observability.rum.endpoint).toBe('https://rum.nears.example/v1');
+  });
+});

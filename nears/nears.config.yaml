@@ -184,6 +184,14 @@ security:
     hostValidation: allowlist-only
     allowlistSource: panel-endpoint   # consulta server-only a lista de dominios verificados do painel; cache curto + cache negativo; fail-closed
 
+observability:
+  # RUM de Core Web Vitals (docs/adr/0022): coletor inline, fora do bundle de JS.
+  # endpoint: caminho local (mock do template) ou URL https do coletor da Nears.
+  rum:
+    enabled: true
+    endpoint: /api/rum
+    sampleRate: 1          # 0..1; reduza em lojas de alto trafego
+
 integrations:
   # provider vazio significa "a loja define".
   # A estrategia de carga NAO e negociavel.
