@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Suspense, type ReactNode } from 'react';
 import { cardAspect, toProductCard } from '../data/mappers';
 import { DEFAULT_SORT, parseCollectionQuery, queryCollection, type CollectionQuery } from '../data/collections';
-import { loadAllManifests, loadConfig, vocab } from '../manifest';
+import { loadAllManifests, loadConfig } from '../manifest';
 import { buildCollectionView, facetLabels, type CollectionView } from './collection-content';
 import { expandTemplate } from './expand';
 import { renderInstances } from './render';
