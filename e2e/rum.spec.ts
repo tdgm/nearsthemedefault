@@ -3,15 +3,29 @@ import { expect, test } from '@playwright/test';
 test.describe('RUM de Core Web Vitals', () => {
   test('o coletor envia um beacon valido quando a aba fica oculta', async ({ page, javaScriptEnabled }) => {
     test.skip(!javaScriptEnabled, 'o coletor e JavaScript inline');
+    // O Chromium nao expoe o corpo Blob de um sendBeacon em request.postData(); registramos
+    // o que o coletor entrega ao navegador e conferimos separadamente que a requisicao saiu.
+    await page.addInitScript(() => {
+      const w = window as unknown as { __beacons: { url: string; body: string }[] };
+      w.__beacons = [];
+      const original = navigator.sendBeacon.bind(navigator);
+      navigator.sendBeacon = (url, data) => {
+        void (data as Blob).text().then((body) => w.__beacons.push({ url: String(url), body }));
+        return original(url, data);
+      };
+    });
     await page.goto('/departamento-exemplo?brand=marca-1');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
-    const beacon = page.waitForRequest((r) => r.url().endsWith('/api/rum') && r.method() === 'POST');
+    const request = page.waitForRequest((r) => r.url().endsWith('/api/rum') && r.method() === 'POST');
     await page.evaluate(() => {
       Object.defineProperty(document, 'visibilityState', { value: 'hidden', configurable: true });
       document.dispatchEvent(new Event('visibilitychange', { bubbles: true }));
     });
-    const body = JSON.parse((await beacon).postData() ?? '{}');
+    await request;
+    await page.waitForFunction(() => (window as unknown as { __beacons: unknown[] }).__beacons.length > 0);
+    const [beacon] = await page.evaluate(() => (window as unknown as { __beacons: { url: string; body: string }[] }).__beacons);
+    const body = JSON.parse(beacon?.body ?? '{}');
     // Pathname sem query string (dado de busca/filtro nunca sai do navegador).
     expect(body.p).toBe('/departamento-exemplo');
     expect(['m', 'd']).toContain(body.v);
