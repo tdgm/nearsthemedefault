@@ -3,7 +3,7 @@
 // do usuario (gesto/teclado) sincroniza o indice. A rolagem em si e CSS nativo
 // (scroll-snap): sem JS o carrossel continua navegavel por gesto e teclado.
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { cn } from '../cn';
 
 export type CarouselProps = {
@@ -26,8 +26,13 @@ const defaultLabels = {
   play: 'Retomar rotação',
 };
 
-const prefersReducedMotion = () =>
-  typeof window !== 'undefined' && Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+const REDUCED = '(prefers-reduced-motion: reduce)';
+const prefersReducedMotion = () => typeof window !== 'undefined' && Boolean(window.matchMedia?.(REDUCED).matches);
+const subscribeReducedMotion = (onChange: () => void) => {
+  const query = typeof window !== 'undefined' ? window.matchMedia?.(REDUCED) : undefined;
+  query?.addEventListener('change', onChange);
+  return () => query?.removeEventListener('change', onChange);
+};
 
 const widths = { 1: 'basis-full', 2: 'basis-[85%] md:basis-1/2', 3: 'basis-[85%] md:basis-1/3', 4: 'basis-[45%] md:basis-1/4' } as const;
 
@@ -44,7 +49,12 @@ export function Carousel({ slides, label, perView = 1, labels = defaultLabels, a
   const last = slides.length - 1;
   // Autoplay (WCAG 2.2.2): botao de pausa, pausa com hover/foco dentro, e nunca
   // inicia com prefers-reduced-motion. Sem `autoplayMs` nada disso existe.
-  const [playing, setPlaying] = useState(Boolean(autoplayMs));
+  // A preferencia so existe no cliente: useSyncExternalStore (servidor = false) evita
+  // divergencia de hidratacao e setState em efeito. Com reduced-motion o padrao e
+  // parado; o usuario ainda pode iniciar pelo botao.
+  const reduced = useSyncExternalStore(subscribeReducedMotion, prefersReducedMotion, () => false);
+  const [userPlay, setUserPlay] = useState<boolean | null>(null);
+  const playing = Boolean(autoplayMs) && (userPlay ?? !reduced);
   const [engaged, setEngaged] = useState(false);
 
   const go = (to: number) => {
@@ -53,11 +63,6 @@ export function Carousel({ slides, label, perView = 1, labels = defaultLabels, a
     itemRefs.current[target]?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', inline: 'start', block: 'nearest' });
     setIndex(target);
   };
-
-  useEffect(() => {
-    // Preferencia so e conhecida no cliente; ler no estado inicial quebraria a hidratacao.
-    if (autoplayMs && prefersReducedMotion()) setPlaying(false);
-  }, [autoplayMs]);
 
   useEffect(() => {
     if (!autoplayMs || !playing || engaged || last < 1) return;
@@ -114,7 +119,7 @@ export function Carousel({ slides, label, perView = 1, labels = defaultLabels, a
       {slides.length > 1 && (
         <div className="mt-3 flex items-center justify-end gap-2">
           {autoplayMs && (
-            <button type="button" className={btn} aria-label={playing ? l.pause : l.play} aria-pressed={!playing} onClick={() => setPlaying((p) => !p)}>
+            <button type="button" className={btn} aria-label={playing ? l.pause : l.play} aria-pressed={!playing} onClick={() => setUserPlay(!playing)}>
               <span aria-hidden="true">{playing ? '❚❚' : '▶'}</span>
             </button>
           )}
