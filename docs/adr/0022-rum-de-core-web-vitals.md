@@ -15,7 +15,7 @@ Lighthouse CI, mas o que importa é o campo. A Fase 8 pede RUM. Restrições:
 ## Decisão
 
 1. **Coletor inline, ES5, sem dependência** (`lib/rum/script.ts`), injetado por um Server
-   Component (`RumScript`) no fim do `<body>`: ~1,5 KB no HTML (limite 80 KB), 0 KB no
+   Component (`RumScript`) no fim do `<body>`: ~1,5 KB brutos (0,9 KB gzip) no HTML (limite 80 KB), 0 KB no
    bundle de JS, sem requisição extra, sem dependência nova. Determinístico, então uma
    CSP por hash (Fase 8d) libera exatamente este texto.
 2. **Métricas:** LCP (último candidato), FCP, TTFB (`responseStart` da navegação), CLS pela
@@ -49,7 +49,7 @@ Lighthouse CI, mas o que importa é o campo. A Fase 8 pede RUM. Restrições:
 
 ## Consequências
 
-- HTML +~1,5 KB em toda rota (16,9 KB de 80 KB na home); JS e CSS inalterados.
+- HTML +0,9 KB gzip em toda rota (medido: home 16,9 -> 17,8 KB de 80 KB); JS (139,3 KB) e CSS (8 KB) inalterados.
 - O mock não persiste nada: sem coletor configurado o RUM só valida o contrato. Isso é
   intencional e está dito aqui, não é uma métrica real até a loja apontar o endpoint.
 - Plano de medição (CrUX, Search Console, share of voice em IA) fica no onboarding (8d).
