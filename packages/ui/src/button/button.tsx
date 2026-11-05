@@ -67,7 +67,9 @@ export function Button({
       className={cn(buttonClasses({ variant, size, fullWidth }), className)}
       aria-busy={loading || undefined}
       aria-disabled={loading || undefined}
-      onClick={handleClick}
+      // Sem handler quando nao ha onClick nem loading: Server Components nao serializam
+      // funcoes em props, entao `<Button>` renderizado no servidor (ex.: submit de form) quebrava o build.
+      onClick={loading || onClick ? handleClick : undefined}
       {...rest}
     >
       {loading && (
