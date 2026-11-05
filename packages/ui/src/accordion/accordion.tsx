@@ -27,7 +27,7 @@ export function Accordion({ items, headingLevel = 3, name, className }: Accordio
   return (
     <div className={cn('divide-y divide-border border-y border-border', className)}>
       {items.map((item) => (
-        <details key={item.id} name={name} open={item.defaultOpen} className="group">
+        <details key={item.id} id={item.id} name={name} open={item.defaultOpen} className="group">
           <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 py-3 [&::-webkit-details-marker]:hidden">
             <H className="text-md font-medium">{item.title}</H>
             <span

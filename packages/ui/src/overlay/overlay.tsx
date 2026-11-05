@@ -7,7 +7,7 @@ export type OverlayProps = {
   /** Titulo visivel; vira o nome acessivel do dialogo. Obrigatorio. */
   title: string;
   children: ReactNode;
-  side?: 'left' | 'right';
+  side?: 'left' | 'right' | 'center';
   closeLabel?: string;
   className?: string;
 };
@@ -26,8 +26,11 @@ export function Overlay({ id, title, children, side = 'left', closeLabel = 'Fech
       aria-labelledby={titleId}
       data-overlay
       className={cn(
-        'm-0 h-dvh max-h-dvh w-[min(24rem,100vw)] max-w-none bg-surface-raised p-0 text-on-surface backdrop:bg-black/50',
-        side === 'right' ? 'ml-auto' : 'mr-auto',
+        'max-w-none bg-surface-raised p-0 text-on-surface backdrop:bg-black/50',
+        // `center`: modal de conteudo largo (ex.: zoom de imagem); lateral: painel de altura total.
+        side === 'center' ? 'm-auto max-h-dvh w-[min(64rem,100vw)]' : 'm-0 h-dvh max-h-dvh w-[min(24rem,100vw)]',
+        side === 'right' && 'ml-auto',
+        side === 'left' && 'mr-auto',
         className,
       )}
     >
