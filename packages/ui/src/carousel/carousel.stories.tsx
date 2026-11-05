@@ -14,3 +14,4 @@ export const UmPorVez: Story = {};
 export const TresPorVez: Story = { args: { perView: 3 } };
 export const QuatroPorVez: Story = { args: { perView: 4 } };
 export const SlideUnico: Story = { args: { slides: [card(1)] } };
+export const ComRotacaoAutomatica: Story = { args: { autoplayMs: 4000 } };
