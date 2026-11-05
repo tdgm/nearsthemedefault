@@ -14,6 +14,7 @@ export const pdpGallerySchema = z.strictObject({
   labels: z
     .strictObject({
       gallery: z.string(),
+      slides: z.string(),
       thumbs: z.string(),
       image: z.string(),
       zoom: z.string(),

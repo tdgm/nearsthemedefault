@@ -55,6 +55,12 @@ describe('PdpGallery', () => {
     expect(nav.querySelectorAll('a')).toHaveLength(3);
   });
 
+  it('faixa rolavel e focavel por teclado e tem nome acessivel', () => {
+    render(<PdpGallery images={images} zoom={false} />);
+    const strip = screen.getByRole('list', { name: 'Fotos em sequência' });
+    expect(strip).toHaveAttribute('tabindex', '0');
+  });
+
   it('video: preload none e nome acessivel', () => {
     const { container } = render(<PdpGallery images={images} video="/v.mp4" />);
     const video = container.querySelector('video');

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { Suspense, type ReactNode } from 'react';
 import { quoteShipping } from '../data/shipping';
 import { loadAllManifests } from '../manifest';
@@ -30,13 +29,12 @@ async function DynamicShipping({ view, searchParams }: { view: PdpView; searchPa
 /**
  * Template PDP. A composicao vem de `templates.pdp` no manifest; o layout fixa
  * dois slots: galeria + buy box (2 colunas no desktop, buy box sticky) e o corpo
- * (frete, detalhes, avaliacoes, bundle, relacionados). O shell e estatico; so a
+ * (frete, detalhes, avaliacoes, bundle, relacionados). A view e resolvida pela rota
+ * ANTES do JSX (`notFound()` so devolve 404 de verdade antes do stream). O shell e estatico; so a
  * calculadora de frete le a URL, em Suspense, e o fallback e a propria section
  * sem resultado (nenhum shift quando o resultado chega).
  */
-export async function PdpPage({ slug, searchParams }: { slug: string; searchParams: Promise<RawQuery> }): Promise<ReactNode> {
-  const view = await buildPdpView(slug);
-  if (!view) notFound();
+export function PdpPage({ view, searchParams }: { view: PdpView; searchParams: Promise<RawQuery> }): ReactNode {
   const { sections } = loadAllManifests();
   const instances = expandTemplate(sections.templates.pdp?.sections ?? [], {});
   const group = (ids: string[]) => instances.filter((i) => ids.includes(i.id));

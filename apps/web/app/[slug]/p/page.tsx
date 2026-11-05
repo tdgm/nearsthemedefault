@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { getProducts } from '../../../lib/data/client';
+import { buildPdpView } from '../../../lib/templates/pdp-content';
 import { PdpPage, pdpMetadata } from '../../../lib/templates/pdp';
 
 // PDP: "/{productSlug}/p". O sufixo literal "/p" vence /[slug]/[sub] e o Next
@@ -18,5 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params, searchParams }: Props) {
   const { slug } = await params;
-  return <PdpPage slug={slug} searchParams={searchParams} />;
+  // Resolve ANTES de montar o JSX: so assim o notFound() vira status 404 (como nas demais rotas).
+  const view = await buildPdpView(slug);
+  if (!view) notFound();
+  return <PdpPage view={view} searchParams={searchParams} />;
 }

@@ -90,7 +90,8 @@ test.describe('PDP (/produto-exemplo/p)', () => {
     await expect(page.getByRole('heading', { level: 2, name: 'Detalhes do produto' })).toBeAttached();
     await expect(page.getByRole('heading', { level: 2, name: 'Avaliações de clientes' })).toBeAttached();
     await expect(page.getByRole('heading', { level: 2, name: 'Perguntas frequentes' })).toBeAttached();
-    await expect(page.getByRole('table').first()).toBeAttached();
+    // as tabelas ficam em <details> fechado (fora da arvore de acessibilidade), mas existem no HTML
+    await expect(page.locator('table').first()).toBeAttached();
   });
 
   test('slug inexistente: status 404 real', async ({ page }) => {

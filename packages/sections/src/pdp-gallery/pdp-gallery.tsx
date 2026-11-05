@@ -4,6 +4,7 @@ import type { PdpGalleryProps } from './pdp-gallery.schema';
 
 const defaults = {
   gallery: 'Fotos do produto',
+  slides: 'Fotos em sequência',
   thumbs: 'Miniaturas',
   image: 'Ver foto {n} de {total}',
   zoom: 'Ampliar foto {n} de {total}',
@@ -30,7 +31,10 @@ export function PdpGallery({ images, zoom = true, video, thumbs = 'vertical', as
       aria-label={l.gallery}
       className={cn('grid gap-3 py-4', thumbs === 'vertical' && images.length > 1 && 'md:grid-cols-[4.5rem_minmax(0,1fr)]')}
     >
+      {/* tabIndex=0: faixa rolavel precisa de foco por teclado (axe: scrollable-region-focusable); setas rolam entre as fotos. */}
       <ul
+        tabIndex={0}
+        aria-label={l.slides}
         className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] motion-reduce:scroll-auto md:order-2 [&::-webkit-scrollbar]:hidden"
         style={{ overscrollBehaviorX: 'contain' }}
       >
