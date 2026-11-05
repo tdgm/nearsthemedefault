@@ -94,6 +94,17 @@ Correcao herdada da Fase 6b: as rotas de 1, 2 e 3 segmentos e a de cauda longa c
 `notFound()` dentro de um componente filho e respondiam 200 (soft 404). Agora a resolucao
 e a chamada acontecem em `Page`, antes do JSX, e o status e 404 de verdade (ADR 0003).
 
+Isso sozinho nao basta: com `cacheComponents` o Next serve um shell de fallback para
+parametros fora de `generateStaticParams` e o status sai 200 na PRIMEIRA requisicao (so as
+seguintes, ja cacheadas, saem 404). O crawler que descobre a URL errada veria um soft 404.
+Por isso `apps/web/proxy.ts` pergunta a `lib/routing/known-path` se a URL existe (mesmos
+resolvers das paginas: indice de slugs, cauda longa, produto) e, se nao, reescreve para um
+caminho sem rota; o Next responde 404 real com `app/not-found.tsx`. O proxy so le o
+pathname (nao le cookie nem header), entao nao torna nenhuma rota dinamica; a pagina
+continua decidindo o resto (ex.: campanha fora da janela). Fora do matcher: `/api`,
+`/_next` e qualquer caminho com extensao (robots.txt, llms.txt, sitemap/*.xml, imagens).
+Custo: uma consulta ao indice de slugs (em memoria) por requisicao de pagina.
+
 ### 5. Atribuicao de trafego de IA
 
 O servidor nao ve o `Referer` de paginas estaticas (ler header as tornaria dinamicas).
