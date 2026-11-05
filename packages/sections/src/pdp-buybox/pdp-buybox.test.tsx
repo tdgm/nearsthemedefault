@@ -20,7 +20,8 @@ describe('PdpBuybox', () => {
   it('tem o unico h1 da pagina, preco e parcelamento', () => {
     render(<PdpBuybox {...base} installments={{ count: 4 }} listPrice={150} />);
     expect(screen.getByRole('heading', { level: 1, name: 'Camiseta' })).toBeInTheDocument();
-    expect(screen.getByText('R$ 100,00')).toBeInTheDocument();
+    // o preco tambem aparece na barra fixa do mobile (R$ 100,00 no CTA)
+    expect(screen.getAllByText('R$ 100,00').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('4x de R$ 25,00 sem juros')).toBeInTheDocument();
   });
 

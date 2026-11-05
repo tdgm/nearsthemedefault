@@ -22,7 +22,7 @@ for (const url of urls) {
   });
 }
 
-for (const url of ['/', '/s', '/s?q=camiseta', '/a/b/c/d/e']) {
+for (const url of ['/', '/departamento-exemplo', '/produto-exemplo/p', '/s', '/s?q=camiseta', '/a/b/c/d/e']) {
   test(`${url}: 0 violacoes axe`, async ({ page, javaScriptEnabled }) => {
     // O axe-core e JavaScript injetado na pagina: sem JS ele nao roda (o
     // projeto `nojs` so valida que o conteudo existe no HTML inicial).
@@ -76,6 +76,52 @@ test.describe('busca (/s)', () => {
   test('e noindex,nofollow', async ({ page }) => {
     await page.goto('/s?q=camiseta');
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+  });
+});
+
+test.describe('PDP (/produto-exemplo/p)', () => {
+  // Frete e transmitido por stream (le a URL), como a busca: so aparece com JS.
+  const needsJs = 'cotacao de frete e transmitida por stream e so aparece com JavaScript';
+
+  test('conteudo indexavel no HTML inicial: nome, preco, detalhes, avaliacoes e FAQ', async ({ page }) => {
+    await page.goto('/produto-exemplo/p');
+    await expect(page.getByRole('heading', { level: 1, name: 'Produto 1' })).toBeVisible();
+    await expect(page.getByRole('main').getByText('R$ 59,90').first()).toBeAttached();
+    await expect(page.getByRole('heading', { level: 2, name: 'Detalhes do produto' })).toBeAttached();
+    await expect(page.getByRole('heading', { level: 2, name: 'Avaliações de clientes' })).toBeAttached();
+    await expect(page.getByRole('heading', { level: 2, name: 'Perguntas frequentes' })).toBeAttached();
+    await expect(page.getByRole('table').first()).toBeAttached();
+  });
+
+  test('slug inexistente: status 404 real', async ({ page }) => {
+    const res = await page.goto('/produto-que-nao-existe/p');
+    expect(res?.status()).toBe(404);
+  });
+
+  test('frete: formulario GET leva ao resultado com opcoes', async ({ page, javaScriptEnabled }) => {
+    test.skip(!javaScriptEnabled, needsJs);
+    await page.goto('/produto-exemplo/p');
+    await page.getByLabel('CEP').fill('01310100');
+    await page.getByRole('button', { name: 'Calcular' }).click();
+    await expect(page).toHaveURL(/\?cep=01310100#frete$/);
+    await expect(page.locator('#frete').getByText('Entrega padrão')).toBeVisible();
+    await expect(page.getByLabel('CEP')).toHaveValue('01310-100');
+  });
+
+  test('adicionar ao carrinho anuncia o resultado em aria-live', async ({ page, javaScriptEnabled }) => {
+    test.skip(!javaScriptEnabled, 'o envio sem recarregar e a regiao viva precisam de JavaScript');
+    await page.goto('/produto-exemplo/p');
+    await page.getByRole('button', { name: 'Adicionar ao carrinho' }).click();
+    await expect(page.locator('[role="status"][aria-live="polite"]').filter({ hasText: 'Adicionado ao carrinho.' })).toBeVisible();
+  });
+
+  test('zoom abre em dialogo e fecha com Esc', async ({ page, javaScriptEnabled }) => {
+    test.skip(!javaScriptEnabled, 'o zoom precisa de JavaScript (showModal)');
+    await page.goto('/produto-exemplo/p');
+    await page.getByRole('button', { name: 'Ampliar foto 1 de 1' }).click();
+    await expect(page.getByRole('dialog', { name: 'Ampliar foto 1 de 1' })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toHaveCount(0);
   });
 });
 

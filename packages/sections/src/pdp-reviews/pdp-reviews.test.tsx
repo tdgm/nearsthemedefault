@@ -18,7 +18,7 @@ describe('PdpReviews', () => {
 
   it('cada avaliacao tem nota em texto, autor e data em <time> dd/mm/aaaa', () => {
     const { container } = render(<PdpReviews provider="nears" aggregate={{ rating: 4.5, count: 2 }} items={items} />);
-    expect(screen.getByText(/Avaliação 5 de 5/)).toBeInTheDocument();
+    expect(screen.getByText(/Avaliação 5,0 de 5/)).toBeInTheDocument();
     const time = container.querySelector('time')!;
     expect(time).toHaveAttribute('datetime', '2026-03-10T12:00:00-03:00');
     expect(time).toHaveTextContent('10/03/2026');
