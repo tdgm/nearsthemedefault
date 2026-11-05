@@ -67,6 +67,43 @@ export const productSchema = z.strictObject({
   productType: slugSchema,
   brand: z.string().optional(),
   createdAt: z.iso.datetime({ offset: true }),
+  // --- Campos da PDP (opcionais: a listagem so precisa dos acima) ---
+  sku: z.string().min(1).optional(),
+  availability: z.enum(['in_stock', 'out_of_stock', 'preorder']).default('in_stock'),
+  /** Texto simples; paragrafos separados por linha em branco. O 1o responde "o que e este produto?". */
+  description: z.string().optional(),
+  /** Pares atributo/valor: viram <table> e additionalProperty (catalog.specTable). */
+  specs: z.array(z.strictObject({ name: z.string().min(1), value: z.string().min(1) })).default([]),
+  /** Cuidados, uso, instalacao, conservacao... conforme o nicho. */
+  instructions: z.string().optional(),
+  /** Guia auxiliar (medidas, compatibilidade, voltagem...): tabela HTML, nunca imagem. */
+  guide: z.strictObject({ columns: z.array(z.string().min(1)).min(1), rows: z.array(z.array(z.string())).min(1) }).optional(),
+  rating: z.strictObject({ value: z.number().min(0).max(5), count: z.number().int().nonnegative() }).optional(),
+  reviews: z
+    .array(
+      z.strictObject({
+        author: z.string().min(1),
+        rating: z.number().int().min(1).max(5),
+        date: z.iso.datetime({ offset: true }),
+        title: z.string().optional(),
+        body: z.string().min(1),
+      }),
+    )
+    .default([]),
+  /** Opcoes por eixo de variacao (id do eixo = catalog.variantAxes[].id). */
+  variants: z
+    .array(
+      z.strictObject({
+        axis: z.string().min(1),
+        options: z.array(z.strictObject({ value: z.string().min(1), label: z.string().min(1), swatch: z.string().optional(), unavailable: z.boolean().optional() })).min(1),
+      }),
+    )
+    .default([]),
+  /** Slugs de produtos complementares (compre junto, kit...). */
+  bundle: z.array(slugSchema).default([]),
+  /** Slugs de produtos relacionados. */
+  related: z.array(slugSchema).default([]),
+  faq: z.array(z.strictObject({ question: z.string().min(1), answer: z.string().min(1) })).optional(),
 });
 
 export const storeSchema = z.strictObject({

@@ -42,6 +42,8 @@ const productTypes: CatalogSnapshot['productTypes'] = [
   { slug: 'tipo-2', name: 'Tipo 2' },
 ];
 
+const slugOf = (n: number) => (n === 1 ? 'produto-exemplo' : `produto-${n}`);
+
 /** 24 produtos distribuidos entre departamentos, categorias e tipos. */
 const products: CatalogSnapshot['products'] = Array.from({ length: 24 }, (_, i) => {
   const n = i + 1;
@@ -51,7 +53,7 @@ const products: CatalogSnapshot['products'] = Array.from({ length: 24 }, (_, i) 
   const promo = n % 3 === 0;
   const price = 49.9 + n * 10;
   return {
-    slug: n === 1 ? 'produto-exemplo' : `produto-${n}`,
+    slug: slugOf(n),
     name: `Produto ${n}`,
     images: [{ ...PRODUCT_IMAGE, alt: `Produto ${n}` }],
     price,
@@ -64,6 +66,36 @@ const products: CatalogSnapshot['products'] = Array.from({ length: 24 }, (_, i) 
     productType: productTypes[i % productTypes.length]!.slug,
     brand: `Marca ${(i % 3) + 1}`,
     createdAt: new Date(Date.UTC(2026, 0, 1 + i)).toISOString(),
+    sku: `SKU-${String(n).padStart(4, '0')}`,
+    availability: n % 11 === 0 ? ('out_of_stock' as const) : ('in_stock' as const),
+    description: `Produto ${n} é um item de exemplo do catálogo de desenvolvimento, com preço e parcelamento informados.\n\nEste texto vem do CMS e descreve materiais, usos e diferenciais do produto.`,
+    specs: [
+      { name: 'Marca', value: `Marca ${(i % 3) + 1}` },
+      { name: 'Código', value: `SKU-${String(n).padStart(4, '0')}` },
+      { name: 'Garantia', value: '12 meses' },
+    ],
+    instructions: 'Siga as orientações de uso e conservação que acompanham o produto.',
+    rating: n % 4 === 0 ? undefined : { value: 3.5 + (n % 3) * 0.5, count: 10 + n },
+    reviews:
+      n % 4 === 0
+        ? []
+        : [
+            { author: 'Cliente 1', rating: 5, date: '2026-03-10T12:00:00-03:00', title: 'Recomendo', body: 'Chegou no prazo e é como descrito.' },
+            { author: 'Cliente 2', rating: 4, date: '2026-04-02T09:30:00-03:00', body: 'Bom custo-benefício.' },
+          ],
+    variants: [
+      {
+        axis: 'color',
+        options: [
+          { value: 'cor-1', label: 'Cor 1', swatch: '#1b4d89' },
+          { value: 'cor-2', label: 'Cor 2', swatch: '#8a2b2b' },
+          { value: 'cor-3', label: 'Cor 3', swatch: '#2f6b3f', unavailable: true },
+        ],
+      },
+      { axis: 'size', options: ['P', 'M', 'G'].map((v) => ({ value: v.toLowerCase(), label: v })) },
+    ],
+    bundle: [slugOf(((i + 1) % 24) + 1), slugOf(((i + 2) % 24) + 1)],
+    related: [3, 4, 5, 6].map((d) => slugOf(((i + d) % 24) + 1)),
   };
 });
 
