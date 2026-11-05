@@ -105,6 +105,13 @@ validando toda resposta e mocks para desenvolvimento.
 slug duplicado entre fontes ou slug reservado em uso; slug inexistente retorna
 status 404.
 
+**Entregue:** data layer tipado com mocks (ADR 0017), resolucao de rotas por indice de slugs
+e colecoes/landing/pagina/busca/mapa do site/404 (ADR 0018), e a PDP com as 7 sections
+proprias, frete por CEP sem JS, CTA fixo no mobile com `aria-live` e zoom em `<dialog>`
+(ADR 0019). JS inicial 139,3 KB (limite 140). Pendencias registradas: header `minimal` na
+PDP (Fase 8), canonical/robots por faceta e JSON-LD (Fase 7) e o LCP no perfil throttled
+(ver ADR 0020).
+
 Nota: esta fase NAO inclui o mecanismo de resolucao de loja por dominio
 personalizado (multi-tenant, ex.: `followin.com.br`) - isso depende da
 decisao registrada em `nears.config.yaml > security.multiTenancy.allowlistSource`

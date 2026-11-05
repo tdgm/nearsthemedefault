@@ -57,8 +57,8 @@ somente `panel-endpoint | build-file | upstream`.
 
 ### 4. Fonte da marca
 
-`typography.font.brand.source` passa a `self-hosted` com Inter 4.1 (OFL-1.1),
-conforme ADR 0001. Arquivo: `packages/tokens/fonts/brand-variable.woff2`, 75,8 KB,
+`typography.font.brand.source` passou a `self-hosted` com Inter 4.1 (OFL-1.1),
+conforme ADR 0001 (o padrao voltou a `system` no ADR 0020; o arquivo segue no repo). Arquivo: `packages/tokens/fonts/brand-variable.woff2`, 75,8 KB,
 eixo `wght` 400-700, `opsz` fixado em 14, subset latin + latin-ext, features
 `kern liga calt ccmp locl mark mkmk tnum lnum case`. A licenca esta em
 `packages/tokens/fonts/OFL.txt`. Origem: release oficial

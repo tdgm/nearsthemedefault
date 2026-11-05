@@ -39,7 +39,7 @@ marca.
   websafe. Custo de fonte: 0 KB e 0 requisições. É a opção para lojas que não têm
   fonte de marca.
 
-Default do template: **Inter** (OFL-1.1), sem serifa e neutra.
+Default do template: **`system`** (zero download; ADR 0020). Fonte de marca opcional e pre-aprovada: **Inter** (OFL-1.1), sem serifa e neutra, pronta em `packages/tokens/fonts/`.
 
 ## Famílias pré-aprovadas
 
@@ -49,7 +49,7 @@ lista.
 
 | Família | Licença | Estilo | Fallback |
 | --- | --- | --- | --- |
-| Inter | OFL-1.1 | sem serifa, neutra (default) | Arial |
+| Inter | OFL-1.1 | sem serifa, neutra (opcional por marca; arquivo ja no repo) | Arial |
 | Roboto Flex | OFL-1.1 | sem serifa, neutra | Arial |
 | Noto Sans | OFL-1.1 | sem serifa, cobertura ampla de idiomas | Arial |
 | Source Sans 3 | OFL-1.1 | sem serifa, humanista | Arial |
