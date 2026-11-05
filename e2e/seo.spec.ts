@@ -105,12 +105,15 @@ test.describe('metadata e JSON-LD no HTML inicial', () => {
   test('colecao: ItemList dos produtos da pagina, CollectionPage, FAQ e canonical proprio', async ({ request }) => {
     const { body } = await html(request, '/departamento-exemplo');
     const g = graphByType(body);
-    const list = g.get('CollectionPage')!.mainEntity;
+    const page = g.get('CollectionPage')!;
+    const list = page.mainEntity;
     expect(list['@type']).toBe('ItemList');
     expect(list.itemListElement.length).toBeGreaterThan(0);
     expect(list.itemListElement[0].url).toMatch(new RegExp(`^${SITE}/[a-z0-9-]+/p$`));
     expect(g.get('FAQPage')).toBeTruthy();
-    expect(g.get('BreadcrumbList')!.itemListElement[0].name).toBe('Início');
+    // Na colecao o breadcrumb vai aninhado no CollectionPage (Rich Results aceita as duas formas).
+    expect(page.breadcrumb['@type']).toBe('BreadcrumbList');
+    expect(page.breadcrumb.itemListElement[0].name).toBe('Início');
     expect(canonical(body)).toBe(`${SITE}/departamento-exemplo`);
   });
 
