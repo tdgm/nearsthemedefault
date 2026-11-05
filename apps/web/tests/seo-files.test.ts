@@ -155,7 +155,8 @@ describe('politica de facetas', () => {
   });
 
   it('faceta combinada (duas facetas ou dois valores) e noindex,follow com canonical na colecao', () => {
-    for (const filters of [{ brand: ['a'], category: ['b'] }, { brand: ['a', 'b'] }]) {
+    const combined: Record<string, string[]>[] = [{ brand: ['a'], category: ['b'] }, { brand: ['a', 'b'] }];
+    for (const filters of combined) {
       expect(decideFacetPolicy({ ...base, filters, page: 2 })).toEqual({ canonicalPath: '/dep', robots: 'noindex,follow', indexable: false, page: 1 });
     }
   });

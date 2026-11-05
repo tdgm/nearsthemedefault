@@ -16,7 +16,8 @@ export function disallowLines({ routes }: Pick<Rules, 'routes'>): string[] {
 
 export function buildRobots(manifests: Rules, site: string): MetadataRoute.Robots {
   const disallow = disallowLines(manifests);
-  const rules: Exclude<MetadataRoute.Robots['rules'], undefined | unknown[]>[] = [{ userAgent: '*', allow: '/', disallow }];
+  type Rule = { userAgent: string; allow?: string; disallow?: string | string[] };
+  const rules: Rule[] = [{ userAgent: '*', allow: '/', disallow }];
 
   // Um grupo especifico SUBSTITUI o grupo `*` para aquele agente (RFC 9309): por isso
   // o agente liberado repete os mesmos Disallow, em vez de herdar.
