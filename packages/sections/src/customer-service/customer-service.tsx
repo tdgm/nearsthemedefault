@@ -11,7 +11,7 @@ const defaults = { open: 'Atendimento', title: 'Fale com a gente' } as const;
 export function CustomerService({ channels, labels }: CustomerServiceProps) {
   const l = { ...defaults, ...labels };
   return (
-    <details className="group fixed right-4 bottom-4 z-30">
+    <details className="group fixed right-4 bottom-[calc(1rem+var(--nears-sticky-offset,0px))] z-30">
       <summary
         aria-label={l.open}
         className="grid size-14 cursor-pointer list-none place-items-center rounded-full bg-action text-action-on shadow-lg [&::-webkit-details-marker]:hidden"

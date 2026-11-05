@@ -23,6 +23,13 @@ import { heroSpec } from './hero/hero.spec.ts';
 import { productCardSpec } from './product-card/product-card.spec.ts';
 import { productGridSpec } from './product-grid/product-grid.spec.ts';
 import { showcaseSpec } from './showcase/showcase.spec.ts';
+import { pdpGallerySpec } from './pdp-gallery/pdp-gallery.spec.ts';
+import { pdpBuyboxSpec } from './pdp-buybox/pdp-buybox.spec.ts';
+import { pdpShippingSpec } from './pdp-shipping/pdp-shipping.spec.ts';
+import { pdpDetailsSpec } from './pdp-details/pdp-details.spec.ts';
+import { pdpReviewsSpec } from './pdp-reviews/pdp-reviews.spec.ts';
+import { pdpBundleSpec } from './pdp-bundle/pdp-bundle.spec.ts';
+import { pdpRelatedSpec } from './pdp-related/pdp-related.spec.ts';
 
 export const sectionSpecs: readonly AnySectionSpec[] = [
   promoBarSpec,
@@ -46,4 +53,11 @@ export const sectionSpecs: readonly AnySectionSpec[] = [
   productCardSpec,
   productGridSpec,
   showcaseSpec,
+  pdpGallerySpec,
+  pdpBuyboxSpec,
+  pdpShippingSpec,
+  pdpDetailsSpec,
+  pdpReviewsSpec,
+  pdpBundleSpec,
+  pdpRelatedSpec,
 ];

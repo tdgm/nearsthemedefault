@@ -1,6 +1,7 @@
-import { RoutePlaceholder } from '../../components/route-placeholder';
+import type { Metadata } from 'next';
+import { SitemapPage } from '../../lib/templates/sitemap';
 
-// Hub de linkagem interna, obrigatorio no template padrao. Fase 6.
-export default function Page() {
-  return <RoutePlaceholder id="sitemap-html" template="sitemap" />;
-}
+export const metadata: Metadata = { title: 'Mapa do site' };
+
+// Hub de linkagem interna, obrigatorio no template padrao (templates.sitemap).
+export default SitemapPage;

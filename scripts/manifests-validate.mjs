@@ -47,7 +47,7 @@ if (generic) {
     const registry = createRegistry(generic, sectionSpecs, (p) => existsSync(resolve(root, p)));
     const pending = pendingSections(generic, registry);
     console.log(
-      `ok      registry de sections            ${registry.size} implementadas, ${pending.length} pendentes (PDP, Fase 6)`,
+      `ok      registry de sections            ${registry.size} implementadas, ${pending.length} pendentes`,
     );
   } catch (e) {
     failed = true;

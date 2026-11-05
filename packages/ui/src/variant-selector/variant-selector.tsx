@@ -26,6 +26,8 @@ export type VariantSelectorProps = {
   onValueChange?: (value: string) => void;
   error?: string;
   unavailableLabel?: string;
+  /** Escolha obrigatoria: validacao nativa do formulario (funciona sem JS). */
+  required?: boolean;
 };
 
 /**
@@ -42,6 +44,7 @@ export function VariantSelector({
   onValueChange,
   error,
   unavailableLabel = 'indisponível',
+  required = false,
 }: VariantSelectorProps) {
   const generated = useId();
   const groupName = name ?? generated;
@@ -79,6 +82,7 @@ export function VariantSelector({
                 name={groupName}
                 value={o.value}
                 disabled={o.unavailable}
+                required={required}
                 checked={value !== undefined ? value === o.value : undefined}
                 defaultChecked={value === undefined && defaultValue !== undefined ? defaultValue === o.value : undefined}
                 onChange={() => {

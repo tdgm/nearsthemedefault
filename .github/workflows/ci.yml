@@ -88,6 +88,14 @@ jobs:
       # O proprio LHCI sobe e derruba o servidor (collect.startServerCommand em
       # lighthouserc.json): sem `&` solto e sem dependencia extra tipo wait-on.
       - run: pnpm lh
+      # Relatorios completos (trace, LCP element, rede) para diagnosticar falhas de CWV:
+      # o upload do LHCI vai para um storage publico temporario, fora do alcance do repo.
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci
+          retention-days: 7
       - run: node scripts/check-third-party-hosts.mjs   # hosts distintos; LHCI nao tem assercao nativa para isso
 
   e2e:

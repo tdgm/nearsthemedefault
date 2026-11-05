@@ -9,6 +9,11 @@ describe('SectionTitle', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'Novidades' })).toBeInTheDocument();
   });
 
+  it('respeita level h1 (titulo da pagina)', () => {
+    render(<SectionTitle text="Camisetas" level="h1" />);
+    expect(screen.getByRole('heading', { level: 1, name: 'Camisetas' })).toBeInTheDocument();
+  });
+
   it('respeita level h3', () => {
     render(<SectionTitle text="Novidades" level="h3" />);
     expect(screen.getByRole('heading', { level: 3 })).toBeInTheDocument();
@@ -21,9 +26,9 @@ describe('SectionTitle', () => {
     expect(link.className).toContain('min-h-11');
   });
 
-  it('schema: texto obrigatorio, level so h2/h3 e padrao h2', () => {
+  it('schema: texto obrigatorio, level so h1/h2/h3 e padrao h2', () => {
     expect(sectionTitleSchema.safeParse({ text: '' }).success).toBe(false);
-    expect(sectionTitleSchema.safeParse({ text: 'x', level: 'h1' }).success).toBe(false);
+    expect(sectionTitleSchema.safeParse({ text: 'x', level: 'h4' }).success).toBe(false);
     expect(sectionTitleSchema.parse({ text: 'x' }).level).toBe('h2');
   });
 });

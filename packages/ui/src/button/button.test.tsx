@@ -2,6 +2,20 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { Button, buttonClasses } from './button';
 
+describe('Button no servidor', () => {
+  // Regressao: Server Components nao serializam funcoes em props; o Button sem onClick
+  // nem loading nao pode emitir handler (quebrava o build ao prerenderizar a PDP).
+  it('nao emite onClick quando nao ha onClick nem loading', () => {
+    const el = Button({ children: 'Enviar', type: 'submit' }) as { props: Record<string, unknown> };
+    expect(el.props.onClick).toBeUndefined();
+  });
+
+  it('emite onClick quando ha onClick ou loading', () => {
+    expect((Button({ children: 'x', onClick: () => {} }) as { props: Record<string, unknown> }).props.onClick).toBeTypeOf('function');
+    expect((Button({ children: 'x', loading: true }) as { props: Record<string, unknown> }).props.onClick).toBeTypeOf('function');
+  });
+});
+
 describe('Button', () => {
   it('e type=button por padrao (nao envia formulario sem querer)', () => {
     render(<Button>Comprar</Button>);

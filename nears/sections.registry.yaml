@@ -159,7 +159,7 @@ sections:
     priority: high
     props:
       text: { type: string, required: true }
-      level: { type: enum, values: [h2, h3], default: h2 }
+      level: { type: enum, values: [h1, h2, h3], default: h2 }
       href: url
     cwv: { noLayoutShift: true }
     a11y: { headingOrder: enforced }
@@ -346,6 +346,8 @@ pdpSections:
       zoom: { type: boolean, default: true }
       video: url
       thumbs: { type: enum, values: [vertical, dots] }
+      aspect: { type: enum, values: [product, portrait, landscape, square], default: portrait }
+      labels: object
     cwv:
       lcpCandidate: true
       firstImage: { fetchpriority: high }
@@ -358,7 +360,14 @@ pdpSections:
       name: string
       rating: object
       price: money
+      listPrice: money
       installments: object
+      availability: { type: enum, values: [in_stock, out_of_stock, preorder], default: in_stock }
+      sku: string
+      addToCartAction:
+        type: url
+        note: "endpoint POST do adicionar; sem ele o CTA fica desabilitado"
+      labels: object
       variantSelectors:
         type: array
         from: catalog.variantAxes      # um seletor por eixo; zero se nao ha variacao
@@ -375,7 +384,12 @@ pdpSections:
 
   - id: pdp-shipping
     priority: high
-    props: { zipInput: true, helpHref: url }
+    props:
+      zipInput: { type: boolean, default: true }
+      helpHref: url
+      cep: { type: string, note: "CEP informado (?cep=), ja validado" }
+      quote: { type: object, note: "opcoes de entrega ou erro; vem do data layer" }
+      labels: object
     cwv: { reservedHeight: 96 }
     a11y: { inputLabel: required, errorAssociation: ariaDescribedby }
 
@@ -394,6 +408,7 @@ pdpSections:
         type: table
         enabledBy: catalog.guide.enabled
         note: "medidas, compatibilidade, voltagem, tabela nutricional..."
+      labels: object
     cwv: { contentVisibility: auto }
     a11y: { accordion: true, tableHeaders: scope }
     geo: { renderAsTable: true, neverAsImage: true }
@@ -404,6 +419,7 @@ pdpSections:
       provider: string
       aggregate: { rating: number, count: number }
       items: array
+      labels: object
     cwv: { ssrAggregate: true }
     a11y: { ratingTextAlternative: required }
     seo: { schema: [AggregateRating, Review] }
@@ -420,7 +436,9 @@ pdpSections:
 
   - id: pdp-related
     priority: lazy
-    props: { products: array }
+    props:
+      title: { type: string, default: "Você também pode gostar" }
+      products: array
     cwv: { scrollSnap: native }
     a11y: { role: list }
     seo: { schema: ItemList }
@@ -466,6 +484,9 @@ templates:
     sections:
       - section-title
       - repeat: { over: departments, blocks: [related-links] }
+      # Tipos de produto, campanhas e paginas institucionais: sem este bloco
+      # nada alem do rodape linkaria para eles (zero links orfaos).
+      - related-links
 
   notfound:
     sections: [section-title, showcase:recommended]

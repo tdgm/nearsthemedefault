@@ -1,6 +1,5 @@
 import { Tabs } from '@nears/ui';
-import { ProductCard } from '../product-card/product-card.tsx';
-import type { ProductCardProps } from '../product-card/product-card.schema';
+import { ProductRail } from '../shared/product-rail.tsx';
 import type { ShowcaseProps } from './showcase.schema';
 
 const defaultTitles = {
@@ -10,25 +9,6 @@ const defaultTitles = {
   wishlist: 'Seus favoritos',
   recommended: 'Você também pode gostar',
 } as const;
-
-const SIZES = '(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 176px';
-
-/**
- * Faixa de produtos: scroll-snap nativo no mobile (os cards tem links, entao a
- * faixa ja e alcancavel por teclado), grade de 4 colunas no desktop. Tudo lazy
- * (secao `lazy`, abaixo da dobra) com `content-visibility: auto`.
- */
-function ProductRail({ products, limit }: { products: ProductCardProps[]; limit: number }) {
-  return (
-    <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] md:grid md:grid-cols-3 md:overflow-visible lg:grid-cols-4 [&::-webkit-scrollbar]:hidden">
-      {products.slice(0, limit).map((product) => (
-        <li key={product.href} className="w-44 shrink-0 snap-start md:w-auto">
-          <ProductCard {...product} sizes={SIZES} />
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 /**
  * Vitrine de produtos em cinco variantes (static, tabs, personalized, wishlist,
