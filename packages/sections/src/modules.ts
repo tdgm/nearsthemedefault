@@ -22,6 +22,13 @@ import { hero } from './hero/index.ts';
 import { productCard } from './product-card/index.ts';
 import { productGrid } from './product-grid/index.ts';
 import { showcase } from './showcase/index.ts';
+import { pdpGallery } from './pdp-gallery/index.ts';
+import { pdpBuybox } from './pdp-buybox/index.ts';
+import { pdpShipping } from './pdp-shipping/index.ts';
+import { pdpDetails } from './pdp-details/index.ts';
+import { pdpReviews } from './pdp-reviews/index.ts';
+import { pdpBundle } from './pdp-bundle/index.ts';
+import { pdpRelated } from './pdp-related/index.ts';
 
 export const sectionModules: readonly AnySectionModule[] = [promoBar, header, navDrawer, minicart, footer, customerService,
   benefitBar,
@@ -39,4 +46,11 @@ export const sectionModules: readonly AnySectionModule[] = [promoBar, header, na
   productCard,
   productGrid,
   showcase,
+  pdpGallery,
+  pdpBuybox,
+  pdpShipping,
+  pdpDetails,
+  pdpReviews,
+  pdpBundle,
+  pdpRelated,
 ];

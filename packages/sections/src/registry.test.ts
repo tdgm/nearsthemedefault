@@ -24,17 +24,18 @@ describe('createRegistry', () => {
     expect(pendingSections(manifests, registry)).not.toContain('benefit-bar');
   });
 
-  it('registra as globais (Fase 4) e as de conteudo (Fase 5); so as do PDP seguem pendentes', () => {
+  it('registra as globais (Fase 4) de conteudo (Fase 5) e da PDP (Fase 6)', () => {
     const registry = createRegistry(manifests, sectionSpecs, exists);
     expect([...registry.keys()].sort()).toEqual(
       [
         'banner-full', 'banner-grid', 'benefit-bar', 'breadcrumb', 'category-hub', 'customer-service', 'event-banner', 'faq',
         'footer', 'header', 'hero', 'minicart', 'nav-drawer', 'product-card', 'product-grid', 'promo-bar', 'quick-filter',
         'related-links', 'section-title', 'showcase', 'text-seo',
+        'pdp-gallery', 'pdp-buybox', 'pdp-shipping', 'pdp-details', 'pdp-reviews', 'pdp-bundle', 'pdp-related',
       ].sort(),
     );
     expect(pendingSections(manifests, registry)).not.toContain('hero');
-    expect(pendingSections(manifests, registry)).toContain('pdp-gallery');
+    expect(pendingSections(manifests, registry)).toEqual([]);
   });
 
   const failing = (patch: Record<string, unknown>) => () =>
