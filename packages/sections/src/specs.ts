@@ -19,6 +19,10 @@ import { breadcrumbSpec } from './breadcrumb/breadcrumb.spec.ts';
 import { textSeoSpec } from './text-seo/text-seo.spec.ts';
 import { faqSpec } from './faq/faq.spec.ts';
 import { relatedLinksSpec } from './related-links/related-links.spec.ts';
+import { heroSpec } from './hero/hero.spec.ts';
+import { productCardSpec } from './product-card/product-card.spec.ts';
+import { productGridSpec } from './product-grid/product-grid.spec.ts';
+import { showcaseSpec } from './showcase/showcase.spec.ts';
 
 export const sectionSpecs: readonly AnySectionSpec[] = [
   promoBarSpec,
@@ -38,4 +42,8 @@ export const sectionSpecs: readonly AnySectionSpec[] = [
   textSeoSpec,
   faqSpec,
   relatedLinksSpec,
+  heroSpec,
+  productCardSpec,
+  productGridSpec,
+  showcaseSpec,
 ];

@@ -23,4 +23,8 @@ export * from './breadcrumb/index.ts';
 export * from './text-seo/index.ts';
 export * from './faq/index.ts';
 export * from './related-links/index.ts';
+export * from './hero/index.ts';
+export * from './product-card/index.ts';
+export * from './product-grid/index.ts';
+export * from './showcase/index.ts';
 export { navigationSchema, type Navigation } from './shared/navigation.ts';

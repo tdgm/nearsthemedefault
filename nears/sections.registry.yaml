@@ -133,13 +133,16 @@ sections:
           headline: string
           cta: string
       autoplay: { type: boolean, default: false }
+      intervalMs: { type: number, min: 3000, default: 6000 }
+      labels: { type: object }
     cwv:
       lcpCandidate: true
       firstSlide: { loading: eager, fetchpriority: high }
       media: picture
       formats: [avif, webp]
       aspectRatio: required
-    a11y: { carousel: tablist, pauseControl: required, keyboardNav: true }
+    # Carrossel basico do APG (regiao + anterior/proximo); pausa obrigatoria quando autoplay=true.
+    a11y: { carousel: apg-basic, pauseControl: required-with-autoplay, keyboardNav: true }
 
   - id: benefit-bar
     priority: high
@@ -189,8 +192,11 @@ sections:
       source: { type: enum, values: [collection, query, recommender] }
       limit: { type: number, min: 4, max: 12, default: 8 }
       tabs: array
-    cwv: { ssrFirstTab: true, scrollSnap: native }
-    a11y: { tabs: tablist, keyboardNav: true }
+      variant: { type: enum, values: [static, tabs, personalized, wishlist, recommended], default: static }
+      products: array
+      labels: { type: object }
+    cwv: { ssrFirstTab: true, scrollSnap: native, contentVisibility: auto, containIntrinsicSize: "0 520px" }
+    a11y: { tabs: tablist, keyboardNav: true, region: true }
     seo: { schema: ItemList }
 
   - id: event-banner
@@ -234,6 +240,14 @@ sections:
       facets:
         type: array
         from: catalog.facets.available   # definido por nicho
+      products: array
+      total: number
+      page: number
+      basePath: string
+      query: { type: object }
+      currentSort: string
+      filters: array
+      labels: { type: object }
     cwv:
       ssr: true
       skeleton: true
@@ -255,6 +269,7 @@ sections:
       image: { type: image, required: true }
       hoverImage: image
       name: { type: string, required: true }
+      href: { type: string, required: true }
       price: { type: money, required: true }
       listPrice: money
       installments: object
@@ -263,7 +278,14 @@ sections:
         type: array
         note: "amostras do primeiro eixo de catalog.variantAxes; vazio se o nicho nao tem variacao"
       quickAdd: { type: boolean, default: false }
+      quickAddAction: string
       wishlist: { type: boolean, default: true }
+      wishlistAction: string
+      aspect: { type: enum, values: [product, portrait, landscape, square], default: portrait }
+      # Resolvido pelo container (docs/adr/0006): acima da dobra = eager + fetchpriority alto.
+      priority: { type: boolean, default: false }
+      sizes: string
+      labels: { type: object }
     cwv:
       aspectRatio: "{media.aspect[catalog.productMedia.aspect]}"
       intrinsicSize: required

@@ -1,6 +1,6 @@
 # ADR 0015 - Sections de conteudo (`packages/sections`)
 
-- Status: aceito (leva A; a leva B - hero, product-card, product-grid, showcase - acrescenta decisoes abaixo)
+- Status: aceito
 - Data: 2026-11-05
 
 ## Contexto
@@ -44,7 +44,45 @@ A Fase 5 (docs/ROADMAP.md) entrega as sections de conteudo. Gate: Hero e LCP em
    `banner-full.href|imageSide`, `quick-filter.basePath|current|labels`,
    `category-hub.items|limit|labels`.
 
-## Pendente na leva B
+## Decisao (leva B: hero, product-card, product-grid, showcase)
 
-Hero (LCP, art direction, autoplay opcional), ProductCard (`priority: inherit`),
-ProductGrid e Showcase (static/tabs/personalized/wishlist/recommended).
+10. **Hero sobre o `Carousel` do design system.** Slide unico nao carrega JS; com varios,
+    o `Carousel` (scroll-snap nativo, ja existente) cobre teclado e botoes. So o 1o slide
+    e candidato a LCP (`<picture>` eager + `fetchpriority="high"`); os demais, lazy. O
+    texto fica em faixa solida abaixo da arte (nunca sobre a foto) e o titulo e `<p>`
+    (o H1 e do template). O manifest dizia `carousel: tablist`; adotamos o carrossel
+    basico do APG (regiao + anterior/proximo), que pesa menos JS, e a pausa vira
+    obrigatoria so quando `autoplay=true`.
+11. **Autoplay opt-in no `Carousel`** (`autoplayMs`): desligado por padrao; quando ligado
+    tem botao de pausa/retomar (`aria-pressed`), pausa com hover e foco dentro, nao inicia
+    com `prefers-reduced-motion` (lido no cliente apos hidratar, para nao quebrar a
+    hidratacao) e `aria-live` fica `off` enquanto gira. Custo: ~0.4 KB gzip no `@nears/ui`.
+12. **ProductCard (`priority: inherit`).** O container passa `priority` (acima da dobra =
+    eager + fetchpriority alto), `aspect` (token `media.aspect`) e `sizes`. O card nao e
+    um link unico (tem acoes); o link da imagem fica fora do Tab e do leitor de tela e o
+    nome e o link principal. Favoritar e adicionar rapido sao formularios POST que so
+    existem quando o container informa o endpoint (`wishlistAction`, `quickAddAction`):
+    funcionam sem JS e sem criar controle morto. Produto com variacao deve mandar o
+    cliente para a PDP (container define `quickAdd=false`).
+13. **ProductGrid sem estado de cliente.** Ordenacao (form GET + select), filtros (form GET
+    dentro do drawer `<dialog>`, via `Overlay`) e paginacao (links `?page=N`, pagina 1 =
+    URL limpa, `rel` prev/next) funcionam sem JS; o unico JS e o `OverlayTrigger`, que ja
+    esta no bundle do header. Primeira linha (`columns.lg`) eager; depois de duas linhas,
+    `content-visibility: auto` com tamanho intrinseco. `facets` continua sendo a lista de
+    ids permitida pelo nicho; as opcoes (`filters`) vem do data layer.
+14. **Showcase.** Cinco variantes pela prop `variant` (o template escreve `showcase:tabs`).
+    `tabs` usa o `Tabs` do design system com todos os paineis no HTML (`hidden`); quando o
+    data layer enviar so a 1a aba (`ssrFirstTab`), as outras carregam sob demanda na Fase 6.
+    Variante sem produtos some, exceto `wishlist`, que explica o vazio.
+15. **Props acrescentadas ao manifest** na leva B: `hero.intervalMs|labels`,
+    `product-card.href|quickAddAction|wishlistAction|aspect|priority|sizes|labels`,
+    `product-grid.products|total|page|basePath|query|currentSort|filters|labels`,
+    `showcase.variant|products|labels`.
+
+## Consequencias
+
+- Nenhuma dependencia nova. JS inicial: ver o resultado do `pnpm validate` no PR (gate de
+  140 KB, ADR 0010); se estourar, o Carousel do Hero passa a carregar sob demanda.
+- Fica para a Fase 6: data layer (produtos, facetas, ordenacao), endpoints de favoritar e
+  adicionar, escolha de `priority` por template, loader de imagem AVIF/WebP.
+- Fica para a Fase 7: JSON-LD (ItemList, FAQPage, BreadcrumbList) a partir dos mesmos props.

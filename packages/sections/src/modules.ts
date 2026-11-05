@@ -18,6 +18,10 @@ import { breadcrumbSection } from './breadcrumb/index.ts';
 import { textSeo } from './text-seo/index.ts';
 import { faq } from './faq/index.ts';
 import { relatedLinks } from './related-links/index.ts';
+import { hero } from './hero/index.ts';
+import { productCard } from './product-card/index.ts';
+import { productGrid } from './product-grid/index.ts';
+import { showcase } from './showcase/index.ts';
 
 export const sectionModules: readonly AnySectionModule[] = [promoBar, header, navDrawer, minicart, footer, customerService,
   benefitBar,
@@ -31,4 +35,8 @@ export const sectionModules: readonly AnySectionModule[] = [promoBar, header, na
   textSeo,
   faq,
   relatedLinks,
+  hero,
+  productCard,
+  productGrid,
+  showcase,
 ];

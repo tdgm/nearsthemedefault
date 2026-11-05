@@ -84,6 +84,11 @@ QuickFilter, ProductGrid, ProductCard, Breadcrumb, TextSEO, FAQ e RelatedLinks.
 
 **Gate:** Hero e LCP em <= 2.0s no perfil mobile throttled. CLS 0 em todas.
 
+**Entregue:** as 15 sections de conteudo (spec, schema, meta, story e teste cada), `ArtImage`
+e helpers compartilhados, autoplay opt-in no `Carousel` e decisoes em
+`docs/adr/0015-sections-de-conteudo.md`. Medicao de LCP no perfil throttled fica para a
+Fase 6, quando houver pagina real com Hero (o `pnpm lh` ja cobre a home).
+
 ## Fase 6 - Templates e rotas
 
 Entregar: home, collection, pdp, landing, page, search, sitemap HTML e 404.
