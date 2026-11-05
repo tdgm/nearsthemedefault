@@ -194,6 +194,7 @@ resolution:
       - b
       - p
       - mapa-do-site
+      - sitemap                  # /sitemap/{segmento}-{n}.xml (Fase 7)
       - "404"
       - api
       - account

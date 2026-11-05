@@ -24,12 +24,12 @@ export async function RoutePage({ resolved, searchParams }: { resolved: Resolved
   }
 }
 
-export async function routeMetadata(resolved: Resolved | null): Promise<Metadata> {
+export async function routeMetadata(resolved: Resolved | null, searchParams: Promise<RawQuery> = Promise.resolve({})): Promise<Metadata> {
   if (!resolved) return {};
   switch (resolved.kind) {
     case 'collection':
     case 'longtail':
-      return collectionMetadata(await buildCollectionView(resolved));
+      return collectionMetadata(await buildCollectionView(resolved), await searchParams);
     case 'landing':
       return landingMetadata(resolved);
     case 'page':

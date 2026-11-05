@@ -89,6 +89,13 @@ export async function buildMetadata(input: SeoInput): Promise<Metadata> {
       description,
       ...(ogImages ? { images: ogImages.map((i) => i.url) } : {}),
     },
-    ...(input.pagination ? { pagination: input.pagination } : {}),
+    ...(input.pagination && (input.pagination.previous || input.pagination.next)
+      ? {
+          pagination: {
+            ...(input.pagination.previous ? { previous: absoluteUrl(input.pagination.previous, site) } : {}),
+            ...(input.pagination.next ? { next: absoluteUrl(input.pagination.next, site) } : {}),
+          },
+        }
+      : {}),
   };
 }

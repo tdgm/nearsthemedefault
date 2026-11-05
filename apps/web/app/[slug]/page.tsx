@@ -13,9 +13,9 @@ export async function generateStaticParams() {
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { slug } = await params;
-  return routeMetadata(await resolveSegments([slug]));
+  return routeMetadata(await resolveSegments([slug]), searchParams);
 }
 
 export default async function Page({ params, searchParams }: Props) {

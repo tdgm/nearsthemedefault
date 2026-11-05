@@ -15,9 +15,9 @@ type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { keyword } = await params;
-  return routeMetadata(await resolveLongtail(keyword));
+  return routeMetadata(await resolveLongtail(keyword), searchParams);
 }
 
 export default async function Page({ params, searchParams }: Props) {
