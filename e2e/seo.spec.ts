@@ -20,6 +20,8 @@ function graphByType(body: string): Map<string, Node> {
   return new Map(nodes.map((n) => [String(n['@type']), n]));
 }
 
+const unescapeXml = (s: string) => s.replaceAll('&amp;', '&');
+
 const meta = (body: string, name: string) =>
   new RegExp(`<meta[^>]+(?:name|property)="${name}"[^>]+content="([^"]*)"|<meta[^>]+content="([^"]*)"[^>]+(?:name|property)="${name}"`).exec(body)?.slice(1).find(Boolean);
 const canonical = (body: string) =>
@@ -48,11 +50,11 @@ test.describe('arquivos gerados', () => {
     for (const file of files) {
       const res = await html(request, file);
       expect(res.status, file).toBe(200);
-      all.push(...[...res.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]!));
+      all.push(...[...res.body.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => unescapeXml(m[1]!)));
     }
     expect(all).toContain(`${SITE}/produto-exemplo/p`);
-    expect(all).toContain(`${SITE}/departamento-exemplo?brand=marca-1`.replace('&', '&amp;'));
-    expect(all.some((u) => /\/(s|checkout|carrinho)(\/|\?|$)/.test(new URL(u.replace('&amp;', '&')).pathname + new URL(u.replace('&amp;', '&')).search))).toBe(false);
+    expect(all).toContain(`${SITE}/departamento-exemplo?brand=marca-1`);
+    expect(all.some((u) => /^\/(s|checkout|carrinho|login|account)(\/|$)/.test(new URL(u).pathname))).toBe(false);
   });
 
   test('arquivo de sitemap inexistente e 404 real', async ({ request }) => {
