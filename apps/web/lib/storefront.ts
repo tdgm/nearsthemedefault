@@ -10,30 +10,30 @@ import {
   navDrawerSchema,
   promoBarSchema,
 } from '@nears/sections';
+import { getDepartments, getStore } from './data/client';
 import { vocab } from './manifest';
 
-const departments = [1, 2, 3].map((n) => ({
-  label: `Departamento ${n}`,
-  href: `/departamento-${n}`,
-  groups: [
-    {
-      label: `Categoria ${n}.1`,
-      href: `/departamento-${n}/categoria-1`,
-      links: [
-        { label: `Subcategoria ${n}.1.1`, href: `/departamento-${n}/categoria-1/subcategoria-1` },
-        { label: `Subcategoria ${n}.1.2`, href: `/departamento-${n}/categoria-1/subcategoria-2` },
-      ],
-    },
-    { label: `Categoria ${n}.2`, href: `/departamento-${n}/categoria-2`, links: [] },
-  ],
-}));
+/** Navegacao dos departamentos a partir do data layer (categorias viram grupos; subcategorias, links). */
+async function loadNavigation() {
+  const list = await getDepartments();
+  return list.map((d) => ({
+    label: d.name,
+    href: `/${d.slug}`,
+    groups: d.categories.map((c) => ({
+      label: c.name,
+      href: `/${d.slug}/${c.slug}`,
+      links: c.subcategories.map((sc) => ({ label: sc.name, href: `/${d.slug}/${c.slug}/${sc.slug}` })),
+    })),
+  }));
+}
 
-export function getStorefront() {
+export async function getStorefront() {
+  const [store, departments] = await Promise.all([getStore(), loadNavigation()]);
   const cart = vocab('cart');
   const wishlist = vocab('wishlist');
 
   const header = headerSchema.parse({
-    logo: { src: '/logo-placeholder.svg', width: 120, height: 32, alt: 'Loja' },
+    logo: { ...store.logo, alt: store.logo.alt ?? store.name },
     nav: { departments },
     labels: {
       cart,
@@ -55,10 +55,10 @@ export function getStorefront() {
     minicart: minicartSchema.parse({ items: [], labels: { title: cart, close: `Fechar ${cart.toLowerCase()}` } }),
     footer: footerSchema.parse({
       columns: [
-        { title: 'Institucional', links: [{ label: 'Mapa do site', href: '/mapa-do-site' }] },
+        { title: 'Institucional', links: [{ label: 'Mapa do site', href: '/mapa-do-site' }, { label: 'Página exemplo', href: '/pagina-exemplo' }] },
         { title: 'Ajuda', links: [{ label: 'Buscar', href: '/s' }] },
       ],
-      legal: { companyName: 'Loja', copyright: '© Loja. Conteúdo provisório do rodapé.' },
+      legal: { companyName: store.name, copyright: `© ${store.name}. Conteúdo provisório do rodapé.` },
     }),
     customerService: customerServiceSchema.parse({ channels: [{ label: 'Central de ajuda', href: '/mapa-do-site' }] }),
   };

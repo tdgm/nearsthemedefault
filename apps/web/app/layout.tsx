@@ -19,8 +19,8 @@ export const metadata: Metadata = {
 // Sections globais (docs/adr/0014). Variante do header: `full` em todas as rotas por
 // enquanto; a variante `minimal` da PDP (`*/p`) entra com o template real na Fase 6
 // (resolveHeaderVariant ja existe e e testada). `#conteudo` e o destino do skip link.
-export default function RootLayout({ children }: { children: ReactNode }) {
-  const s = getStorefront();
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const s = await getStorefront();
   return (
     <html lang={config.locale.default} className={fontVariableClass}>
       <body>

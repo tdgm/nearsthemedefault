@@ -1,107 +1,30 @@
-import Link from 'next/link';
-import { exampleHref, phases, stateLinks, statusLabel } from '../lib/evolution';
-import { loadRoutes } from '../lib/manifest';
+import type { Metadata } from 'next';
+import { EvolutionPanel } from '../components/evolution-panel';
+import { loadAllManifests } from '../lib/manifest';
+import { expandTemplate, repeatCountsFor } from '../lib/templates/expand';
+import { getHomeContent } from '../lib/templates/home-content';
+import { renderInstances } from '../lib/templates/render';
 
-export default function HomePage() {
-  const routes = loadRoutes();
+export const metadata: Metadata = { title: 'Início' };
+
+/**
+ * Home: a composicao (sections, ordem, limite de departamentos em destaque) vem
+ * de nears/sections.registry.yaml > templates.home e de
+ * nears.config.yaml > composition.home.featuredDepartments (docs/adr/0006); o
+ * conteudo vem do data layer. O unico H1 e o nome da loja (visivel so a leitores
+ * de tela: o hero e a identidade visual da pagina).
+ */
+export default async function HomePage() {
+  const { config, sections } = loadAllManifests();
+  const home = await getHomeContent();
+  const entries = sections.templates.home?.sections ?? [];
+  const instances = expandTemplate(entries, repeatCountsFor(entries, { departments: home.departmentCount }, config));
 
   return (
-    <main className="mx-auto max-w-5xl p-4">
-      <h1 className="my-4 text-3xl font-bold">Nears — template padrão</h1>
-      <p>
-        Painel de evolução do front-end. Mostra em que fase do roadmap o template está e permite
-        abrir cada rota do manifest. Esta página é provisória e some quando a Fase 6 entregar a
-        home real.
-      </p>
-
-      <section aria-labelledby="fases" className="mt-8">
-        <h2 id="fases" className="mb-2 text-xl font-semibold">
-          Fases do roadmap
-        </h2>
-        <ol className="list-decimal pl-6">
-          {phases.map((p) => (
-            <li key={p.id} value={p.id}>
-              Fase {p.id} — {p.name}: <strong>{statusLabel[p.status]}</strong>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section aria-labelledby="estados" className="mt-8">
-        <h2 id="estados" className="mb-2 text-xl font-semibold">
-          Estados de tela
-        </h2>
-        <ul className="list-disc pl-6">
-          {stateLinks.map((s) => (
-            <li key={s.href}>
-              <Link href={s.href} className="underline">
-                {s.label}
-              </Link>{' '}
-              (<code>{s.href}</code>)
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section aria-labelledby="rotas" className="mt-8">
-        <h2 id="rotas" className="mb-2 text-xl font-semibold">
-          Rotas do manifest
-        </h2>
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-left">
-            <caption className="mb-2 text-left">
-              Rotas de nears/routes.manifest.yaml e o arquivo físico de cada uma
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col" className="border p-2">
-                  Rota
-                </th>
-                <th scope="col" className="border p-2">
-                  Padrão
-                </th>
-                <th scope="col" className="border p-2">
-                  Template
-                </th>
-                <th scope="col" className="border p-2">
-                  Arquivo (appRoute)
-                </th>
-                <th scope="col" className="border p-2">
-                  Abrir
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {routes.map((r) => {
-                const href = exampleHref[r.id];
-                return (
-                  <tr key={r.id}>
-                    <th scope="row" className="border p-2 font-medium">
-                      {r.id}
-                    </th>
-                    <td className="border p-2">
-                      <code>{r.pattern}</code>
-                    </td>
-                    <td className="border p-2">{r.template}</td>
-                    <td className="border p-2">
-                      <code>{r.appRoute ?? 'app/not-found.tsx'}</code>
-                    </td>
-                    <td className="border p-2">
-                      {href ? (
-                        <Link href={href} className="underline">
-                          {href}
-                        </Link>
-                      ) : (
-                        '—'
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </section>
+    <main>
+      <h1 className="sr-only">{home.storeName}</h1>
+      {renderInstances(instances, home.propsFor)}
+      {process.env.NODE_ENV !== 'production' && <EvolutionPanel />}
     </main>
   );
 }
