@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import type { Resolved } from '../routing/resolve';
 import { buildCollectionView, CollectionPage, collectionMetadata } from './collection';
-import { InstitutionalPage } from './institutional';
-import { LandingPage, landingTitle } from './landing';
+import { InstitutionalPage, institutionalMetadata } from './institutional';
+import { LandingPage, landingMetadata } from './landing';
 
 type RawQuery = Record<string, string | string[] | undefined>;
 
@@ -24,16 +24,16 @@ export async function RoutePage({ resolved, searchParams }: { resolved: Resolved
   }
 }
 
-export async function routeMetadata(resolved: Resolved | null): Promise<Metadata> {
+export async function routeMetadata(resolved: Resolved | null, searchParams: Promise<RawQuery> = Promise.resolve({})): Promise<Metadata> {
   if (!resolved) return {};
   switch (resolved.kind) {
     case 'collection':
     case 'longtail':
-      return collectionMetadata(await buildCollectionView(resolved));
+      return collectionMetadata(await buildCollectionView(resolved), await searchParams);
     case 'landing':
-      return { title: landingTitle(resolved) };
+      return landingMetadata(resolved);
     case 'page':
-      return { title: resolved.page.title };
+      return institutionalMetadata(resolved);
     case 'pdp':
       return { title: resolved.product.name };
   }

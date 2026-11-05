@@ -128,6 +128,12 @@ atribuicao de trafego vindo de motores generativos.
 
 **Gate:** Rich Results sem erro em Product, Breadcrumb, ItemList e FAQPage. `categories:seo` do `lighthouserc.json` volta de `warn` para `error` (o noindex global do layout sai e o robots.txt passa a existir). `contracts.yaml > onMissingGeoField` passa de `warn-build` para `fail-build` no PR final desta fase (docs/adr/0016).
 
+**Entregue:** `apps/web/lib/seo` (metadata, JSON-LD tipado, politica de facetas e paginacao,
+robots.txt por segmento exato com politica de agentes, sitemap segmentado, llms.txt e
+atribuicao de trafego de IA), `store.organization`/`store.policies` no data layer,
+`onMissingGeoField: fail-build`, `categories:seo` em `error` e o `noindex` global removido
+(ADR 0021). JS inicial inalterado: todo o codigo novo roda no servidor.
+
 ## Fase 8 - Endurecimento
 
 Entregar: carregamento diferido de terceiros com Partytown, RUM de Core Web Vitals,

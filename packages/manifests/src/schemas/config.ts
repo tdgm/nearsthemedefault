@@ -129,6 +129,8 @@ export const configSchema = z.strictObject({
     streaming: z.boolean(),
     cacheComponents: z.boolean(),
     partialPrefetching: z.boolean(),
+    // true: crawlers declarados em contracts.geo.agents recebem title/description/canonical/robots no <head> (docs/adr/0021 s6).
+    blockingMetadataForAgents: z.boolean(),
   }),
   design: z.looseObject({
     tokens: z.looseObject({ source: z.string().min(1) }),

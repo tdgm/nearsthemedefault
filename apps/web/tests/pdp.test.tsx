@@ -89,8 +89,15 @@ describe('template pdp (manifest)', () => {
     expect((generic.propsFor({ id: 'pdp-buybox' }) as { guideHref?: string }).guideHref).toBeUndefined();
   });
 
-  it('produto sem avaliacoes (4o) nao tem agregado e a section explica o vazio', async () => {
-    const view = (await buildPdpView('produto-4'))!;
+  it('produto sem avaliacoes nao tem agregado e a section explica o vazio', async () => {
+    const client = await import('../lib/data/client');
+    const all = await client.getProducts();
+    const base = structuredClone(all[3]!);
+    delete base.rating;
+    base.reviews = [];
+    const spy = vi.spyOn(client, 'getProducts').mockResolvedValue(all.map((p) => (p.slug === base.slug ? base : p)));
+    const view = (await buildPdpView(base.slug))!;
+    spy.mockRestore();
     const props = view.propsFor({ id: 'pdp-reviews' }) as { aggregate?: unknown; items: unknown[] };
     expect(props.aggregate).toBeUndefined();
     expect(props.items).toEqual([]);

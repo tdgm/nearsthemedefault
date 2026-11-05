@@ -70,6 +70,7 @@ rendering:
   streaming: true
   cacheComponents: true   # Next 16; substitui a PPR experimental do 15 (docs/adr/0007)
   partialPrefetching: true  # recomendado pelo Next 16.4 para projetos novos; sem efeito no tamanho de JS (docs/adr/0010)
+  blockingMetadataForAgents: true  # crawlers de contracts.geo.agents recebem metadados no <head> (facetas/paginacao leem searchParams); docs/adr/0021
 
 design:
   theme: white-label
