@@ -58,6 +58,22 @@ describe('manifests reais', () => {
   });
 });
 
+describe('security.headers.contentSecurityPolicy (docs/adr/0025)', () => {
+  it('strict-dynamic nao existe mais: exigiria render dinamico em toda rota', () => {
+    const load = loadMutated('nears.config.yaml', (t) => t.replace('mode: baseline', 'mode: strict-dynamic'));
+    expect(messages(load)).toContain('contentSecurityPolicy.mode');
+  });
+
+  it('formActionOrigins aceita so origem https pura', () => {
+    for (const bad of ['http://checkout.exemplo.com.br', 'https://checkout.exemplo.com.br/', 'https://x.com.br/carrinho', 'checkout']) {
+      const load = loadMutated('nears.config.yaml', (t) => t.replace('formActionOrigins: []', `formActionOrigins: ["${bad}"]`));
+      expect(messages(load), bad).toContain('formActionOrigins');
+    }
+    const ok = loadMutated('nears.config.yaml', (t) => t.replace('formActionOrigins: []', 'formActionOrigins: ["https://checkout.exemplo.com.br"]'));
+    expect(ok().config.security.headers.contentSecurityPolicy.formActionOrigins).toEqual(['https://checkout.exemplo.com.br']);
+  });
+});
+
 describe('tipos gerados', () => {
   it('moda expoe os eixos color e size e a faceta size', () => {
     const out = generateTypes(loadManifests({ nearsDir, tokensFile, preset: 'fashion' }));

@@ -137,6 +137,20 @@ test('headers de seguranca vem do manifest', async ({ request }) => {
   const h = res.headers();
   expect(h['x-content-type-options']).toBe('nosniff');
   expect(h['referrer-policy']).toBe('strict-origin-when-cross-origin');
-  expect(h['content-security-policy']).toContain("frame-ancestors 'none'");
+  // CSP de base (docs/adr/0025): sem script-src, entao nada do Next/RUM/Partytown e bloqueado.
+  expect(h['content-security-policy']).toBe("object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'");
   expect(h['x-powered-by']).toBeUndefined();
+});
+
+test('a CSP de base nao bloqueia nada nas rotas principais nem nos envios de formulario', async ({ page, javaScriptEnabled }) => {
+  test.skip(!javaScriptEnabled, 'violacoes de CSP sao reportadas ao console do navegador');
+  const violations: string[] = [];
+  page.on('console', (m) => {
+    if (/content security policy/i.test(m.text())) violations.push(m.text());
+  });
+  for (const url of ['/', '/departamento-exemplo', '/produto-exemplo/p', '/s']) await page.goto(url);
+  await page.getByRole('main').getByRole('searchbox').fill('produto');
+  await page.getByRole('main').getByRole('button', { name: 'Buscar' }).click();
+  await expect(page).toHaveURL(/\/s\?q=produto$/);
+  expect(violations).toEqual([]);
 });
