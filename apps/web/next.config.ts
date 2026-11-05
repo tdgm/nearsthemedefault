@@ -49,6 +49,11 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Metadados que dependem de searchParams (canonical/robots de facetas e paginas) seriam
+  // transmitidos no fim do <body> para clientes fora da lista de bots do Next: o Lighthouse
+  // mobile e crawlers de IA sem JS nao os viam no <head>. Casar todo UA os torna bloqueantes
+  // (no <head>). Custo medido: ~0,1 s de TTFB em pagina quente (docs/adr/0021).
+  ...(cfg.rendering.blockingMetadata ? { htmlLimitedBots: /.*/ } : {}),
   poweredByHeader: false,
   // Pacotes do monorepo publicados como TypeScript (sem etapa de build propria).
   transpilePackages: ['@nears/manifests', '@nears/sections', '@nears/ui'],
