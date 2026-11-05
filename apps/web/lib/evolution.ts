@@ -12,7 +12,7 @@ export const phases: { id: number; name: string; status: PhaseStatus }[] = [
   { id: 5, name: 'Sections de conteúdo', status: 'concluida' },
   { id: 6, name: 'Templates e rotas', status: 'concluida' },
   { id: 7, name: 'SEO e GEO', status: 'concluida' },
-  { id: 8, name: 'Endurecimento', status: 'pendente' },
+  { id: 8, name: 'Endurecimento', status: 'concluida' },
 ];
 
 export const statusLabel: Record<PhaseStatus, string> = {

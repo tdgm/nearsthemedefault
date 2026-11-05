@@ -22,8 +22,11 @@ Fontes: so open source (OFL/Apache), self-hosted, com fallback websafe -
 
 1. Leia **[CLAUDE.md](./CLAUDE.md)** - regras inviolaveis do projeto.
 2. Leia **[docs/ROADMAP.md](./docs/ROADMAP.md)** - oito fases com gates.
-3. Abra o Claude Code na raiz e cole o prompt de kickoff de
-   **[docs/PROMPTS.md](./docs/PROMPTS.md)**.
+3. Vai criar uma loja? Siga **[docs/ONBOARDING.md](./docs/ONBOARDING.md)** (marca, nicho,
+   dados, variaveis de ambiente, checklist de entrega) e use
+   **[docs/MEDICAO.md](./docs/MEDICAO.md)** para acompanhar CWV, busca e citacao em IA.
+4. Para continuar o desenvolvimento do template, abra o Claude Code na raiz e cole o prompt
+   de kickoff de **[docs/PROMPTS.md](./docs/PROMPTS.md)**.
 
 ## O que ja existe
 
@@ -32,6 +35,8 @@ Fontes: so open source (OFL/Apache), self-hosted, com fallback websafe -
 | `CLAUDE.md` | Memoria persistente: stack, budgets, a11y, SEO/GEO, definition of done |
 | `docs/ROADMAP.md` | Fases 0 a 8 com entregavel e gate de cada uma |
 | `docs/PROMPTS.md` | Prompt de kickoff e prompts de continuacao por fase |
+| `docs/ONBOARDING.md` | Como criar uma loja a partir do template |
+| `docs/MEDICAO.md` | Plano de medicao: RUM, CrUX, Search Console e visibilidade em IA |
 | `nears/nears.config.yaml` | Catalogo por nicho, vocabulario, budgets e politica de terceiros |
 | `nears/routes.manifest.yaml` | Mapa de URLs, canonical, facetas e indexacao |
 | `nears/sections.registry.yaml` | Catalogo de blocos com props, CWV e a11y |
@@ -66,8 +71,8 @@ Fonte unica de verdade: `nears/nears.config.yaml`. O CI falha se estourar.
 ## Seguranca
 
 `pnpm audit`, scanner de segredos (gitleaks) correm no CI e o CodeQL roda pelo default
-setup do GitHub, desde a Fase 0, mesmo em repo vazio. Headers de seguranca (CSP, HSTS, etc.) vem de
-`nears.config.yaml > security`, nunca hardcoded em componente. Detalhe
+setup do GitHub, desde a Fase 0, mesmo em repo vazio. Headers de seguranca (CSP de base, HSTS,
+etc.) vem de `nears.config.yaml > security`, nunca hardcoded em componente (CSP: ADR 0025). Detalhe
 completo em
 [docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md](./docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md).
 
@@ -80,7 +85,7 @@ Decididas em [docs/adr/0016](./docs/adr/0016-politica-de-agentes-e-multitenancy.
 - **`onMissingGeoField`**: `fail-build` desde o fim da Fase 7
   ([docs/adr/0021](./docs/adr/0021-seo-geo-metadata-jsonld-facetas.md)).
 - **`security.multiTenancy.allowlistSource`**: `panel-endpoint` (consulta
-  server-only, cache curto, fail-closed). Implementacao na Fase 6/8.
+  server-only, cache curto, fail-closed). O contrato existe; o resolver depende do endpoint do painel e segue pendente (docs/ROADMAP.md, Fase 8).
 
 ## Padrao arquitetural
 

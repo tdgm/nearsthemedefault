@@ -147,3 +147,18 @@ Confira a nota de honestidade em docs/adr/0005 sobre assertions granulares de
 `pnpm check-budgets` (JS, CSS e HTML por rota, gzip estatico) e as assertions
 `resource-summary:*` do Lighthouse CI sem estouro (o Lighthouse 13 nao tem mais a
 auditoria `performance-budget`; ver ADR 0005) e `scripts/check-third-party-hosts.mjs` passando.
+
+**Entregue:** quatro PRs. **8a** RUM de Core Web Vitals (coletor inline, `/api/rum`, ADR 0022).
+**8b** terceiros declarativos com Partytown, zero por padrao (ADR 0023). **8c** E2E do fluxo
+descoberta -> PLP -> PDP -> carrinho em `fashion` e `electronics` com `NEARS_PRESET`, catalogo
+mock por nicho e microcopy do carrinho no vocabulary (ADR 0024). **8d** CSP de base, auditoria
+de teclado e leitor de tela com o skip link corrigido, onboarding (`docs/ONBOARDING.md`) e plano
+de medicao (`docs/MEDICAO.md`) (ADR 0025 e 0026). `performance-budget` saiu do gate (Lighthouse 13
+nao o tem); valem `check-budgets` e `resource-summary:*` (ADR 0005). Medido: JS inicial 139,3 KB
+de 140, CSS 8 KB de 30, HTML da home 17,8 KB de 80.
+
+**Pendente / fora do escopo do template:** resolver de loja por dominio personalizado
+(`security.multiTenancy`, ADR 0016: depende do endpoint de dominios verificados do painel); CSP
+com `script-src` (exigiria render dinamico em toda rota, ADR 0025); primeira requisicao a arquivo
+inexistente com ponto ainda responde 200 (ADR 0025); Partytown com um terceiro real nunca rodou,
+porque nenhum esta habilitado (ADR 0023); conferencia manual com NVDA, JAWS e VoiceOver (ADR 0026).
