@@ -57,10 +57,12 @@ Tailwind falha com "Package path ./tokens.css is exported ... but no valid targe
 file was found", tanto com condicao `style` quanto com string simples (o Node
 resolve normalmente). Reavaliar quando o Next/Tailwind corrigirem isso.
 
-## Fonte: modo `system` por enquanto
+## Fonte: `self-hosted` (atualizado no ADR 0016)
 
-`typography.font.brand.source` esta em `system`: zero download, pilha websafe. O
-default de marca (Inter, OFL-1.1) so passa a `self-hosted` quando o arquivo
+`typography.font.brand.source` passou a `self-hosted` com Inter (OFL-1.1) em
+2026-11-05; o texto abaixo descreve o mecanismo original. O modo `system` (zero
+download, pilha websafe) continua disponivel. O arquivo era condicao para
+`self-hosted`:
 `packages/tokens/fonts/brand-variable.woff2` (woff2 variavel, latin + latin-ext,
 `wght` 400-700) for adicionado ao repositorio. O build ja gera o `next/font/local`
 com `display: swap`, `preload` do arquivo unico e `adjustFontFallback` contra
