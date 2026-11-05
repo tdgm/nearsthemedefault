@@ -18,6 +18,8 @@ export type LoadOptions = {
   tokensFile: string;
   /** Nome de um preset em nears/presets (sem .yaml). Omitido = catalogo do nears.config.yaml. */
   preset?: string;
+  /** Raiz do repositorio (para conferir os ADRs citados em thirdParties). Padrao: pai de nearsDir. */
+  repoRoot?: string;
 };
 
 const readYaml = (file: string): unknown => YAML.parse(readFileSync(file, 'utf8'));
@@ -27,6 +29,28 @@ function parse<S extends z.ZodType>(schema: S, data: unknown, file: string, issu
   if (r.success) return r.data;
   for (const i of r.error.issues) issues.push({ file, path: i.path.join('.'), message: i.message });
   return undefined;
+}
+
+/** Regras que dependem de outros campos ou do disco: ids unicos, ADR existente, limite de hosts. */
+function thirdPartyIssues(config: Manifests['config'], repoRoot: string): Issue[] {
+  const issues: Issue[] = [];
+  const file = 'nears.config.yaml';
+  const seen = new Set<string>();
+  const hosts = new Set<string>();
+  config.thirdParties.scripts.forEach((script, i) => {
+    const at = `thirdParties.scripts.${i}`;
+    if (seen.has(script.id)) issues.push({ file, path: `${at}.id`, message: `id "${script.id}" repetido` });
+    seen.add(script.id);
+    hosts.add(new URL(script.src).hostname);
+    if (!existsSync(join(repoRoot, script.adr))) {
+      issues.push({ file, path: `${at}.adr`, message: `${script.adr} nao existe: terceiro sem ADR nao entra (integrations.thirdPartyPolicy.requiresAdr)` });
+    }
+  });
+  const limit = config.budgets.third_party_hosts;
+  if (hosts.size > limit) {
+    issues.push({ file, path: 'thirdParties.scripts', message: `${hosts.size} hosts de terceiros distintos; limite budgets.third_party_hosts = ${limit}` });
+  }
+  return issues;
 }
 
 export function listPresets(nearsDir: string): string[] {
@@ -72,7 +96,7 @@ export function loadManifests(opts: LoadOptions): Manifests {
   const media: TokensMedia = { aspect: tokens.media?.aspect ?? {}, sizes: tokens.media?.sizes ?? {} };
 
   const manifests: Manifests = { config, routes, sections, contracts };
-  issues.push(...validateCross(manifests, media));
+  issues.push(...validateCross(manifests, media), ...thirdPartyIssues(config, opts.repoRoot ?? join(opts.nearsDir, '..')));
   if (issues.length) throw new ManifestError(issues);
   return manifests;
 }

@@ -192,6 +192,19 @@ observability:
     endpoint: /api/rum
     sampleRate: 1          # 0..1; reduza em lojas de alto trafego
 
+thirdParties:
+  # Scripts de terceiros da loja (docs/adr/0023). Vazio = zero custo no cliente.
+  # Cada item: { id, integration, src (https), strategy, forward?, adr, mainThreadReason? }.
+  #   strategy: partytown (padrao, web worker) | post-interaction | idle (thread principal;
+  #   exigem mainThreadReason). `adr` aponta o ADR que justifica o custo. Limite de hosts
+  #   distintos: budgets.third_party_hosts. Exemplo (GTM em worker):
+  #     - id: gtm
+  #       integration: tagManager
+  #       src: https://www.googletagmanager.com/gtm.js?id=GTM-XXXX
+  #       forward: [dataLayer.push]
+  #       adr: docs/adr/0024-gtm-na-loja-x.md
+  scripts: []
+
 integrations:
   # provider vazio significa "a loja define".
   # A estrategia de carga NAO e negociavel.

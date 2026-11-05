@@ -168,3 +168,6 @@ storybook-static/
 # Tokens gerados sao versionados de proposito (pnpm tokens:check falha se divergirem)
 !packages/tokens/dist
 !packages/tokens/dist/**
+
+# Gerado por `pnpm --filter web partytown:copy` (predev/prebuild)
+apps/web/public/~partytown/
