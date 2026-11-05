@@ -144,7 +144,8 @@ sections:
   - id: benefit-bar
     priority: high
     props:
-      items: { type: array, of: { icon: string, label: string, href: url } }
+      items: { type: array, min: 1, of: { icon: string, label: string, href: url } }
+      label: string
     cwv: { reservedHeight: 44 }
     a11y: { role: list }
 
@@ -171,8 +172,11 @@ sections:
   - id: category-hub
     priority: lazy
     props:
-      items: { type: number, default: 6 }
-      item: { image: image, label: string, fromPrice: money, href: url }
+      # `items` sao as categorias ja resolvidas pelo template (ex.: do departamento);
+      # `limit` corta a lista (docs/adr/0015).
+      items: { type: array, min: 1, of: { image: image, label: string, fromPrice: money, href: url } }
+      limit: { type: number, default: 6 }
+      labels: { type: object }
     cwv: { aspectRatio: required, scrollSnap: native }
     a11y: { role: list, keyboardScroll: true }
     seo: { renderAs: ul, linksInHtml: true }
@@ -203,13 +207,18 @@ sections:
       headline: string
       body: string
       cta: string
+      href: url
+      imageSide: { type: enum, values: [left, right], default: left }
     cwv: { media: picture, aspectRatio: required }
-    a11y: { contrastOverImage: verified }
+    a11y: { contrastOverImage: verified, textOverImage: false }
 
   - id: quick-filter
     priority: high
     props:
-      chips: { type: array, of: { label: string, facet: string, value: string } }
+      chips: { type: array, min: 1, of: { label: string, facet: string, value: string } }
+      basePath: string
+      current: { type: object }
+      labels: { type: object }
     cwv: { reservedHeight: 48, scrollSnap: native }
     a11y: { role: list, minTouchTarget: 44 }
     seo: { linksInHtml: true, relNofollowWhenMultiFacet: true }
@@ -268,7 +277,7 @@ sections:
 
   - id: breadcrumb
     priority: critical
-    props: { items: array }
+    props: { items: array, label: string }
     cwv: { reservedHeight: 32 }
     a11y: { landmark: navigation, label: "Voce esta em" }
     seo: { schema: BreadcrumbList }
@@ -280,13 +289,15 @@ sections:
       richText: { type: richtext, required: true }
       collapsible: { type: boolean, default: true }
       collapsedHeight: { type: number, default: 160 }
+      labels: { type: object }
     cwv: { contentVisibility: auto, containIntrinsicSize: "0 320px" }
-    a11y: { expandButton: ariaExpanded, contentAlwaysInDom: true }
+    a11y: { expandControl: native-details, contentAlwaysInDom: true }
     geo: { chunkable: true, answerFirst: true, headingAsQuestion: preferred }
 
   - id: faq
     priority: lazy
     props:
+      title: string
       items:
         type: array
         min: 3

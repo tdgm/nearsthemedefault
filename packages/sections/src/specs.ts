@@ -8,6 +8,17 @@ import { headerSpec } from './header/header.spec.ts';
 import { minicartSpec } from './minicart/minicart.spec.ts';
 import { navDrawerSpec } from './nav-drawer/nav-drawer.spec.ts';
 import { promoBarSpec } from './promo-bar/promo-bar.spec.ts';
+import { benefitBarSpec } from './benefit-bar/benefit-bar.spec.ts';
+import { sectionTitleSpec } from './section-title/section-title.spec.ts';
+import { bannerGridSpec } from './banner-grid/banner-grid.spec.ts';
+import { categoryHubSpec } from './category-hub/category-hub.spec.ts';
+import { eventBannerSpec } from './event-banner/event-banner.spec.ts';
+import { bannerFullSpec } from './banner-full/banner-full.spec.ts';
+import { quickFilterSpec } from './quick-filter/quick-filter.spec.ts';
+import { breadcrumbSpec } from './breadcrumb/breadcrumb.spec.ts';
+import { textSeoSpec } from './text-seo/text-seo.spec.ts';
+import { faqSpec } from './faq/faq.spec.ts';
+import { relatedLinksSpec } from './related-links/related-links.spec.ts';
 
 export const sectionSpecs: readonly AnySectionSpec[] = [
   promoBarSpec,
@@ -16,4 +27,15 @@ export const sectionSpecs: readonly AnySectionSpec[] = [
   minicartSpec,
   footerSpec,
   customerServiceSpec,
+  benefitBarSpec,
+  sectionTitleSpec,
+  bannerGridSpec,
+  categoryHubSpec,
+  eventBannerSpec,
+  bannerFullSpec,
+  quickFilterSpec,
+  breadcrumbSpec,
+  textSeoSpec,
+  faqSpec,
+  relatedLinksSpec,
 ];
