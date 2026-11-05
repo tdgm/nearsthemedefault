@@ -73,13 +73,16 @@ test.describe('overlays: focus trap, Esc e retorno do foco', () => {
       await expect(panel).toBeVisible();
       expect(await panel.evaluate((el) => (el as HTMLDialogElement).matches(':modal'))).toBe(true);
 
+      // <dialog> modal torna o resto da pagina inerte: o foco circula no dialog e, ao fim
+      // dele, passa pela interface do navegador (activeElement = body). Nunca cai na pagina.
+      const trapped = () => panel.evaluate((el) => document.activeElement === document.body || el.contains(document.activeElement));
       for (let i = 0; i < 25; i++) {
         await page.keyboard.press('Tab');
-        expect(await panel.evaluate((el) => el.contains(document.activeElement)), `Tab ${i + 1} saiu do dialog`).toBe(true);
+        expect(await trapped(), `Tab ${i + 1} foi para a pagina atras do dialog`).toBe(true);
       }
       for (let i = 0; i < 5; i++) {
         await page.keyboard.press('Shift+Tab');
-        expect(await panel.evaluate((el) => el.contains(document.activeElement)), `Shift+Tab ${i + 1} saiu do dialog`).toBe(true);
+        expect(await trapped(), `Shift+Tab ${i + 1} foi para a pagina atras do dialog`).toBe(true);
       }
 
       await page.keyboard.press('Escape');
@@ -95,7 +98,9 @@ test.describe('compra so com teclado', () => {
     const form = page.locator('#pdp-form');
     // Sem eixos de variacao no nicho padrao, o botao e o unico controle obrigatorio.
     expect(await form.getByRole('radiogroup').count()).toBe(0);
-    const add = form.getByRole('button', { name: 'Adicionar ao carrinho' });
+    // O rotulo do botao muda para "Adicionado ao carrinho." depois do envio: localiza pelo tipo.
+    const add = form.locator('button[type="submit"]');
+    await expect(add).toHaveAccessibleName('Adicionar ao carrinho');
     await add.focus();
     await page.keyboard.press('Enter');
     const status = form.getByRole('status');

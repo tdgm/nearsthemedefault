@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import { Header } from './header';
+import { Header, SkipLink } from './header';
 import { headerSchema } from './header.schema';
 
 const logo = { src: '/logo.svg', width: 120, height: 32, alt: 'Loja' };
@@ -17,6 +17,19 @@ describe('Header', () => {
     const skip = screen.getAllByRole('link')[0];
     expect(skip).toHaveTextContent('Ir para o conteúdo');
     expect(skip).toHaveAttribute('href', '#conteudo');
+  });
+
+  it('skipLink={false} tira o skip link do header (o layout o renderiza antes da PromoBar)', () => {
+    render(<Header logo={logo} nav={nav} skipLink={false} />);
+    expect(screen.queryByRole('link', { name: 'Ir para o conteúdo' })).toBeNull();
+    expect(screen.getByRole('banner')).toBeInTheDocument();
+    render(<Header logo={logo} nav={nav} variant="none" skipLink={false} />);
+    expect(screen.queryByRole('link', { name: 'Ir para o conteúdo' })).toBeNull();
+  });
+
+  it('SkipLink isolado: rotulo e destino configuraveis', () => {
+    render(<SkipLink label="Saltar" href="#principal" />);
+    expect(screen.getByRole('link', { name: 'Saltar' })).toHaveAttribute('href', '#principal');
   });
 
   it('logo centralizado e link para a home, com dimensoes e prioridade (LCP)', () => {

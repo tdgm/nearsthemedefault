@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { CustomerService, Footer, Header, Minicart, NavDrawer, PromoBar } from '@nears/sections';
+import { CustomerService, Footer, Header, Minicart, NavDrawer, PromoBar, SkipLink } from '@nears/sections';
 import { getStorefront } from '../lib/storefront';
 import { getStore } from '../lib/data/client';
 import { loadAllManifests, loadConfig } from '../lib/manifest';
@@ -33,8 +33,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang={config.locale.default} className={fontVariableClass}>
       <body>
+        {/* Primeiro item focavel da pagina: antes da PromoBar (docs/adr/0026). */}
+        <SkipLink {...(s.header.labels?.skip ? { label: s.header.labels.skip } : {})} />
         <PromoBar {...s.promoBar} />
-        <Header {...s.header} />
+        <Header {...s.header} skipLink={false} />
         <div id="conteudo" tabIndex={-1} className="outline-none">
           {children}
         </div>

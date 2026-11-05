@@ -50,6 +50,7 @@ globals:
       cartCount: { type: number, default: 0 }
       wishlistCount: { type: number, default: 0 }
       variant: { type: enum, values: [full, minimal, none], default: full }
+      skipLink: { type: boolean, default: true }   # false quando o layout renderiza <SkipLink> antes da PromoBar (docs/adr/0026)
       labels: { type: object, note: "microcopy (vem de vocabulary no app)" }
     cwv: { reservedHeight: 56, sticky: true }
     a11y: { landmark: banner, skipLink: required }
