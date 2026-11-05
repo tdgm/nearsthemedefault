@@ -12,4 +12,4 @@ catalog:
   geoAttributes: [brand, weight]
   guide: { enabled: true, label: Tabela nutricional }
   flatAxis: { enabled: false }
-vocabulary: { cart: Cesta, bundle: Leve também }
+vocabulary: { cart: Cesta, addToCart: Adicionar à cesta, addedToCart: Adicionado à cesta., bundle: Leve também }

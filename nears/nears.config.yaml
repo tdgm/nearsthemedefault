@@ -37,6 +37,7 @@ catalog:
 vocabulary:
   cart: Carrinho                 # Sacola, Cesta, Pedido...
   addToCart: Adicionar ao carrinho
+  addedToCart: Adicionado ao carrinho.   # anuncio em aria-live apos adicionar (acompanhe o nome de `cart`)
   wishlist: Favoritos            # Lista de desejos
   department: Departamento
   productType: Tipo de produto
