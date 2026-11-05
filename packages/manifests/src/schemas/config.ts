@@ -100,7 +100,7 @@ const positiveInt = z.number().int().positive();
 /** Origem https sem caminho, query nem fragmento: entra tal e qual numa diretiva de CSP. */
 const httpsOrigin = z
   .url({ protocol: /^https$/ })
-  .refine((v) => new URL(v).origin === v, 'origem https sem barra final, caminho, query ou fragmento (ex.: https://checkout.exemplo.com.br)');
+  .refine((v) => URL.canParse(v) && new URL(v).origin === v, 'origem https sem barra final, caminho, query ou fragmento (ex.: https://checkout.exemplo.com.br)');
 
 export const budgetsSchema = z.strictObject({
   js_initial_kb: z.number().positive(),
