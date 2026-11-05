@@ -25,6 +25,13 @@
     border-color: var(--nears-color-border-control);
   }
 
+  /* PDP no mobile: a barra fixa de CTA (72px, `data-sticky-bar`) sobe o botao de atendimento. */
+  @media (max-width: 767px) {
+    body:has([data-sticky-bar]) {
+      --nears-sticky-offset: 72px;
+    }
+  }
+
   /* Foco visivel sempre (WCAG 2.2 AA, CLAUDE.md > Acessibilidade). */
   :focus-visible {
     outline: 2px solid var(--nears-color-focus-ring);

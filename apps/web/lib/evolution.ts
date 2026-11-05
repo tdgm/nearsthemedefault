@@ -10,7 +10,7 @@ export const phases: { id: number; name: string; status: PhaseStatus }[] = [
   { id: 3, name: 'Design system (packages/ui)', status: 'concluida' },
   { id: 4, name: 'Sections globais', status: 'concluida' },
   { id: 5, name: 'Sections de conteúdo', status: 'concluida' },
-  { id: 6, name: 'Templates e rotas', status: 'em-andamento' },
+  { id: 6, name: 'Templates e rotas', status: 'concluida' },
   { id: 7, name: 'SEO e GEO', status: 'pendente' },
   { id: 8, name: 'Endurecimento', status: 'pendente' },
 ];
