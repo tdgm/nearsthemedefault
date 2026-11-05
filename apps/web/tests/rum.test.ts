@@ -36,7 +36,8 @@ function run({ dnt = false, gpc = false, random = 0, rate = 1, types = ['layout-
     }
   }
   const win = { PerformanceObserver: FakePO, innerWidth: width, addEventListener: (n: string, f: () => void) => (listeners[n] = f) };
-  const fakeMath = { ...Math, random: () => random };
+  // Math.* nao e enumeravel: herdar do Math real e sobrescrever so o random.
+  const fakeMath = Object.assign(Object.create(Math) as Math, { random: () => random });
   const body = rumScript({ endpoint: '/api/rum', sampleRate: rate });
   new Function('window', 'navigator', 'document', 'location', 'performance', 'PerformanceObserver', 'Blob', 'Math', body)(
     win,
