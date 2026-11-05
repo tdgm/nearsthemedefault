@@ -45,8 +45,8 @@ test.describe('busca (/s)', () => {
     test.skip(!javaScriptEnabled, needsJs);
     await page.goto('/s');
     await expect(page.getByRole('heading', { level: 1, name: 'Buscar' })).toBeVisible();
-    await expect(page.getByRole('search')).toBeVisible();
-    await expect(page.getByRole('searchbox')).toHaveValue('');
+    await expect(page.getByRole('main').getByRole('search')).toBeVisible();
+    await expect(page.getByRole('main').getByRole('searchbox')).toHaveValue('');
     await expect(page.getByRole('status')).toContainText('Digite um termo para começar a buscar.');
   });
 
@@ -55,7 +55,7 @@ test.describe('busca (/s)', () => {
     await page.goto('/s?q=camiseta');
     await expect(page.getByRole('status')).toContainText('Nenhum resultado para «camiseta»');
     await expect(page.getByRole('status')).toContainText('Confira a ortografia');
-    await expect(page.getByRole('searchbox')).toHaveValue('camiseta');
+    await expect(page.getByRole('main').getByRole('searchbox')).toHaveValue('camiseta');
   });
 
   test('termo so com espacos conta como busca vazia', async ({ page, javaScriptEnabled }) => {
@@ -67,8 +67,8 @@ test.describe('busca (/s)', () => {
   test('envio do formulario (GET nativo) leva ao estado sem resultados', async ({ page, javaScriptEnabled }) => {
     test.skip(!javaScriptEnabled, needsJs);
     await page.goto('/s');
-    await page.getByRole('searchbox').fill('tenis');
-    await page.getByRole('button', { name: 'Buscar' }).click();
+    await page.getByRole('main').getByRole('searchbox').fill('tenis');
+    await page.getByRole('main').getByRole('button', { name: 'Buscar' }).click();
     await expect(page).toHaveURL(/\/s\?q=tenis$/);
     await expect(page.getByRole('status')).toContainText('Nenhum resultado para «tenis»');
   });

@@ -72,6 +72,10 @@ resolvida do container como prop - nunca leem um valor fixo proprio
 
 **Gate:** JS inicial ainda <= 140 KB (docs/adr/0010) com header e footer montados; se nao couber, reduzir ilhas client antes de subir o limite.
 
+**Entregue:** `packages/sections` com as 6 sections globais (spec, schema, meta, story e teste),
+`Overlay`/`OverlayTrigger` e icones em `@nears/ui`, layout raiz montado. JS inicial 136.6 KB
+(limite 140). Decisoes e adiamentos em `docs/adr/0014-sections-globais.md`.
+
 ## Fase 5 - Sections de conteudo
 
 Entregar: Hero, BenefitBar, SectionTitle, BannerGrid, CategoryHub, Showcase

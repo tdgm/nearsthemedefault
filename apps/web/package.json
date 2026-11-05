@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@nears/manifests": "workspace:*",
+    "@nears/sections": "workspace:*",
     "@nears/tokens": "workspace:*",
     "@nears/ui": "workspace:*",
     "next": "16.4.5",

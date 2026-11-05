@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@nears/manifests": "workspace:*",
+    "@nears/ui": "workspace:*",
     "zod": "^4.6.7"
   },
   "peerDependencies": {

@@ -1,5 +1,15 @@
-// Registry de sections (blocos de pagina). Fase 2: contrato e validacao;
-// as sections em si entram nas Fases 4 e 5.
+// Registry de sections (blocos de pagina). Fase 2: contrato e validacao; Fase 4:
+// sections globais; Fase 5: sections de conteudo.
 export * from './define.ts';
 export * from './registry.ts';
+export { sectionSpecs } from './specs.ts';
 export { sectionModules } from './modules.ts';
+
+// Componentes e schemas das sections (consumidos pelo app e pelo Storybook).
+export * from './promo-bar/index.ts';
+export * from './header/index.ts';
+export * from './nav-drawer/index.ts';
+export * from './minicart/index.ts';
+export * from './footer/index.ts';
+export * from './customer-service/index.ts';
+export { navigationSchema, type Navigation } from './shared/navigation.ts';

@@ -3,15 +3,14 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { loadManifests } from '@nears/manifests/node';
-import { RegistryError, createRegistry, defineSection, pendingSections, sectionModules } from './index.ts';
+import { RegistryError, createRegistry, defineSpec, pendingSections } from './index.ts';
+import { sectionSpecs } from './specs.ts';
 
 const root = resolve(__dirname, '../../..');
 const manifests = loadManifests({ nearsDir: resolve(root, 'nears'), tokensFile: resolve(root, 'packages/tokens/tokens.json') });
 
-const Component = () => null;
-const ok = defineSection({
+const ok = defineSpec({
   id: 'benefit-bar',
-  Component,
   schema: z.object({}),
   meta: { priority: 'high', cwv: { reservedHeight: 44 }, a11y: { role: 'list' } },
   story: 'packages/sections/src/benefit-bar.stories.tsx',
@@ -25,9 +24,9 @@ describe('createRegistry', () => {
     expect(pendingSections(manifests, registry)).not.toContain('benefit-bar');
   });
 
-  it('comeca vazio ate a Fase 4 e todas as sections ficam pendentes', () => {
-    const registry = createRegistry(manifests, sectionModules, exists);
-    expect(registry.size).toBe(0);
+  it('registra as sections globais da Fase 4; as de conteudo seguem pendentes (Fase 5)', () => {
+    const registry = createRegistry(manifests, sectionSpecs, exists);
+    expect([...registry.keys()].sort()).toEqual(['customer-service', 'footer', 'header', 'minicart', 'nav-drawer', 'promo-bar']);
     expect(pendingSections(manifests, registry)).toContain('hero');
   });
 
@@ -36,7 +35,6 @@ describe('createRegistry', () => {
 
   it.each([
     ['id fora do manifest', { id: 'nao-existe' }, 'nao existe em sections.registry.yaml'],
-    ['sem componente', { Component: undefined }, 'nao exporta o componente'],
     ['sem schema', { schema: undefined }, 'nao exporta `schema`'],
     ['sem meta', { meta: undefined }, 'nao exporta `meta`'],
     ['priority divergente', { meta: { ...ok.meta, priority: 'critical' } }, 'diverge do manifest'],

@@ -7,6 +7,7 @@
 @import '../../../packages/tokens/dist/theme.css';
 /* Tailwind so gera classes que encontra: inclui os componentes do design system. */
 @source '../../../packages/ui/src';
+@source '../../../packages/sections/src';
 
 /* Nenhuma cor, fonte ou raio de marca escrito aqui: tudo vem de token. */
 @layer base {

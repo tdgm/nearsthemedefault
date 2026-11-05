@@ -27,6 +27,7 @@ globals:
       countdown: { type: object, props: { endsAt: datetime } }
       dismissible: { type: boolean, default: true }
       rulesHref: { type: url }
+      labels: { type: object, note: "microcopy" }
     cwv: { reservedHeight: 48, cls: 0, ssrTime: true }
     a11y: { role: region, labelRequired: true, dismissKeyboard: true }
 
@@ -38,11 +39,19 @@ globals:
       - { pattern: "*/p", variant: minimal }
     props:
       logo: { type: image, required: true }
+      homeHref: { type: url, default: "/" }
       nav: { type: ref, to: navigation }
       search: { type: boolean, default: true }
+      searchHref: { type: url, default: "/s" }
       account: { type: boolean, default: true }
+      accountHref: { type: url, default: "/account" }
       wishlist: { type: boolean, default: true }
+      wishlistHref: { type: url, default: "/account/favoritos" }
       cart: { type: boolean, default: true }
+      cartCount: { type: number, default: 0 }
+      wishlistCount: { type: number, default: 0 }
+      variant: { type: enum, values: [full, minimal, none], default: full }
+      labels: { type: object, note: "microcopy (vem de vocabulary no app)" }
     cwv: { reservedHeight: 56, sticky: true }
     a11y: { landmark: banner, skipLink: required }
 
@@ -58,6 +67,7 @@ globals:
           groups: array
           highlight: { type: object }
           promo: { type: object }
+      labels: { type: object, note: "microcopy" }
     cwv: { linksInInitialHtml: true, jsOnInteraction: true }
     a11y:
       focusTrap: true
@@ -68,7 +78,13 @@ globals:
   - id: minicart
     slot: overlay
     priority: on-interaction
-    props: { items: array }
+    props:
+      items: array
+      cartHref: { type: url, default: "/carrinho" }
+      checkoutHref: { type: url, default: "/checkout" }
+      continueHref: { type: url, default: "/" }
+      freeShippingFrom: money
+      labels: { type: object, note: "microcopy" }
     cwv: { noBlockingFetchOnLoad: true }
     a11y: { focusTrap: true, escClose: true, liveRegion: true }
 
@@ -77,19 +93,28 @@ globals:
     priority: lazy
     props:
       service: array
-      newsletter: { type: object, props: { segments: array } }
+      newsletter:
+        type: object
+        props:
+          title: string
+          description: string
+          action: url
+          segments: array
       columns: array
       apps: array
       social: array
       seals: array
       legal: object
+      labels: { type: object, note: "microcopy" }
     cwv: { contentVisibility: auto, containIntrinsicSize: "0 640px" }
     a11y: { landmark: contentinfo, collapsibleAria: true }
 
   - id: customer-service
     slot: floating
     priority: idle
-    props: { channels: array }
+    props:
+      channels: array
+      labels: { type: object, note: "microcopy" }
     cwv: { reservedHeight: 0, noLayoutShift: true }
     a11y: { minTouchTarget: 44 }
 
