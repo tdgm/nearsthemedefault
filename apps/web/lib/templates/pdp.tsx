@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Suspense, type ReactNode } from 'react';
 import { quoteShipping } from '../data/shipping';
 import { loadAllManifests } from '../manifest';
+import { JsonLdScript, buildMetadata, breadcrumbNode, enforceGeoCompleteness, faqNode, getSeoContext, graph, organizationNode, productNode } from '../seo';
 import { buildPdpView, type PdpView } from './pdp-content';
 import { expandTemplate } from './expand';
 import { renderInstances } from './render';
@@ -11,11 +12,36 @@ type RawQuery = Record<string, string | string[] | undefined>;
 const GALLERY_GROUP = ['pdp-gallery', 'pdp-buybox'];
 const BODY_GROUP = ['pdp-shipping', 'pdp-details', 'pdp-reviews', 'pdp-bundle', 'pdp-related'];
 
+export const pdpPath = (slug: string) => `/${slug}/p`;
+
 export async function pdpMetadata(slug: string): Promise<Metadata> {
   const view = await buildPdpView(slug);
   if (!view) return {};
-  // Canonical, robots e JSON-LD Product sao da Fase 7.
-  return { title: view.product.name, description: view.description };
+  const image = view.product.images[0];
+  return buildMetadata({
+    template: 'pdp',
+    title: view.product.name,
+    description: view.description,
+    path: pdpPath(slug),
+    ...(image ? { image: { url: image.src, width: image.width, height: image.height, alt: image.alt ?? view.product.name } } : {}),
+  });
+}
+
+/** JSON-LD da PDP: BreadcrumbList + Product/Offer/AggregateRating + FAQPage (contracts.yaml > seo.byTemplate.pdp). */
+async function PdpJsonLd({ view }: { view: PdpView }) {
+  enforceGeoCompleteness(view.product);
+  const ctx = await getSeoContext();
+  const path = pdpPath(view.product.slug);
+  return (
+    <JsonLdScript
+      data={graph(
+        organizationNode(ctx),
+        breadcrumbNode(view.breadcrumb, path, ctx.site),
+        productNode(ctx, { product: view.product, path, breadcrumb: view.breadcrumb }),
+        faqNode(view.faq),
+      )}
+    />
+  );
 }
 
 /** Shipping dinamico: o CEP vem da URL (?cep=), entao so pode ser lido dentro de Suspense. */
@@ -47,6 +73,7 @@ export function PdpPage({ view, searchParams }: { view: PdpView; searchParams: P
   return (
     // pb-[72px]: reserva a barra fixa de CTA no mobile (stickyReservedHeight: 72).
     <main className="pb-[72px] md:pb-0">
+      <PdpJsonLd view={view} />
       {render(pick('breadcrumb'))}
       <div className="mx-auto max-w-7xl px-4 lg:grid lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
         {render(group(GALLERY_GROUP))}

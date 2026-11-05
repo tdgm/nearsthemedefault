@@ -4,6 +4,7 @@ import { Suspense, type ReactNode } from 'react';
 import { getDepartments, getProducts } from '../data/client';
 import { cardAspect, toProductCard } from '../data/mappers';
 import { loadAllManifests } from '../manifest';
+import { JsonLdScript, breadcrumbNode, buildMetadata, getSeoContext, graph, organizationNode, webPageNode } from '../seo';
 import { isCampaignActive, type Resolved } from '../routing/resolve';
 import { expandTemplate } from './expand';
 import { renderInstances } from './render';
@@ -16,6 +17,12 @@ const BANNER = {
 } as const;
 
 export const landingTitle = (r: Landing) => (r.route === 'campaign-segment' ? `${r.campaign.name}: ${r.segment.name}` : r.campaign.name);
+export const landingPath = (r: Landing) => (r.route === 'campaign-segment' ? `/${r.campaign.slug}/${r.segment.slug}` : `/${r.campaign.slug}`);
+const landingDescription = (title: string) => `${title} reúne produtos selecionados com condições especiais durante o período da campanha.`;
+
+export async function landingMetadata(r: Landing) {
+  return buildMetadata({ template: 'landing', title: landingTitle(r), description: landingDescription(landingTitle(r)), path: landingPath(r) });
+}
 
 async function LandingBody({ resolved }: { resolved: Landing }) {
   const { config, sections } = loadAllManifests();
@@ -39,7 +46,7 @@ async function LandingBody({ resolved }: { resolved: Landing }) {
       case 'banner-full':
         return { image: BANNER.desktop, alt: '', headline: campaign.name, body: 'Condições especiais por tempo limitado.', cta: 'Ver todos os departamentos', href: `/${departments[0]?.slug ?? ''}` };
       case 'text-seo':
-        return { title: `O que é ${title}?`, richText: `${title} reúne produtos selecionados com condições especiais durante o período da campanha.\n\nAs condições valem até a data informada na página e podem mudar sem aviso depois dela.` };
+        return { title: `O que é ${title}?`, richText: `${landingDescription(title)}\n\nAs condições valem até a data informada na página e podem mudar sem aviso depois dela.` };
       case 'related-links':
         return { title: 'Continue explorando', links: departments.map((d) => ({ label: `Produtos de ${d.name}`, href: `/${d.slug}` })) };
       default:
@@ -47,8 +54,18 @@ async function LandingBody({ resolved }: { resolved: Landing }) {
     }
   };
 
+  // JSON-LD da landing: so BreadcrumbList (contracts.yaml > seo.byTemplate.landing).
+  const ctx = await getSeoContext();
+  const path = landingPath(resolved);
+  const crumbs = [
+    { label: 'Início', href: '/' },
+    ...(resolved.route === 'campaign-segment' ? [{ label: campaign.name, href: `/${campaign.slug}` }] : []),
+    { label: title },
+  ];
+
   return (
     <>
+      <JsonLdScript data={graph(organizationNode(ctx), webPageNode(ctx, { name: title, description: landingDescription(title), path }), breadcrumbNode(crumbs, path, ctx.site))} />
       <h1 className="sr-only">{title}</h1>
       {renderInstances(instances, propsFor)}
     </>

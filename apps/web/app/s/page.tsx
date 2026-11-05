@@ -6,13 +6,13 @@ import { SearchStatus } from '../../components/search-status';
 import { parseCollectionQuery, searchProducts } from '../../lib/data/collections';
 import { cardAspect, toProductCard } from '../../lib/data/mappers';
 import { loadConfig, loadRoutes, vocab } from '../../lib/manifest';
+import { buildMetadata } from '../../lib/seo';
 
-// Busca: CSR/noindex no manifest (routes.manifest.yaml > search). O robots
-// explicito aqui vale mesmo depois que o noindex global do layout sair (Fase 7).
-export const metadata: Metadata = {
-  title: vocab('search'),
-  robots: { index: false, follow: false },
-};
+// Busca: noindex,nofollow vem de contracts.yaml > seo.byTemplate.search (e o
+// /s sai do robots.txt). Canonical sem query: a busca nunca indexa termos.
+export async function generateMetadata(): Promise<Metadata> {
+  return buildMetadata({ template: 'search', title: vocab('search'), description: vocab('searchEmpty'), path: '/s' });
+}
 
 const MAX_QUERY_LENGTH = 100;
 

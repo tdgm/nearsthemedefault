@@ -69,6 +69,10 @@ export const productSchema = z.strictObject({
   createdAt: z.iso.datetime({ offset: true }),
   // --- Campos da PDP (opcionais: a listagem so precisa dos acima) ---
   sku: z.string().min(1).optional(),
+  /** GTIN-8/12/13/14 (so digitos). Exigido pelo contrato de Product para o schema completo (contracts.yaml). */
+  gtin: z.string().regex(/^(\d{8}|\d{12,14})$/, 'gtin invalido').optional(),
+  /** Fim da validade do preco (YYYY-MM-DD). Vem do dado, nunca de "agora": o build e deterministico. */
+  priceValidUntil: z.iso.date().optional(),
   availability: z.enum(['in_stock', 'out_of_stock', 'preorder']).default('in_stock'),
   /** Texto simples; paragrafos separados por linha em branco. O 1o responde "o que e este produto?". */
   description: z.string().optional(),
@@ -106,9 +110,51 @@ export const productSchema = z.strictObject({
   faq: z.array(z.strictObject({ question: z.string().min(1), answer: z.string().min(1) })).optional(),
 });
 
+const dayRange = z.strictObject({ min: z.number().int().nonnegative(), max: z.number().int().nonnegative() });
+
+/** Entidade da loja (contracts.yaml > data.organization e geo.entity): fonte unica de NAP e sameAs. */
+export const organizationSchema = z.strictObject({
+  legalName: z.string().min(1),
+  /** Uma frase que diz quem e a loja: vira description do Organization e abre o llms.txt. */
+  description: z.string().min(1),
+  foundingDate: z.iso.date().optional(),
+  taxId: z.string().optional(),
+  address: z.strictObject({
+    street: z.string().min(1),
+    locality: z.string().min(1),
+    region: z.string().min(1),
+    postalCode: z.string().min(1),
+    country: z.string().length(2).default('BR'),
+  }),
+  sameAs: z.array(z.url()).default([]),
+  contactPoint: z.strictObject({ contactType: z.string().min(1), telephone: z.string().optional(), email: z.email().optional() }).optional(),
+});
+
+/** Politicas comerciais que alimentam shippingDetails e hasMerchantReturnPolicy do Product. */
+export const policiesSchema = z.strictObject({
+  returns: z.strictObject({
+    days: z.number().int().positive(),
+    method: z.enum(['ByMail', 'InStore', 'AtKiosk']).default('ByMail'),
+    fees: z.enum(['FreeReturn', 'ReturnShippingFees', 'RestockingFees']).default('FreeReturn'),
+  }),
+  shipping: z.strictObject({
+    handlingDays: dayRange,
+    transitDays: dayRange,
+    /** Frete fixo de referencia (BRL). O valor exato sai da calculadora por CEP. */
+    rate: z.number().nonnegative(),
+    /** Acima deste valor o frete e gratis (BRL). */
+    freeFrom: z.number().positive().optional(),
+    country: z.string().length(2).default('BR'),
+  }),
+});
+
 export const storeSchema = z.strictObject({
   name: z.string().min(1),
   logo: imageSchema,
+  /** Imagem padrao de compartilhamento (1200x630, contracts.yaml > seo.global.openGraph.imageSize). */
+  ogImage: imageSchema.optional(),
+  organization: organizationSchema,
+  policies: policiesSchema,
 });
 
 export type Department = z.infer<typeof departmentSchema>;
@@ -118,6 +164,8 @@ export type Page = z.infer<typeof pageSchema>;
 export type Longtail = z.infer<typeof longtailSchema>;
 export type Product = z.infer<typeof productSchema>;
 export type Store = z.infer<typeof storeSchema>;
+export type Organization = z.infer<typeof organizationSchema>;
+export type Policies = z.infer<typeof policiesSchema>;
 
 /** Tudo o que o data layer entrega. O mock e o cliente GraphQL produzem esta forma. */
 export const catalogSnapshotSchema = z.strictObject({

@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import type { Resolved } from '../routing/resolve';
 import { buildCollectionView, CollectionPage, collectionMetadata } from './collection';
-import { InstitutionalPage } from './institutional';
-import { LandingPage, landingTitle } from './landing';
+import { InstitutionalPage, institutionalMetadata } from './institutional';
+import { LandingPage, landingMetadata } from './landing';
 
 type RawQuery = Record<string, string | string[] | undefined>;
 
@@ -31,9 +31,9 @@ export async function routeMetadata(resolved: Resolved | null): Promise<Metadata
     case 'longtail':
       return collectionMetadata(await buildCollectionView(resolved));
     case 'landing':
-      return { title: landingTitle(resolved) };
+      return landingMetadata(resolved);
     case 'page':
-      return { title: resolved.page.title };
+      return institutionalMetadata(resolved);
     case 'pdp':
       return { title: resolved.product.name };
   }

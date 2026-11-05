@@ -9,6 +9,8 @@ export type Crumb = { label: string; href?: string };
 
 export type CollectionView = {
   key: string;
+  /** Chave de contracts.yaml > seo.byTemplate. */
+  template: 'collection' | 'longtail';
   title: string;
   basePath: string;
   scope: ProductScope;
@@ -47,6 +49,7 @@ export async function buildCollectionView(resolved: Extract<Resolved, { kind: 'c
       const { department: d } = resolved;
       return {
         key: d.slug,
+        template: 'collection',
         title: d.name,
         basePath: `/${d.slug}`,
         scope: { department: d.slug },
@@ -61,6 +64,7 @@ export async function buildCollectionView(resolved: Extract<Resolved, { kind: 'c
       const { department: d, category: c } = resolved;
       return {
         key: `${d.slug}/${c.slug}`,
+        template: 'collection',
         title: `${c.name} em ${d.name}`,
         basePath: `/${d.slug}/${c.slug}`,
         scope: { department: d.slug, category: c.slug },
@@ -77,6 +81,7 @@ export async function buildCollectionView(resolved: Extract<Resolved, { kind: 'c
       const { department: d, category: c, subcategory: s } = resolved;
       return {
         key: `${d.slug}/${c.slug}/${s.slug}`,
+        template: 'collection',
         title: `${s.name} em ${c.name}`,
         basePath: `/${d.slug}/${c.slug}/${s.slug}`,
         scope: { department: d.slug, category: c.slug, subcategory: s.slug },
@@ -91,6 +96,7 @@ export async function buildCollectionView(resolved: Extract<Resolved, { kind: 'c
       const { productType: t } = resolved;
       return {
         key: t.slug,
+        template: 'collection',
         title: t.name,
         basePath: `/${t.slug}`,
         scope: { productType: t.slug },
@@ -105,6 +111,7 @@ export async function buildCollectionView(resolved: Extract<Resolved, { kind: 'c
       const { longtail: l } = resolved;
       return {
         key: `b/${l.keyword}`,
+        template: 'longtail',
         title: l.title,
         basePath: `/b/${l.keyword}`,
         scope: {},

@@ -42,6 +42,13 @@ const productTypes: CatalogSnapshot['productTypes'] = [
   { slug: 'tipo-2', name: 'Tipo 2' },
 ];
 
+/** GTIN-13 valido (digito verificador modulo 10) para os produtos de exemplo. */
+const gtin13 = (n: number) => {
+  const base = `789${String(n).padStart(9, '0')}`;
+  const sum = [...base].reduce((acc, d, i) => acc + Number(d) * (i % 2 === 0 ? 1 : 3), 0);
+  return `${base}${(10 - (sum % 10)) % 10}`;
+};
+
 const slugOf = (n: number) => (n === 1 ? 'produto-exemplo' : `produto-${n}`);
 
 /** 24 produtos distribuidos entre departamentos, categorias e tipos. */
@@ -67,6 +74,8 @@ const products: CatalogSnapshot['products'] = Array.from({ length: 24 }, (_, i) 
     brand: `Marca ${(i % 3) + 1}`,
     createdAt: new Date(Date.UTC(2026, 0, 1 + i)).toISOString(),
     sku: `SKU-${String(n).padStart(4, '0')}`,
+    gtin: gtin13(n),
+    priceValidUntil: '2027-12-31',
     availability: n % 11 === 0 ? ('out_of_stock' as const) : ('in_stock' as const),
     description: `Produto ${n} é um item de exemplo do catálogo de desenvolvimento, com preço e parcelamento informados.\n\nEste texto vem do CMS e descreve materiais, usos e diferenciais do produto.`,
     specs: [
@@ -75,14 +84,11 @@ const products: CatalogSnapshot['products'] = Array.from({ length: 24 }, (_, i) 
       { name: 'Garantia', value: '12 meses' },
     ],
     instructions: 'Siga as orientações de uso e conservação que acompanham o produto.',
-    rating: n % 4 === 0 ? undefined : { value: 3.5 + (n % 3) * 0.5, count: 10 + n },
-    reviews:
-      n % 4 === 0
-        ? []
-        : [
-            { author: 'Cliente 1', rating: 5, date: '2026-03-10T12:00:00-03:00', title: 'Recomendo', body: 'Chegou no prazo e é como descrito.' },
-            { author: 'Cliente 2', rating: 4, date: '2026-04-02T09:30:00-03:00', body: 'Bom custo-benefício.' },
-          ],
+    rating: { value: 3.5 + (n % 3) * 0.5, count: 10 + n },
+    reviews: [
+      { author: 'Cliente 1', rating: 5, date: '2026-03-10T12:00:00-03:00', title: 'Recomendo', body: 'Chegou no prazo e é como descrito.' },
+      { author: 'Cliente 2', rating: 4, date: '2026-04-02T09:30:00-03:00', body: 'Bom custo-benefício.' },
+    ],
     variants: [
       {
         axis: 'color',
@@ -100,7 +106,24 @@ const products: CatalogSnapshot['products'] = Array.from({ length: 24 }, (_, i) 
 });
 
 export const mockSnapshot: CatalogSnapshot = {
-  store: { name: 'Loja', logo: { src: '/logo-placeholder.svg', width: 120, height: 32, alt: 'Loja' } },
+  store: {
+    name: 'Loja',
+    logo: { src: '/logo-placeholder.svg', width: 120, height: 32, alt: 'Loja' },
+    ogImage: { src: '/placeholders/og-default.jpg', width: 1200, height: 630, alt: 'Loja' },
+    organization: {
+      legalName: 'Loja Exemplo Comércio Ltda.',
+      description: 'A Loja é um comércio online de exemplo, criado no template padrão da plataforma Nears, com entrega para todo o Brasil.',
+      foundingDate: '2020-01-15',
+      taxId: '00.000.000/0001-00',
+      address: { street: 'Rua Exemplo, 100', locality: 'São Paulo', region: 'SP', postalCode: '01000-000', country: 'BR' },
+      sameAs: ['https://www.instagram.com/loja-exemplo', 'https://www.facebook.com/loja-exemplo'],
+      contactPoint: { contactType: 'customer service', email: 'atendimento@loja.example' },
+    },
+    policies: {
+      returns: { days: 30, method: 'ByMail', fees: 'FreeReturn' },
+      shipping: { handlingDays: { min: 0, max: 2 }, transitDays: { min: 2, max: 8 }, rate: 19.9, freeFrom: 299, country: 'BR' },
+    },
+  },
   departments,
   productTypes,
   campaigns: [

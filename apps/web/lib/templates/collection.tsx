@@ -3,6 +3,7 @@ import { Suspense, type ReactNode } from 'react';
 import { cardAspect, toProductCard } from '../data/mappers';
 import { DEFAULT_SORT, parseCollectionQuery, queryCollection, type CollectionQuery } from '../data/collections';
 import { loadAllManifests, loadConfig } from '../manifest';
+import { JsonLdScript, breadcrumbNode, buildMetadata, collectionPageNode, faqNode, getSeoContext, graph, itemListNode, organizationNode } from '../seo';
 import { buildCollectionView, facetLabels, type CollectionView } from './collection-content';
 import { expandTemplate } from './expand';
 import { renderInstances } from './render';
@@ -13,9 +14,9 @@ type RawQuery = Record<string, string | string[] | undefined>;
 
 const emptyQuery = (): CollectionQuery => ({ filters: {}, sort: DEFAULT_SORT, page: 1, pageSize: PAGE_SIZE });
 
-/** Metadados minimos; canonical, robots por faceta e JSON-LD sao da Fase 7. */
-export function collectionMetadata(view: CollectionView): Metadata {
-  return { title: view.title, description: view.intro };
+/** Metadata da colecao: canonical proprio (sem query). Faceta/paginacao: ver docs/adr/0021. */
+export async function collectionMetadata(view: CollectionView): Promise<Metadata> {
+  return buildMetadata({ template: view.template, title: view.title, description: view.intro, path: view.basePath });
 }
 
 async function CollectionBody({ view, query }: { view: CollectionView; query: CollectionQuery }) {
@@ -63,7 +64,27 @@ async function CollectionBody({ view, query }: { view: CollectionView; query: Co
     }
   };
 
-  return <>{renderInstances(instances, propsFor)}</>;
+  // JSON-LD no HTML inicial: BreadcrumbList + CollectionPage com ItemList da pagina + FAQPage.
+  const ctx = await getSeoContext();
+  const items = result.products.map((p) => ({ name: p.name, path: `/${p.slug}/p` }));
+  const data = graph(
+    organizationNode(ctx),
+    collectionPageNode(ctx, {
+      name: view.title,
+      description: view.intro,
+      path: view.basePath,
+      breadcrumb: breadcrumbNode(view.breadcrumb, view.basePath, ctx.site),
+      mainEntity: itemListNode(items, ctx.site),
+    }),
+    faqNode(view.faq),
+  );
+
+  return (
+    <>
+      <JsonLdScript data={data} />
+      {renderInstances(instances, propsFor)}
+    </>
+  );
 }
 
 async function DynamicBody({ view, searchParams }: { view: CollectionView; searchParams: Promise<RawQuery> }) {

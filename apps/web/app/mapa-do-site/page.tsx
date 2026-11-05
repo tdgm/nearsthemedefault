@@ -1,7 +1,6 @@
-import type { Metadata } from 'next';
-import { SitemapPage } from '../../lib/templates/sitemap';
+import { SitemapPage, sitemapMetadata } from '../../lib/templates/sitemap';
 
-export const metadata: Metadata = { title: 'Mapa do site' };
+export const generateMetadata = sitemapMetadata;
 
 // Hub de linkagem interna, obrigatorio no template padrao (templates.sitemap).
 export default SitemapPage;

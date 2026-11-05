@@ -16,6 +16,8 @@ export type PdpView = {
   /** Props cruas por instancia (null = pular a section). `quote`/`cep` entram no render dinamico. */
   propsFor: (instance: Pick<SectionInstance, 'id'>, extra?: { cep?: string; quote?: unknown }) => unknown | null;
   description: string;
+  breadcrumb: { label: string; href?: string }[];
+  faq: { question: string; answer: string }[];
 };
 
 const defaultFaq = (name: string) => [
@@ -58,6 +60,8 @@ export async function buildPdpView(slug: string, config: NearsConfig = loadConfi
 
   const guideEnabled = config.catalog.guide.enabled && Boolean(product.guide);
   const guideLabel = config.catalog.guide.label ?? vocab('guide');
+
+  const faq = product.faq ?? defaultFaq(product.name);
 
   const propsFor: PdpView['propsFor'] = (inst, extra) => {
     switch (inst.id) {
@@ -103,12 +107,12 @@ export async function buildPdpView(slug: string, config: NearsConfig = loadConfi
       case 'pdp-related':
         return { products: cards(product.related) };
       case 'faq':
-        return { title: 'Perguntas frequentes', items: product.faq ?? defaultFaq(product.name) };
+        return { title: 'Perguntas frequentes', items: faq };
       default:
         return null;
     }
   };
 
-  return { product, propsFor, description: firstParagraph(product.description) || product.name };
+  return { product, propsFor, description: firstParagraph(product.description) || product.name, breadcrumb, faq };
 }
 

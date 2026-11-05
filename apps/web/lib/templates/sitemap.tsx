@@ -1,7 +1,19 @@
 import { getCampaigns, getDepartments, getPages, getProductTypes } from '../data/client';
 import { loadAllManifests } from '../manifest';
+import { JsonLdScript, buildMetadata, getSeoContext, graph, organizationNode, webPageNode } from '../seo';
 import { expandTemplate, repeatCountsFor } from './expand';
 import { renderInstances } from './render';
+
+export const SITEMAP_PATH = '/mapa-do-site';
+
+export async function sitemapMetadata() {
+  return buildMetadata({
+    template: 'sitemap',
+    title: 'Mapa do site',
+    description: 'Mapa do site com todos os departamentos, categorias, campanhas e páginas institucionais da loja.',
+    path: SITEMAP_PATH,
+  });
+}
 
 /** Mapa do site (HTML): hub de linkagem interna, sem limite de departamentos (ADR 0006). */
 export async function SitemapPage() {
@@ -44,5 +56,11 @@ export async function SitemapPage() {
     }
   };
 
-  return <main>{renderInstances(instances, propsFor)}</main>;
+  const ctx = await getSeoContext();
+  return (
+    <main>
+      <JsonLdScript data={graph(organizationNode(ctx), webPageNode(ctx, { name: 'Mapa do site', path: SITEMAP_PATH }))} />
+      {renderInstances(instances, propsFor)}
+    </main>
+  );
 }
