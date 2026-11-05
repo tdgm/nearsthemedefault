@@ -9,7 +9,7 @@ import YAML from 'yaml';
 const cfg = YAML.parse(
   readFileSync(resolve(process.cwd(), '../../nears/nears.config.yaml'), 'utf8'),
 ) as {
-  rendering: { cacheComponents: boolean; partialPrefetching: boolean; blockingMetadata: boolean };
+  rendering: { cacheComponents: boolean; partialPrefetching: boolean; blockingMetadataForAgents: boolean };
   security: {
     headers: {
       hsts: { enabled: boolean; maxAgeSeconds: number; includeSubDomains: boolean; preload: boolean };
@@ -20,6 +20,15 @@ const cfg = YAML.parse(
     };
   };
 };
+
+const contracts = YAML.parse(
+  readFileSync(resolve(process.cwd(), '../../nears/contracts.yaml'), 'utf8'),
+) as { geo: { agents: Record<string, string> } };
+const agentTokens = Object.keys(contracts.geo.agents).map((a) => a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+
+// Lista padrao do Next 16.4 (html-bots.js), mantida aqui porque definir htmlLimitedBots a substitui.
+const NEXT_DEFAULT_LIMITED_BOTS =
+  '[\\w-]+-Google|Google-[\\w-]+|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|yandex|sogou|bitlybot|tumblr|vkShare|quora link preview|redditbot|ia_archiver|Bingbot|BingPreview|applebot|facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|Yeti|googleweblight';
 
 const h = cfg.security.headers;
 
@@ -49,11 +58,14 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // Metadados que dependem de searchParams (canonical/robots de facetas e paginas) seriam
-  // transmitidos no fim do <body> para clientes fora da lista de bots do Next: o Lighthouse
-  // mobile e crawlers de IA sem JS nao os viam no <head>. Casar todo UA os torna bloqueantes
-  // (no <head>). Custo medido: ~0,1 s de TTFB em pagina quente (docs/adr/0021).
-  ...(cfg.rendering.blockingMetadata ? { htmlLimitedBots: /.*/ } : {}),
+  // Metadados que dependem de searchParams (canonical/robots de facetas e paginas) sao
+  // transmitidos no fim do <body> para UA fora de `htmlLimitedBots`. Crawlers sem JS (IA)
+  // precisam deles no <head>: a lista padrao do Next (copiada de next/dist/shared/lib/router/
+  // utils/html-bots, que substitui o default ao ser definida) + os agentes declarados em
+  // contracts.geo.agents. Usuarios seguem com streaming (docs/adr/0021 s6).
+  ...(cfg.rendering.blockingMetadataForAgents
+    ? { htmlLimitedBots: new RegExp(`${NEXT_DEFAULT_LIMITED_BOTS}|${agentTokens.join('|')}`, 'i') }
+    : {}),
   poweredByHeader: false,
   // Pacotes do monorepo publicados como TypeScript (sem etapa de build propria).
   transpilePackages: ['@nears/manifests', '@nears/sections', '@nears/ui'],

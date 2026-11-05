@@ -26,87 +26,175 @@
       }
     },
     "assert": {
-      "_comment": "Lighthouse 13 (usado pelo @lhci/cli 0.16) nao tem mais a Budgets API nem a auditoria performance-budget: o antigo bloco settings.budgets era ignorado e a assertion performance-budget nunca avaliava nada (confirmado em 2026-11-04: configSettings.budgets = null e nenhuma auditoria *budget* no relatorio). Os limites agora usam as chaves nativas resource-summary:<tipo>:size|count do LHCI (bytes transferidos, inclui cabecalhos HTTP). JS e CSS NAO sao repetidos aqui: scripts/check-budgets.mjs mede o gzip estatico, que e a fonte da verdade (docs/adr/0005 e 0010). categories:seo voltou para error na Fase 7: o noindex global saiu do layout, o robots.txt passou a ser gerado e cada template define canonical, robots e JSON-LD (docs/adr/0021).",
-      "assertions": {
-        "categories:performance": [
-          "error",
-          {
-            "minScore": 0.9
+      "_comment": "Lighthouse 13 (usado pelo @lhci/cli 0.16) nao tem mais a Budgets API nem a auditoria performance-budget: o antigo bloco settings.budgets era ignorado e a assertion performance-budget nunca avaliava nada (confirmado em 2026-11-04: configSettings.budgets = null e nenhuma auditoria *budget* no relatorio). Os limites agora usam as chaves nativas resource-summary:<tipo>:size|count do LHCI (bytes transferidos, inclui cabecalhos HTTP). JS e CSS NAO sao repetidos aqui: scripts/check-budgets.mjs mede o gzip estatico, que e a fonte da verdade (docs/adr/0005 e 0010). categories:seo voltou para error na Fase 7: o noindex global saiu do layout, o robots.txt passou a ser gerado e cada template define canonical, robots e JSON-LD (docs/adr/0021). A colecao tem categories:seo minScore 0.9 (assertMatrix): seus metadados dependem de searchParams e, para UA fora da lista de crawlers (docs/adr/0021 s6), o Next os transmite no fim do body, entao o Lighthouse mobile nao ve meta-description no head. Home e PDP continuam em 1.",
+      "assertMatrix": [
+        {
+          "matchingUrlPattern": "^http://localhost:3000/($|produto-exemplo/p$)",
+          "assertions": {
+            "categories:performance": [
+              "error",
+              {
+                "minScore": 0.9
+              }
+            ],
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 0.95
+              }
+            ],
+            "categories:seo": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "largest-contentful-paint": [
+              "error",
+              {
+                "maxNumericValue": 2000
+              }
+            ],
+            "cumulative-layout-shift": [
+              "error",
+              {
+                "maxNumericValue": 0.05
+              }
+            ],
+            "total-blocking-time": [
+              "error",
+              {
+                "maxNumericValue": 200
+              }
+            ],
+            "server-response-time": [
+              "error",
+              {
+                "maxNumericValue": 400
+              }
+            ],
+            "unsized-images": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "uses-responsive-images": [
+              "error",
+              {
+                "minScore": 0.9
+              }
+            ],
+            "font-display": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:total:count": [
+              "error",
+              {
+                "maxNumericValue": 40
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 81920
+              }
+            ],
+            "resource-summary:third-party:size": [
+              "error",
+              {
+                "maxNumericValue": 81920
+              }
+            ]
           }
-        ],
-        "categories:accessibility": [
-          "error",
-          {
-            "minScore": 0.95
+        },
+        {
+          "matchingUrlPattern": "^http://localhost:3000/departamento-exemplo$",
+          "assertions": {
+            "categories:performance": [
+              "error",
+              {
+                "minScore": 0.9
+              }
+            ],
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 0.95
+              }
+            ],
+            "categories:seo": [
+              "error",
+              {
+                "minScore": 0.9
+              }
+            ],
+            "largest-contentful-paint": [
+              "error",
+              {
+                "maxNumericValue": 2000
+              }
+            ],
+            "cumulative-layout-shift": [
+              "error",
+              {
+                "maxNumericValue": 0.05
+              }
+            ],
+            "total-blocking-time": [
+              "error",
+              {
+                "maxNumericValue": 200
+              }
+            ],
+            "server-response-time": [
+              "error",
+              {
+                "maxNumericValue": 400
+              }
+            ],
+            "unsized-images": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "uses-responsive-images": [
+              "error",
+              {
+                "minScore": 0.9
+              }
+            ],
+            "font-display": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:total:count": [
+              "error",
+              {
+                "maxNumericValue": 40
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 81920
+              }
+            ],
+            "resource-summary:third-party:size": [
+              "error",
+              {
+                "maxNumericValue": 81920
+              }
+            ]
           }
-        ],
-        "categories:seo": [
-          "error",
-          {
-            "minScore": 1
-          }
-        ],
-        "largest-contentful-paint": [
-          "error",
-          {
-            "maxNumericValue": 2000
-          }
-        ],
-        "cumulative-layout-shift": [
-          "error",
-          {
-            "maxNumericValue": 0.05
-          }
-        ],
-        "total-blocking-time": [
-          "error",
-          {
-            "maxNumericValue": 200
-          }
-        ],
-        "server-response-time": [
-          "error",
-          {
-            "maxNumericValue": 400
-          }
-        ],
-        "unsized-images": [
-          "error",
-          {
-            "minScore": 1
-          }
-        ],
-        "uses-responsive-images": [
-          "error",
-          {
-            "minScore": 0.9
-          }
-        ],
-        "font-display": [
-          "error",
-          {
-            "minScore": 1
-          }
-        ],
-        "resource-summary:total:count": [
-          "error",
-          {
-            "maxNumericValue": 40
-          }
-        ],
-        "resource-summary:document:size": [
-          "error",
-          {
-            "maxNumericValue": 81920
-          }
-        ],
-        "resource-summary:third-party:size": [
-          "error",
-          {
-            "maxNumericValue": 81920
-          }
-        ]
-      }
+        }
+      ]
     },
     "upload": {
       "target": "temporary-public-storage"

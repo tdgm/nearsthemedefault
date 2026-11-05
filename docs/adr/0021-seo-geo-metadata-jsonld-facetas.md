@@ -132,17 +132,25 @@ manual no Rich Results Test fica no checklist de pre-deploy de cada loja.
 - Nenhuma dependencia nova; JS inicial inalterado (todo o codigo novo roda no servidor).
 - `categories:seo` do Lighthouse CI voltou a `error`.
 
-### 6. Metadados bloqueantes no `<head>` (`rendering.blockingMetadata`)
+### 6. Metadados no `<head>` para crawlers (`rendering.blockingMetadataForAgents`)
 
 `generateMetadata` das colecoes le `searchParams` (canonical, robots e prev/next de facetas e
 paginas). Com `cacheComponents` isso torna os metadados dinamicos e o Next os transmite no
-FIM do `<body>` para todo cliente fora da sua lista de bots (`htmlLimitedBots`): title,
-description, canonical e robots nao estavam no `<head>`. Medido: Lighthouse mobile reprovou
-`meta-description` (SEO 0,92) e crawlers sem JS (GPTBot, ClaudeBot, PerplexityBot) so
-encontrariam as tags no corpo. Decisao: `rendering.blockingMetadata: true` no manifest ->
-`htmlLimitedBots: /.*/` no `next.config.ts`; todo cliente recebe os metadados no `<head>`.
-Medido localmente: head completo (title, description, robots, canonical) em home, colecao,
-colecao com faceta, PDP e 404; TTFB de pagina quente ~0,1 s (a 1a requisicao a frio ~1,2 s
-e o custo de inicializacao do servidor, nao da opcao). Alternativa descartada: mover
-canonical/robots para headers `Link`/`X-Robots-Tag` no proxy (perde o canonical no HTML e
-duplica a regra de facetas fora de `lib/seo`).
+FIM do `<body>` para todo cliente fora da sua lista `htmlLimitedBots`: title, description,
+canonical e robots nao ficavam no `<head>`. Crawlers sem JS (GPTBot, ClaudeBot, PerplexityBot)
+so encontrariam as tags no corpo, o que anula parte do objetivo de GEO.
+
+Tentativa descartada: `htmlLimitedBots: /.*/` (todo UA com render bloqueante). Corrigiu o
+`<head>` e o Lighthouse, mas o CI mediu LCP da home em 2,2 a 2,9 s (limite 2,0 s): render
+bloqueante espera os buracos dinamicos do PPR. Nao se troca LCP de usuario por metadado de bot.
+
+Decisao: `rendering.blockingMetadataForAgents: true` -> `htmlLimitedBots` = lista padrao do
+Next (copiada para o `next.config.ts`, pois definir a opcao substitui o default) + as chaves
+de `contracts.geo.agents`. Usuarios mantem streaming; crawlers de IA e de preview recebem o
+`<head>` completo. Googlebot fica fora da lista de proposito (renderiza JS; mesma escolha do Next).
+
+Consequencia no Lighthouse: o UA mobile do LHCI nao esta na lista, entao na colecao
+(`/departamento-exemplo`) `categories:seo` tem piso 0,9 via `assertMatrix` (so a
+`meta-description` falha); home e PDP seguem exigindo 1. Alternativa descartada: canonical/robots
+via headers `Link`/`X-Robots-Tag` no proxy (perde o canonical no HTML e duplica a regra de
+facetas fora de `lib/seo`). Reavaliar quando o Next permitir metadados estaticos com searchParams.
