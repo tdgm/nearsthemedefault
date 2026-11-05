@@ -113,6 +113,7 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:e2e
       - run: pnpm test:nojs    # valida conteudo indexavel sem JavaScript
+      - run: pnpm test:e2e:presets   # fluxo de compra em cada preset de nicho (um build por preset; ADR 0024)
 
   secrets-scan:
     name: Segredos no codigo
