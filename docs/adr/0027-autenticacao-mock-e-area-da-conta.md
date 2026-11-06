@@ -162,6 +162,23 @@ para fechar a sub-fase sem inventar comportamento:
   destrava o build sem resolver o aviso, nao e a forma correta de modelar
   uma rota sem shell estatico que se tem a chance de fazer certo desde o
   primeiro commit.
+- **`testTimeout` global subiu de 5s (default) para 15s em
+  `vitest.config.ts`, achado durante a validacao desta sub-fase, nao causado
+  por ela.** `apps/web/tests/home.test.tsx`, `pdp.test.tsx` e `seo.test.ts`
+  renderizam o template inteiro (todas as sections da home/PDP) ou iteram o
+  catalogo de 24 produtos inteiro em jsdom; isolados, sem nenhuma contencao,
+  ja levam 4.5-4.8s - confirmado rodando-os sozinhos na `main`, sem nenhuma
+  mudanca desta fase. Sob a carga normal de `pnpm validate` (lint, typecheck
+  e build concorrentes antes do estagio de testes), isso virava timeout
+  intermitente em `apps/web/tests/known-path.test.ts` tambem (que esta fase
+  tocou, adicionando 3 paths a um loop existente) e em qualquer um dos tres
+  testes pesados acima, trocando de teste a cada corrida - sintoma de
+  ambiente, nunca o mesmo assert falhando. `pool: 'vmThreads'`/`isolate:
+  false` (sugestao do proprio vitest, ver resumo do `pnpm test`) resolveria
+  de forma mais estrutural, mas muda como os testes isolam entre si; a troca
+  conservadora e so dar mais tempo de parede a testes legitimamente lentos,
+  sem tocar isolamento. Fica registrado aqui por ter sido descoberto durante
+  a Fase 9c, nao por ser escopo dela.
 
 ## Consequencias
 
