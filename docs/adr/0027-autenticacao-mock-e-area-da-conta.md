@@ -121,6 +121,48 @@ As entradas reais de rota (`login`, `cadastro`, `ssr`, `noindex,nofollow`) e de
 e suas sub-rotas (dados/enderecos/pedidos/favoritos, `requiresAuth: true`,
 `render: ssr`) continuam fora do escopo, para a Fase 9c.
 
+## Nota de implementacao (Fase 9c, 2026-11-06)
+
+Area da conta implementada: 6 rotas (`/account`, `/account/dados`,
+`/account/enderecos`, `/account/pedidos`, `/account/pedidos/[orderId]`,
+`/account/favoritos`), todas `render: ssr`, `requiresAuth: true`,
+`indexable: false`. Guard em `apps/web/lib/auth/guard.ts > requireCustomer`
+(nao em `apps/web/lib/data/schemas.ts` como o esboco original desta ADR
+citava - `customerSchema`/`addressSchema` ja tinham ficado em
+`apps/web/lib/data/customer.ts` desde a 9b; os novos `orderSchema`
+(`orders.ts`) e `favoriteSchema` (`favorites.ts`) seguem o mesmo arquivo por
+entidade). Decisoes de escopo, nenhuma pedida explicitamente mas necessarias
+para fechar a sub-fase sem inventar comportamento:
+
+- **Tudo somente-leitura.** `/account/dados` e `/account/enderecos` exibem os
+  dados do cliente mock, sem formulario de edicao - nao existe persistencia
+  real neste repo (CLAUDE.md > Seguranca), e o ROADMAP pediu "fixture +
+  pagina", nunca "edicao". `/account/favoritos` tambem nao tem botao de
+  remover: um toggle que nao persiste de verdade (mesmo padrao de
+  `/api/cart/items`) criaria uma lista que "volta" ao recarregar a pagina -
+  pior UX do que simplesmente nao oferecer a acao nesta sub-fase.
+- **Pedido pertence ao cliente, sempre verificado.** `findOrderByIdForCustomer`
+  so retorna o pedido quando `customerId` bate; a pagina de detalhe chama
+  `notFound()` tanto para pedido inexistente quanto para pedido de outro
+  cliente, sem distinguir a resposta (evita confirmar que um id alheio
+  existe so pelo tempo/forma da resposta).
+- **`cartCount`/`wishlistCount` do header continuam sem wiring.** Ja eram
+  props estaticas (`default: 0`) antes desta sub-fase, sem nenhuma leitura
+  de estado real em lugar nenhum do app (nem o carrinho, que e mais antigo,
+  tem). Teria sido inconsistente wire-ar so o contador de favoritos agora;
+  fica para quando o carrinho ganhar estado de verdade.
+- **Logout ganhou um segundo endpoint.** `DELETE /api/account/session`
+  (9b) so serve fetch/JS - HTML nao tem metodo DELETE. O botao "Sair" da
+  visao geral e um `<form method="POST">` comum, entao chama
+  `POST /api/account/session/logout` (novo nesta sub-fase).
+- **Shell estatico + Suspense, nunca `instant: false`.** As 6 paginas seguem
+  exatamente o padrao de `/login`/`/cadastro`: `<h1>` fora do Suspense,
+  `requireCustomer` (le `cookies()`) dentro. `instant: false` (Next 16,
+  Cache Components) existe para adocao incremental de app ja existente -
+  destrava o build sem resolver o aviso, nao e a forma correta de modelar
+  uma rota sem shell estatico que se tem a chance de fazer certo desde o
+  primeiro commit.
+
 ## Consequencias
 
 - `account`, `login` seguem reservados em `resolution.reserved.firstSegment`;

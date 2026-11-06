@@ -64,9 +64,10 @@ export async function POST(request: Request) {
   return response;
 }
 
-// Logout. Sem equivalente sem-JS ainda (nenhuma UI chama este metodo antes da
-// Fase 9c, que adiciona o botao "Sair" na area da conta); quando existir, um
-// <form> no-JS chamara POST /api/account/session/logout em vez de DELETE.
+// Logout via fetch/JS. O botao "Sair" da area da conta (Fase 9c,
+// app/account/page.tsx) usa um <form method="POST"> comum (HTML nao tem
+// metodo DELETE), entao chama POST /api/account/session/logout em vez deste
+// endpoint - ver app/api/account/session/logout/route.ts.
 export async function DELETE() {
   const response = Response.json({ ok: true });
   response.headers.append('Set-Cookie', clearSessionCookieHeader());

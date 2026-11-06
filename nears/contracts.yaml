@@ -63,6 +63,13 @@ data:
     # distingue o canal, so o progresso do pedido.
     status: [placed, processing, inTransit, delivered, canceled]
 
+  # Favoritos/wishlist (Fase 9c, ADR 0027). So referencia um sku do catalogo (o
+  # nome/preco/imagem vem sempre do produto atual via data.product, nunca
+  # duplicado aqui) - diferente de order.items, que e um snapshot congelado no
+  # momento da compra.
+  favorite:
+    required: [sku, addedAt]
+
   store:
     required: [id, name, cnpj, address, geoCoordinates, pickupEnabled, deliveryRadiusKm]
     optional: [openingHours]
@@ -74,8 +81,11 @@ data:
   storeInventory:
     required: [storeId, sku, quantity, reservable]
     note: >
-      MOI (Multi Omni/Level Inventory - esclarecido pelo usuario, ADR 0028): leitura
-      de estoque por loja, nao um pool unico. So existe quando
+      Estoque granular por loja (nao um pool unico) - necessario para
+      ship-from-store/retirada; ver ADR 0028 "fulfillment por loja". Nao e o MOI
+      (Multilevel Omnichannel Inventory) real da VTEX, que resolve um problema
+      diferente (marketplace multi-seller de 3 niveis) - a correcao desse
+      engano esta documentada na ADR 0028. So existe quando
       fulfillment.inventory.mode = "per-store"; com "shared" (default), o estoque
       continua vindo de data.product.offers.availability, sem granularidade por
       loja.
@@ -133,10 +143,26 @@ seo:
     cadastro:
       robots: "noindex,nofollow"
       schema: []
-    # As entradas de /account/** (Fase 9c, ADR 0027) entram aqui so quando a
-    # rota/template correspondente existir em routes.manifest.yaml ou
-    # sections.registry.yaml - refs.ts > checkContracts exige que toda chave de
-    # seo.byTemplate seja uma rota ou um template conhecido.
+    # Area da conta (Fase 9c, ADR 0027): sempre noindex,nofollow - dado pessoal,
+    # nunca conteudo de catalogo a citar/indexar (mesmo raciocinio de login/cadastro).
+    account:
+      robots: "noindex,nofollow"
+      schema: []
+    account-dados:
+      robots: "noindex,nofollow"
+      schema: []
+    account-enderecos:
+      robots: "noindex,nofollow"
+      schema: []
+    account-pedidos:
+      robots: "noindex,nofollow"
+      schema: []
+    account-pedido-detalhe:
+      robots: "noindex,nofollow"
+      schema: []
+    account-favoritos:
+      robots: "noindex,nofollow"
+      schema: []
 
 geo:
   requiredEverywhere:

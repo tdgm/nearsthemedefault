@@ -41,14 +41,21 @@ const orderContractSchema = z.strictObject({
   status: strings.min(1),
 });
 
+// Favoritos/wishlist (Fase 9c, ADR 0027). So referencia um sku do catalogo -
+// diferente de order.items, que e um snapshot congelado no momento da compra.
+const favoriteContractSchema = z.strictObject({
+  required: strings.min(1),
+});
+
 const storeContractSchema = z.strictObject({
   required: strings.min(1),
   optional: strings,
   note: z.string().min(1),
 });
 
-// MOI (Multi Omni/Level Inventory - ADR 0028, esclarecido pelo usuario em 2026-11-06):
-// leitura de estoque por loja. So relevante quando fulfillment.inventory.mode =
+// Estoque granular por loja (ADR 0028 "fulfillment por loja"), nao o MOI real da
+// VTEX (ver correcao na ADR 0028 - MOI resolve marketplace multi-seller, nao
+// fulfillment por loja). So relevante quando fulfillment.inventory.mode =
 // "per-store" (nears.config.yaml); com "shared" o estoque e um pool unico.
 const storeInventoryContractSchema = z.strictObject({
   required: strings.min(1),
@@ -61,6 +68,7 @@ const dataSchema = z.strictObject({
   organization: z.strictObject({ required: strings.min(1), optional: strings }),
   customer: customerContractSchema,
   order: orderContractSchema,
+  favorite: favoriteContractSchema,
   store: storeContractSchema,
   storeInventory: storeInventoryContractSchema,
 });

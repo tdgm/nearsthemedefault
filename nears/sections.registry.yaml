@@ -502,6 +502,28 @@ templates:
   cadastro:
     sections: [section-title]
 
+  # Area da conta (Fase 9c, ADR 0027): mesma liberdade de login/cadastro - cada
+  # pagina e so um shell + ilha Suspense em apps/web/app/account/**, nenhuma
+  # section nova. So referenciam section-title para satisfazer
+  # refs.ts > checkTemplates/checkRoutes.
+  account:
+    sections: [section-title]
+
+  account-dados:
+    sections: [section-title]
+
+  account-enderecos:
+    sections: [section-title]
+
+  account-pedidos:
+    sections: [section-title]
+
+  account-pedido-detalhe:
+    sections: [section-title]
+
+  account-favoritos:
+    sections: [section-title]
+
 validation:
   everySectionMustDeclare: [priority, cwv, a11y]
   onMissing: fail-build
