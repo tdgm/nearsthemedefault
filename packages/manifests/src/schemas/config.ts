@@ -85,6 +85,27 @@ export const REQUIRED_VOCABULARY_KEYS = [
   'searchEmpty',
   'searchNoResults',
   'searchNoResultsHint',
+  // Login/cadastro mock (Fase 9b, ADR 0027).
+  'accountLoginTitle',
+  'accountLoginEmail',
+  'accountLoginPassword',
+  'accountLoginSubmit',
+  'accountLoginSubmitting',
+  'accountLoginError',
+  'accountLoginSuccess',
+  'accountLoginSwitchPrompt',
+  'accountLoginSwitchLabel',
+  'accountCadastroTitle',
+  'accountCadastroName',
+  'accountCadastroEmail',
+  'accountCadastroPassword',
+  'accountCadastroConfirmPassword',
+  'accountCadastroSubmit',
+  'accountCadastroSubmitting',
+  'accountCadastroError',
+  'accountCadastroSuccess',
+  'accountCadastroSwitchPrompt',
+  'accountCadastroSwitchLabel',
 ] as const;
 
 export const vocabularySchema = z

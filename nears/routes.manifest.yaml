@@ -163,13 +163,34 @@ routes:
     appRoute: ~   # app/not-found.tsx - arquivo especial do Next, fora do mapa de paginas
     jsBudgetCritical: false
 
-# As rotas de conta/login/cadastro (Fase 9, ADR 0027) entram aqui so quando as
-# sections/templates que elas usam existirem em sections.registry.yaml - refs.ts
-# falha o build se route.template nao existir em `templates` (checagem
-# cruzada entre manifests, docs/adr/0012). Nesta sub-fase (9a) os slugs ja ficam
-# reservados abaixo e os contratos de dados/SEO ja existem em contracts.yaml;
-# as entradas em `routes:` chegam junto do template+sections reais em 9b
-# (login/cadastro) e 9c (account/**).
+  # Login/cadastro mock (Fase 9b, ADR 0027). ssg: o HTML (formulario vazio) e
+  # igual para qualquer visitante - nenhuma leitura de cookie de sessao aqui
+  # (isso so entra nas rotas de /account/** da Fase 9c, com render: ssr).
+  # jsBudgetCritical: false pelo mesmo motivo de institutional/sitemap-html:
+  # nao e caminho de conversao/descoberta de produto.
+  - id: login
+    pattern: "/login"
+    template: login
+    render: ssg
+    indexable: false
+    robots: "noindex,nofollow"
+    appRoute: "/login/page"
+    jsBudgetCritical: false
+
+  - id: cadastro
+    pattern: "/cadastro"
+    template: cadastro
+    render: ssg
+    indexable: false
+    robots: "noindex,nofollow"
+    appRoute: "/cadastro/page"
+    jsBudgetCritical: false
+
+# As rotas de /account/** (Fase 9c, ADR 0027) entram aqui so quando as sections/
+# templates que elas usam existirem em sections.registry.yaml - refs.ts falha o
+# build se route.template nao existir em `templates`. O slug "account" ja fica
+# reservado abaixo e o contrato de dados (customer/order) ja existe em
+# contracts.yaml desde a 9a.
 
 # Varios padroes tem a mesma forma de URL: /{department}, /{productType},
 # /{campaign} e /{pageSlug} (um segmento); /{department}/{category},

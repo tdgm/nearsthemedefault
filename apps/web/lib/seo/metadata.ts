@@ -7,7 +7,19 @@ import { loadAllManifests } from '../manifest';
 import { absoluteAsset, absoluteUrl, siteUrl } from './site';
 
 /** Chaves de `contracts.yaml > seo.byTemplate`. */
-export type SeoTemplate = 'home' | 'collection' | 'longtail' | 'pdp' | 'landing' | 'page' | 'sitemap' | 'search' | 'notfound';
+export type SeoTemplate =
+  | 'home'
+  | 'collection'
+  | 'longtail'
+  | 'pdp'
+  | 'landing'
+  | 'page'
+  | 'sitemap'
+  | 'search'
+  | 'notfound'
+  // Fase 9 (ADR 0027): login/cadastro, sempre noindex,nofollow (dado pessoal).
+  | 'login'
+  | 'cadastro';
 
 export type SeoImage = { url: string; width: number; height: number; alt: string };
 
