@@ -62,10 +62,13 @@ area da conta.
    (`customerSchema`, `orderSchema` em `apps/web/lib/data/schemas.ts`), trocaveis por
    GraphQL sem tocar em rotas ou componentes.
 6. **Contratos de dados e SEO.** `nears/contracts.yaml > data` ganha `customer` e
-   `order` (Fase 9a, so o contrato - fixtures entram na 9c). `seo.byTemplate` marca
-   `login`, `cadastro` e `account` como `robots: "noindex,nofollow"` e `schema: []`:
-   dados pessoais nunca sao indexaveis nem elegiveis a GEO (nao faz sentido um motor
-   generativo citar o pedido de alguem).
+   `order` na Fase 9a (so o contrato - fixtures entram na 9c). As entradas de
+   `seo.byTemplate` para `login`, `cadastro` e `account` (sempre
+   `robots: "noindex,nofollow"` e `schema: []` - dados pessoais nunca sao indexaveis
+   nem elegiveis a GEO) so podem existir quando a rota/template correspondente
+   existir: `refs.ts > checkContracts` exige que toda chave de `seo.byTemplate` seja
+   uma rota ou um template conhecido. Por isso essas tres entradas entram em 9b/9c,
+   junto da rota, nao na 9a.
 
 ## Pendencias explicitas (fora desta decisao)
 
