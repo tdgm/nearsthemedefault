@@ -88,4 +88,21 @@ describe('OverlayTrigger', () => {
     render(<OverlayTrigger targetId="nao-existe">Abrir</OverlayTrigger>);
     expect(() => fireEvent.click(screen.getByRole('button', { name: 'Abrir' }))).not.toThrow();
   });
+
+  it('trava o scroll do documento enquanto o dialogo esta aberto e destrava ao fechar', () => {
+    const { container } = setup();
+    document.documentElement.style.overflow = '';
+    fireEvent.click(screen.getByRole('button', { name: 'Abrir menu' }));
+    expect(document.documentElement.style.overflow).toBe('hidden');
+    (container.querySelector('dialog') as HTMLDialogElement).close();
+    expect(document.documentElement.style.overflow).toBe('');
+  });
+
+  it('fechar pelo backdrop tambem destrava o scroll', () => {
+    const { container } = setup();
+    document.documentElement.style.overflow = '';
+    fireEvent.click(screen.getByRole('button', { name: 'Abrir menu' }));
+    fireEvent.click(container.querySelector('dialog') as HTMLElement);
+    expect(document.documentElement.style.overflow).toBe('');
+  });
 });
