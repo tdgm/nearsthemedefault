@@ -23,6 +23,7 @@ describe('isKnownPath (404 real na primeira requisicao)', () => {
       '/account', // Fase 9c (ADR 0027): rota real, ssr, noindex
       '/account/dados',
       '/account/pedidos/pedido-1001',
+      '/lojas', // Fase 9d (ADR 0028): rota real, ssg, indexavel
       '/departamento-exemplo/', // barra final
     ]) {
       expect(await isKnownPath(path), path).toBe(true);

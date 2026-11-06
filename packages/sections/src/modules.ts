@@ -25,6 +25,7 @@ import { showcase } from './showcase/index.ts';
 import { pdpGallery } from './pdp-gallery/index.ts';
 import { pdpBuybox } from './pdp-buybox/index.ts';
 import { pdpShipping } from './pdp-shipping/index.ts';
+import { pdpPickup } from './pdp-pickup/index.ts';
 import { pdpDetails } from './pdp-details/index.ts';
 import { pdpReviews } from './pdp-reviews/index.ts';
 import { pdpBundle } from './pdp-bundle/index.ts';
@@ -49,6 +50,7 @@ export const sectionModules: readonly AnySectionModule[] = [promoBar, header, na
   pdpGallery,
   pdpBuybox,
   pdpShipping,
+  pdpPickup,
   pdpDetails,
   pdpReviews,
   pdpBundle,

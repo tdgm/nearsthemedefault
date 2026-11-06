@@ -32,7 +32,7 @@ const instances = () => expandTemplate(loadAllManifests().sections.templates.pdp
 describe('template pdp (manifest)', () => {
   it('declara as sections na ordem do manifest', () => {
     expect(instances().map((i) => i.id)).toEqual([
-      'breadcrumb', 'pdp-gallery', 'pdp-buybox', 'pdp-shipping', 'pdp-details', 'pdp-reviews', 'pdp-bundle', 'pdp-related', 'faq',
+      'breadcrumb', 'pdp-gallery', 'pdp-buybox', 'pdp-shipping', 'pdp-pickup', 'pdp-details', 'pdp-reviews', 'pdp-bundle', 'pdp-related', 'faq',
     ]);
   });
 

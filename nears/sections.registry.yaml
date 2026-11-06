@@ -393,6 +393,19 @@ pdpSections:
     cwv: { reservedHeight: 96 }
     a11y: { inputLabel: required, errorAssociation: ariaDescribedby }
 
+  # Retirada/entrega pela loja mais proxima (Fase 9d, ADR 0028). ADITIVO sobre
+  # pdp-shipping, nunca substituicao: so renderiza quando fulfillment.mode !=
+  # "centralized" (apps/web/lib/templates/pdp-content.ts). Reusa o MESMO
+  # ?cep= de pdp-shipping - nunca pede o CEP de novo.
+  - id: pdp-pickup
+    priority: high
+    props:
+      cep: { type: string, note: "CEP informado (?cep=), ja validado - mesmo de pdp-shipping" }
+      quote: { type: object, note: "loja mais proxima com retirada/entrega, ou erro; vem do data layer" }
+      labels: object
+    cwv: { reservedHeight: 64 }
+    a11y: { liveRegion: status, noJsRequired: true }
+
   - id: pdp-details
     priority: lazy
     props:
@@ -468,7 +481,7 @@ templates:
                product-grid, text-seo, faq, related-links]
 
   pdp:
-    sections: [breadcrumb, pdp-gallery, pdp-buybox, pdp-shipping, pdp-details,
+    sections: [breadcrumb, pdp-gallery, pdp-buybox, pdp-shipping, pdp-pickup, pdp-details,
                pdp-reviews, pdp-bundle, pdp-related, faq]
 
   landing:
@@ -522,6 +535,12 @@ templates:
     sections: [section-title]
 
   account-favoritos:
+    sections: [section-title]
+
+  # Fulfillment por loja (Fase 9d, ADR 0028): pagina institucional publica,
+  # mesma liberdade de login/cadastro/account - a lista de lojas e so um
+  # componente simples em apps/web/app/lojas/page.tsx, nenhuma section nova.
+  lojas:
     sections: [section-title]
 
 validation:

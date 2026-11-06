@@ -163,6 +163,11 @@ seo:
     account-favoritos:
       robots: "noindex,nofollow"
       schema: []
+    # Fulfillment por loja (Fase 9d, ADR 0028): pagina publica, indexavel -
+    # reforca geo.entity.napConsistency com um LocalBusiness por loja.
+    lojas:
+      h1: "Nossas lojas"
+      schema: [WebPage, LocalBusiness]
 
 geo:
   requiredEverywhere:

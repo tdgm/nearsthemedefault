@@ -55,7 +55,7 @@ export async function getStorefront() {
     minicart: minicartSchema.parse({ items: [], labels: { title: cart, close: `Fechar ${cart.toLowerCase()}` } }),
     footer: footerSchema.parse({
       columns: [
-        { title: 'Institucional', links: [{ label: 'Mapa do site', href: '/mapa-do-site' }, { label: 'Página exemplo', href: '/pagina-exemplo' }] },
+        { title: 'Institucional', links: [{ label: 'Mapa do site', href: '/mapa-do-site' }, { label: 'Página exemplo', href: '/pagina-exemplo' }, { label: 'Nossas lojas', href: '/lojas' }] },
         { title: 'Ajuda', links: [{ label: 'Buscar', href: '/s' }] },
       ],
       legal: { companyName: store.name, copyright: `© ${store.name}. Conteúdo provisório do rodapé.` },

@@ -1,16 +1,20 @@
 import type { Metadata } from 'next';
 import { Suspense, type ReactNode } from 'react';
+import { quotePickup } from '../data/pickup';
 import { quoteShipping } from '../data/shipping';
 import { loadAllManifests } from '../manifest';
 import { JsonLdScript, buildMetadata, breadcrumbNode, enforceGeoCompleteness, faqNode, getSeoContext, graph, organizationNode, productNode } from '../seo';
 import { buildPdpView, type PdpView } from './pdp-content';
-import { expandTemplate } from './expand';
+import { expandTemplate, type SectionInstance } from './expand';
 import { renderInstances } from './render';
 
 type RawQuery = Record<string, string | string[] | undefined>;
 
 const GALLERY_GROUP = ['pdp-gallery', 'pdp-buybox'];
-const BODY_GROUP = ['pdp-shipping', 'pdp-details', 'pdp-reviews', 'pdp-bundle', 'pdp-related'];
+// pdp-shipping/pdp-pickup saem daqui: sao renderizados dinamicamente (leem ?cep=
+// dentro de Suspense) - ver DynamicFulfillment abaixo.
+const DYNAMIC_GROUP = ['pdp-shipping', 'pdp-pickup'];
+const BODY_GROUP = ['pdp-details', 'pdp-reviews', 'pdp-bundle', 'pdp-related'];
 
 export const pdpPath = (slug: string) => `/${slug}/p`;
 
@@ -44,12 +48,19 @@ async function PdpJsonLd({ view }: { view: PdpView }) {
   );
 }
 
-/** Shipping dinamico: o CEP vem da URL (?cep=), entao so pode ser lido dentro de Suspense. */
-async function DynamicShipping({ view, searchParams }: { view: PdpView; searchParams: Promise<RawQuery> }) {
+/**
+ * Frete + retirada/entrega por loja: o CEP vem da URL (?cep=), entao so pode
+ * ser lido dentro de Suspense. As duas cotacoes compartilham o MESMO CEP -
+ * pdp-pickup nunca pede o CEP de novo. `quotePickup` e no-op (undefined)
+ * quando fulfillment.mode = "centralized" (ADR 0028), e pdp-content.ts ja
+ * descarta a instancia 'pdp-pickup' nesse caso (propsFor devolve null).
+ */
+async function DynamicFulfillment({ view, searchParams, instances }: { view: PdpView; searchParams: Promise<RawQuery>; instances: readonly SectionInstance[] }) {
   const raw = (await searchParams).cep;
   const cep = Array.isArray(raw) ? raw[0] : raw;
-  const quote = await quoteShipping(cep, view.product.price);
-  return <>{renderInstances([{ id: 'pdp-shipping', key: 'pdp-shipping', occurrence: 0 }], (i) => view.propsFor(i, { ...(cep ? { cep } : {}), ...(quote ? { quote } : {}) }))}</>;
+  const [quote, pickupQuote] = await Promise.all([quoteShipping(cep, view.product.price), quotePickup(cep, view.product.sku)]);
+  const extra = { ...(cep ? { cep } : {}), ...(quote ? { quote } : {}), ...(pickupQuote ? { pickupQuote } : {}) };
+  return <>{renderInstances(instances, (i) => view.propsFor(i, extra))}</>;
 }
 
 /**
@@ -65,10 +76,11 @@ export function PdpPage({ view, searchParams }: { view: PdpView; searchParams: P
   const instances = expandTemplate(sections.templates.pdp?.sections ?? [], {});
   const group = (ids: string[]) => instances.filter((i) => ids.includes(i.id));
   const render = (list: typeof instances) => renderInstances(list, (i) => view.propsFor(i));
-  const hasShipping = instances.some((i) => i.id === 'pdp-shipping');
+  const dynamic = group(DYNAMIC_GROUP);
+  const hasDynamic = dynamic.length > 0;
 
   const pick = (id: string) => instances.filter((i) => i.id === id);
-  const body = group(BODY_GROUP).filter((i) => i.id !== 'pdp-shipping');
+  const body = group(BODY_GROUP);
 
   return (
     // pb-[72px]: reserva a barra fixa de CTA no mobile (stickyReservedHeight: 72).
@@ -79,9 +91,9 @@ export function PdpPage({ view, searchParams }: { view: PdpView; searchParams: P
         {render(group(GALLERY_GROUP))}
       </div>
       <div className="mx-auto max-w-7xl px-4">
-        {hasShipping && (
-          <Suspense fallback={render(pick('pdp-shipping'))}>
-            <DynamicShipping view={view} searchParams={searchParams} />
+        {hasDynamic && (
+          <Suspense fallback={render(dynamic)}>
+            <DynamicFulfillment view={view} searchParams={searchParams} instances={dynamic} />
           </Suspense>
         )}
         {render(body)}

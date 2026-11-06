@@ -204,8 +204,12 @@ Sub-fases (mesmo padrao da Fase 8):
   `requiresAuth`, redireciona para `/login?returnUrl=...`). Ver ADR 0027, nota de
   implementacao da 9c, para as decisoes de escopo (somente-leitura, sem contador de
   carrinho/favoritos no header).
-- **9d - Fulfillment por loja.** Fixture mock de lojas e de estoque granular por loja
-  (`storeInventory`, ADR 0028 - nao e o MOI real da VTEX, ver nota acima), calculo de
-  retirada/entrega pela loja mais proxima do CEP *com estoque* como opcao adicional ao
-  `quoteShipping` existente, widget na PDP/carrinho; pagina institucional publica de
-  lojas (reforca `geo.entity.napConsistency`).
+- **9d - Fulfillment por loja (concluida).** Fixtures `apps/web/lib/data/stores.ts`
+  (`PhysicalStore`) e `store-inventory.ts` (`storeInventory`, ADR 0028 - nao e o MOI
+  real da VTEX, ver nota acima); `apps/web/lib/data/pickup.ts` (`quotePickup`)
+  calcula retirada/entrega pela loja mais proxima do CEP *com estoque*, aditivo ao
+  `quoteShipping` existente - no-op com `fulfillment.mode: centralized` (default);
+  nova section `pdp-pickup` na PDP (reusa o `?cep=` de `pdp-shipping`, nunca pede de
+  novo); pagina institucional publica `/lojas` (reforca `geo.entity.napConsistency`,
+  um `LocalBusiness` por loja). Widget no carrinho fica para quando `/carrinho`
+  existir como pagina propria (ver ADR 0028, nota de implementacao da 9d).

@@ -26,7 +26,9 @@ export type SeoTemplate =
   | 'account-enderecos'
   | 'account-pedidos'
   | 'account-pedido-detalhe'
-  | 'account-favoritos';
+  | 'account-favoritos'
+  // Fulfillment por loja (Fase 9d, ADR 0028): pagina publica, indexavel.
+  | 'lojas';
 
 export type SeoImage = { url: string; width: number; height: number; alt: string };
 

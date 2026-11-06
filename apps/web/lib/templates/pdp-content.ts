@@ -13,8 +13,8 @@ export const ADD_TO_CART_ENDPOINT = '/api/cart/items';
 
 export type PdpView = {
   product: Product;
-  /** Props cruas por instancia (null = pular a section). `quote`/`cep` entram no render dinamico. */
-  propsFor: (instance: Pick<SectionInstance, 'id'>, extra?: { cep?: string; quote?: unknown }) => unknown | null;
+  /** Props cruas por instancia (null = pular a section). `quote`/`cep`/`pickupQuote` entram no render dinamico. */
+  propsFor: (instance: Pick<SectionInstance, 'id'>, extra?: { cep?: string; quote?: unknown; pickupQuote?: unknown }) => unknown | null;
   description: string;
   breadcrumb: { label: string; href?: string }[];
   faq: { question: string; answer: string }[];
@@ -60,6 +60,11 @@ export async function buildPdpView(slug: string, config: NearsConfig = loadConfi
 
   const guideEnabled = config.catalog.guide.enabled && Boolean(product.guide);
   const guideLabel = config.catalog.guide.label ?? vocab('guide');
+  // Retirada/entrega por loja (Fase 9d, ADR 0028): aditivo sobre pdp-shipping,
+  // nunca substituicao. So renderiza quando o modo de fulfillment sai do
+  // padrao "centralized" (nears.config.yaml); nesse padrao fica null, como
+  // se a section nao existisse.
+  const pickupEnabled = config.fulfillment.mode !== 'centralized';
 
   const faq = product.faq ?? defaultFaq(product.name);
 
@@ -92,6 +97,8 @@ export async function buildPdpView(slug: string, config: NearsConfig = loadConfi
         };
       case 'pdp-shipping':
         return { zipInput: true, ...(extra?.cep ? { cep: extra.cep } : {}), ...(extra?.quote ? { quote: extra.quote } : {}) };
+      case 'pdp-pickup':
+        return pickupEnabled ? { ...(extra?.cep ? { cep: extra.cep } : {}), ...(extra?.pickupQuote ? { quote: extra.pickupQuote } : {}) } : null;
       case 'pdp-details':
         return {
           ...(product.description ? { description: product.description } : {}),
