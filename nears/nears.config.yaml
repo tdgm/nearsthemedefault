@@ -114,6 +114,21 @@ vocabulary:
   accountPedidoTotal: Total
   accountFavoritosTitle: Favoritos
   accountFavoritosEmpty: Você ainda não adicionou favoritos.
+  # Carrinho de pagina propria (Fase 10, ADR 0029).
+  cartTitle: Meu carrinho
+  cartEmpty: Seu carrinho está vazio.
+  cartContinueShopping: Continuar comprando
+  cartQuantityLabel: Quantidade
+  cartUpdate: Atualizar
+  cartRemove: Remover
+  cartSubtotal: Subtotal
+  cartCheckout: Finalizar compra
+  cartUpdated: Carrinho atualizado.
+  cartItemRemoved: Item removido do carrinho.
+  cartItemUnavailable: Um ou mais itens não estão mais disponíveis e foram removidos do carrinho.
+  checkoutStubTitle: Finalizar compra
+  checkoutStubMessage: Finalizar compra ainda não está disponível neste template. Em uma loja real, esta etapa é do backend/painel.
+  checkoutStubBack: Voltar ao carrinho
 
 locale:
   default: pt-BR

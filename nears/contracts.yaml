@@ -168,6 +168,15 @@ seo:
     lojas:
       h1: "Nossas lojas"
       schema: [WebPage, LocalBusiness]
+    # Carrinho de pagina propria e stub de checkout (Fase 10, ADR 0029):
+    # sempre noindex,nofollow - dado por visitante, nunca conteudo de
+    # catalogo (mesmo raciocinio da area da conta).
+    carrinho:
+      robots: "noindex,nofollow"
+      schema: []
+    checkout:
+      robots: "noindex,nofollow"
+      schema: []
 
 geo:
   requiredEverywhere:
