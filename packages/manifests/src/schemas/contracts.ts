@@ -47,6 +47,14 @@ const storeContractSchema = z.strictObject({
   note: z.string().min(1),
 });
 
+// MOI (Multi Omni/Level Inventory - ADR 0028, esclarecido pelo usuario em 2026-11-06):
+// leitura de estoque por loja. So relevante quando fulfillment.inventory.mode =
+// "per-store" (nears.config.yaml); com "shared" o estoque e um pool unico.
+const storeInventoryContractSchema = z.strictObject({
+  required: strings.min(1),
+  note: z.string().min(1),
+});
+
 const dataSchema = z.strictObject({
   product: productContractSchema,
   collection: z.strictObject({ required: strings.min(1), requiredForGeo: strings }),
@@ -54,6 +62,7 @@ const dataSchema = z.strictObject({
   customer: customerContractSchema,
   order: orderContractSchema,
   store: storeContractSchema,
+  storeInventory: storeInventoryContractSchema,
 });
 
 const seoGlobalSchema = z.strictObject({

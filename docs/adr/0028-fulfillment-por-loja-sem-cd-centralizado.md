@@ -24,10 +24,31 @@ Pesquisa feita a pedido do usuario:
   tres conceitos sao a base vocabular desta decisao.
 - **"MOI"**: citado pelo usuario como termo a pesquisar na VTEX. Nao foi possivel
   confirmar como termo real da documentacao publica da VTEX em nenhuma busca
-  realizada. Registrado aqui como **pendente de esclarecimento com o usuario** -
-  nenhum campo ou conceito desta ADR usa essa sigla. Se o usuario confirmar o
-  significado, uma ADR de extensao trata disso; nao adivinho o significado para nao
-  arriscar nomear um campo de manifest errado.
+  realizada. **Esclarecido pelo proprio usuario em 2026-11-06**: "Multi Omni
+  Inventary ou Multi Level Inventary, leitura de estoques disponivel nas lojas" -
+  ou seja, visibilidade de estoque *por loja* (cada loja com sua propria
+  quantidade por SKU), nao um pool unico central. Nao e termo oficial confirmado da
+  VTEX (nenhuma busca o encontrou na documentacao publica), mas e o conceito que o
+  usuario pediu e que o fulfillment por loja de fato precisa: sem isso, "retirar
+  nesta loja" ou "entregar a partir da loja mais proxima" so poderia assumir
+  disponibilidade, nunca confirma-la. Modelado abaixo como `fulfillment.inventory`
+  (politica) e `data.storeInventory` (contrato de dados).
+
+## Atualizacao (2026-11-06, mesmo dia - resolve a pendencia acima)
+
+Com o significado de MOI confirmado, dois acrescimos a decisao original (ainda sem
+UI nem fixture - so contrato, igual ao restante da Fase 9a):
+
+- `fulfillment.inventory: { mode: shared | per-store, provider: mock | external }`.
+  `shared` (default) preserva o comportamento atual: estoque e um pool unico
+  (`product.offers.availability`), sem granularidade por loja - mode `centralized`
+  so faz sentido com `shared`. `per-store` ativa a leitura de `data.storeInventory`
+  por loja antes de prometer retirada/entrega; natural com `mode: ship-from-store`
+  ou `hybrid`, mas a validacao nao forca o acoplamento (uma loja pode ter poucos
+  SKUs e preferir nao rastrear por unidade ainda).
+- Nova entidade `data.storeInventory` em `contracts.yaml`: `storeId`, `sku`,
+  `quantity`, `reservable`. Fixture mock entra na Fase 9d junto do fixture de
+  `store`, como a mesma ADR ja previa.
 
 ## Decisao
 
@@ -83,13 +104,15 @@ Pesquisa feita a pedido do usuario:
 - Calculo real de distancia CEP -> loja mais proxima (a 9d implementa com os CEPs
   mock das lojas fixture; calculo geografico real entra quando houver fonte de dados
   real de lojas).
-- Qualquer uso do termo "MOI" ate o usuario esclarecer o significado pretendido.
+- Fixture mock de `storeInventory` e a logica que consulta "tem estoque nesta loja
+  antes de prometer retirada" (Fase 9d; aqui so o contrato de dados).
 
 ## Consequencias
 
-- `packages/manifests/src/schemas/config.ts` ganha `fulfillmentSchema` e o campo
-  `fulfillment` em `configSchema`.
-- `packages/manifests/src/schemas/contracts.ts` ganha `storeContractSchema` e o campo
-  `store` em `dataSchema`.
+- `packages/manifests/src/schemas/config.ts` ganha `fulfillmentSchema` (incluindo
+  `inventory`) e o campo `fulfillment` em `configSchema`.
+- `packages/manifests/src/schemas/contracts.ts` ganha `storeContractSchema`,
+  `storeInventoryContractSchema` e os campos `store`/`storeInventory` em
+  `dataSchema`.
 - Nenhum preset de nicho (`nears/presets/*.yaml`) precisa mudar: `fulfillment` nao e
   sobrescrito por preset (so `catalog` e `vocabulary` sao).

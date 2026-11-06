@@ -164,6 +164,14 @@ export const fulfillmentSchema = z
       provider: z.enum(['mock', 'external']),
       endpoint: z.string().min(1).nullable(),
     }),
+    // MOI (Multi Omni/Level Inventory - ADR 0028, 2026-11-06): leitura de estoque
+    // por loja, nao um pool unico. "shared" preserva product.offers.availability
+    // como hoje; "per-store" consulta data.storeInventory antes de prometer
+    // retirada/entrega por uma loja especifica.
+    inventory: z.strictObject({
+      mode: z.enum(['shared', 'per-store']),
+      provider: z.enum(['mock', 'external']),
+    }),
   })
   .superRefine((f, ctx) => {
     if (f.mode === 'centralized' && (f.pickup.enabled || f.delivery.shipFromStore)) {
