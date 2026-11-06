@@ -31,7 +31,7 @@ describe('createRegistry', () => {
         'banner-full', 'banner-grid', 'benefit-bar', 'breadcrumb', 'category-hub', 'customer-service', 'event-banner', 'faq',
         'footer', 'header', 'hero', 'minicart', 'nav-drawer', 'product-card', 'product-grid', 'promo-bar', 'quick-filter',
         'related-links', 'section-title', 'showcase', 'text-seo',
-        'pdp-gallery', 'pdp-buybox', 'pdp-shipping', 'pdp-details', 'pdp-reviews', 'pdp-bundle', 'pdp-related',
+        'pdp-gallery', 'pdp-buybox', 'pdp-shipping', 'pdp-pickup', 'pdp-details', 'pdp-reviews', 'pdp-bundle', 'pdp-related',
       ].sort(),
     );
     expect(pendingSections(manifests, registry)).not.toContain('hero');
