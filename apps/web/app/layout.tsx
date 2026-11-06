@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
-import { CustomerService, Footer, Header, Minicart, NavDrawer, PromoBar, SkipLink } from '@nears/sections';
-import { getStorefront } from '../lib/storefront';
+import { Suspense, type ReactNode } from 'react';
+import { CustomerService, Footer, Header, Minicart, NavDrawer, PromoBar, SkipLink, type HeaderProps, type MinicartProps } from '@nears/sections';
+import { getCartAwareChrome, getStorefront } from '../lib/storefront';
 import { getStore } from '../lib/data/client';
 import { loadAllManifests, loadConfig } from '../lib/manifest';
 import { RumScript } from '../lib/rum';
@@ -25,6 +25,26 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+/**
+ * `cartCount`/`items` reais dependem do cookie `nears_cart` - dado de
+ * requisicao, que com Cache Components (ADR 0007) so pode ser lido dentro de
+ * um `Suspense` (mesmo padrao de `app/account/page.tsx`). `getStorefront()`
+ * continua 100% estatica (ela e usada por TODA rota do site); so estas duas
+ * ilhas, dentro do layout raiz, leem o carrinho (Fase 10, ADR 0029). O
+ * fallback de cada `Suspense` e exatamente o mesmo render estatico de hoje
+ * (`cartCount: 0`/`items: []`, os defaults de `s.header`/`s.minicart`) -
+ * zero layout shift quando o resultado chega.
+ */
+async function CartAwareHeader({ header }: { header: HeaderProps }) {
+  const { cartCount } = await getCartAwareChrome();
+  return <Header {...header} skipLink={false} cartCount={cartCount} />;
+}
+
+async function CartAwareMinicart({ minicart }: { minicart: MinicartProps }) {
+  const { items } = await getCartAwareChrome();
+  return <Minicart {...minicart} items={items} />;
+}
+
 // Sections globais (docs/adr/0014). Variante do header: `full` em todas as rotas
 // (docs/adr/0025: `minimal` por rota exigiria grupos de rota; resolveHeaderVariant segue
 // disponivel e testada). `#conteudo` e o destino do skip link.
@@ -36,13 +56,17 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         {/* Primeiro item focavel da pagina: antes da PromoBar (docs/adr/0026). */}
         <SkipLink {...(s.header.labels?.skip ? { label: s.header.labels.skip } : {})} />
         <PromoBar {...s.promoBar} />
-        <Header {...s.header} skipLink={false} />
+        <Suspense fallback={<Header {...s.header} skipLink={false} />}>
+          <CartAwareHeader header={s.header} />
+        </Suspense>
         <div id="conteudo" tabIndex={-1} className="outline-none">
           {children}
         </div>
         <Footer {...s.footer} />
         <NavDrawer {...s.navDrawer} />
-        <Minicart {...s.minicart} />
+        <Suspense fallback={<Minicart {...s.minicart} />}>
+          <CartAwareMinicart minicart={s.minicart} />
+        </Suspense>
         <CustomerService {...s.customerService} />
         <AiReferralScript />
         <RumScript />
