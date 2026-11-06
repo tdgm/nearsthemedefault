@@ -171,7 +171,7 @@ routes:
   - id: login
     pattern: "/login"
     template: login
-    render: ssg
+    render: ssr   # shell estatico + ilha com Suspense (returnUrl/erro vem da query - ver app/login/page.tsx)
     indexable: false
     robots: "noindex,nofollow"
     appRoute: "/login/page"
@@ -180,7 +180,7 @@ routes:
   - id: cadastro
     pattern: "/cadastro"
     template: cadastro
-    render: ssg
+    render: ssr   # mesmo padrao do login
     indexable: false
     robots: "noindex,nofollow"
     appRoute: "/cadastro/page"

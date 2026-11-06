@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Link } from '@nears/ui';
 import { AccountAuthForm } from '../../components/account-auth-form';
 import { vocab } from '../../lib/manifest';
@@ -18,33 +19,61 @@ function safeReturnUrl(raw: string | string[] | undefined): string {
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
-export default async function Page({ searchParams }: { searchParams: SearchParams }) {
+const labels = {
+  name: vocab('accountCadastroName'),
+  email: vocab('accountCadastroEmail'),
+  password: vocab('accountCadastroPassword'),
+  confirmPassword: vocab('accountCadastroConfirmPassword'),
+  submit: vocab('accountCadastroSubmit'),
+  submitting: vocab('accountCadastroSubmitting'),
+  error: vocab('accountCadastroError'),
+  success: vocab('accountCadastroSuccess'),
+};
+
+/**
+ * searchParams (returnUrl/erro) e dado de requisicao: com Cache Components
+ * precisa ficar dentro de Suspense, senao o build falha ao tentar prerenderizar
+ * a rota (mesmo padrao de app/s/page.tsx e app/login/page.tsx). O shell (H1 +
+ * formulario sem personalizacao) sai no HTML estatico; so esta ilha e dinamica
+ * por requisicao.
+ */
+async function CadastroForm({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
   const returnUrl = safeReturnUrl(params.returnUrl);
 
   return (
-    <main className="mx-auto max-w-md p-4">
-      <h1 className="my-4 text-2xl font-bold">{vocab('accountCadastroTitle')}</h1>
+    <>
       <AccountAuthForm
         variant="cadastro"
         action="/api/account/register"
         returnUrl={returnUrl}
         initialError={params.erro === '1'}
-        labels={{
-          name: vocab('accountCadastroName'),
-          email: vocab('accountCadastroEmail'),
-          password: vocab('accountCadastroPassword'),
-          confirmPassword: vocab('accountCadastroConfirmPassword'),
-          submit: vocab('accountCadastroSubmit'),
-          submitting: vocab('accountCadastroSubmitting'),
-          error: vocab('accountCadastroError'),
-          success: vocab('accountCadastroSuccess'),
-        }}
+        labels={labels}
       />
       <p className="mt-6 text-sm text-on-surface-muted">
         {vocab('accountCadastroSwitchPrompt')}{' '}
         <Link href={`/login${returnUrl !== '/' ? `?returnUrl=${encodeURIComponent(returnUrl)}` : ''}`}>{vocab('accountCadastroSwitchLabel')}</Link>
       </p>
+    </>
+  );
+}
+
+export default function Page({ searchParams }: { searchParams: SearchParams }) {
+  return (
+    <main className="mx-auto max-w-md p-4">
+      <h1 className="my-4 text-2xl font-bold">{vocab('accountCadastroTitle')}</h1>
+      <Suspense
+        fallback={
+          <>
+            <AccountAuthForm variant="cadastro" action="/api/account/register" labels={labels} />
+            <p className="mt-6 text-sm text-on-surface-muted">
+              {vocab('accountCadastroSwitchPrompt')} <Link href="/login">{vocab('accountCadastroSwitchLabel')}</Link>
+            </p>
+          </>
+        }
+      >
+        <CadastroForm searchParams={searchParams} />
+      </Suspense>
     </main>
   );
 }

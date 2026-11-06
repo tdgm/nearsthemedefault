@@ -105,8 +105,18 @@ desta ADR:
   essa liberdade. `nears/sections.registry.yaml > templates.login/cadastro`
   so referenciam `section-title` (existente) para satisfazer
   `refs.ts > checkTemplates/checkRoutes`.
+- **`render: ssr`, nao `ssg` (ajuste pos-build).** `/login` e `/cadastro` leem
+  `searchParams` (`returnUrl`/`erro`) a cada requisicao - com *Cache
+  Components* do Next 16, isso teria que ficar dentro de `<Suspense>`, senao
+  `pnpm build` falha ao tentar prerenderizar a rota ("uncached or runtime data
+  during prerendering"). Cada pagina virou shell estatico (`<h1>` + rotulos do
+  `vocab`) com uma ilha async dentro de `<Suspense>` lendo `searchParams`,
+  mesmo padrao de `app/s/page.tsx` (comentario la: "searchParams e dado de
+  requisicao: com cacheComponents precisa ficar dentro de Suspense"). Por
+  isso `routes.manifest.yaml` usa `render: ssr`, nao `ssg` como no primeiro
+  commit desta sub-fase.
 
-As entradas reais de rota (`login`, `cadastro`, `ssg`, `noindex,nofollow`) e de
+As entradas reais de rota (`login`, `cadastro`, `ssr`, `noindex,nofollow`) e de
 `contracts.yaml > seo.byTemplate` ja existem a partir desta sub-fase. `account`
 e suas sub-rotas (dados/enderecos/pedidos/favoritos, `requiresAuth: true`,
 `render: ssr`) continuam fora do escopo, para a Fase 9c.
