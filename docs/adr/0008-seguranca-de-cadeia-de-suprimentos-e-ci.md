@@ -80,7 +80,7 @@ apresentado antes deste ADR.
 - Toda vez que uma dependencia nova entrar, em qualquer fase, ela passa por
   peso em KB (regra existente do `CLAUDE.md`) **e** por `pnpm audit` (novo)
   antes de mergear.
-- A configuracao real do header (CSP com nonce por requisicao, etc.) so
+- A configuracao real do header (CSP com nonce por requisicao, etc.; substituida pela CSP de base do ADR 0025) so
   acontece quando houver app Next para configurar - o que existe agora e o
   contrato no manifest, nao o middleware/proxy. Isso e intencional: a Fase
   0 nao cria codigo de app, so os manifests/CI que o guiam.

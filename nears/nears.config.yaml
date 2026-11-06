@@ -162,8 +162,12 @@ security:
   # docs/adr/0008-seguranca-de-cadeia-de-suprimentos-e-ci.md.
   headers:
     contentSecurityPolicy:
-      mode: strict-dynamic    # nonce por requisicao; sem 'unsafe-inline' sem nonce
-      reportOnly: false
+      # baseline = object-src 'none'; base-uri 'self'; form-action 'self' (+ origens abaixo);
+      # frame-ancestors. Sem script-src: nonce por requisicao exige render dinamico em toda
+      # rota e desfaz SSG/PPR (docs/adr/0025). off = so frame-ancestors.
+      mode: baseline
+      reportOnly: false       # true troca para Content-Security-Policy-Report-Only
+      formActionOrigins: []   # origens https extras para <form action>, ex.: https://checkout.minhaloja.com.br
     hsts:
       enabled: true
       maxAgeSeconds: 63072000
@@ -203,7 +207,7 @@ thirdParties:
   #       integration: tagManager
   #       src: https://www.googletagmanager.com/gtm.js?id=GTM-XXXX
   #       forward: [dataLayer.push]
-  #       adr: docs/adr/0024-gtm-na-loja-x.md
+  #       adr: docs/adr/0100-gtm-na-loja-x.md
   scripts: []
 
 integrations:

@@ -16,6 +16,7 @@ export const headerSchema = z.strictObject({
   cartCount: z.number().int().nonnegative().optional(),
   wishlistCount: z.number().int().nonnegative().optional(),
   variant: z.enum(['full', 'minimal', 'none']).optional(),
+  skipLink: z.boolean().optional(),
   labels: z
     .strictObject({
       skip: z.string(),

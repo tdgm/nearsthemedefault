@@ -97,6 +97,11 @@ export const vocabularySchema = z
 
 const positiveInt = z.number().int().positive();
 
+/** Origem https sem caminho, query nem fragmento: entra tal e qual numa diretiva de CSP. */
+const httpsOrigin = z
+  .url({ protocol: /^https$/ })
+  .refine((v) => URL.canParse(v) && new URL(v).origin === v, 'origem https sem barra final, caminho, query ou fragmento (ex.: https://checkout.exemplo.com.br)');
+
 export const budgetsSchema = z.strictObject({
   js_initial_kb: z.number().positive(),
   css_initial_kb: z.number().positive(),
@@ -189,6 +194,13 @@ export const configSchema = z.strictObject({
       referrerPolicy: z.string().min(1),
       permissionsPolicy: z.string().min(1),
       frameAncestors: z.enum(['none', 'self']),
+      contentSecurityPolicy: z
+        .strictObject({
+          mode: z.enum(['baseline', 'off']),
+          reportOnly: z.boolean().default(false),
+          formActionOrigins: z.array(httpsOrigin).default([]),
+        })
+        .default({ mode: 'baseline', reportOnly: false, formActionOrigins: [] }),
     }),
     multiTenancy: z.looseObject({
       hostValidation: z.literal('allowlist-only'),

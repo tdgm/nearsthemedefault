@@ -124,7 +124,7 @@ routes:
     pattern: "/{productSlug}/p"
     template: pdp
     priority: 0.8
-    headerVariant: minimal
+    headerVariant: full   # minimal exigiria grupos de rota no layout raiz; decisao em docs/adr/0025
     appRoute: "/[slug]/p/page"   # sufixo literal "/p" vence /[slug]/[sub]; o Next exige o mesmo nome de parametro ([slug]) no 1o segmento - docs/adr/0009
     jsBudgetCritical: true
 

@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { NextConfig } from 'next';
 import YAML from 'yaml';
+import { buildCsp, type CspConfig } from './lib/security/csp.ts';
 
 // Fonte unica: nears/nears.config.yaml. Nada de header ou flag de render
 // hardcoded aqui (CLAUDE.md > Seguranca; docs/adr/0008). O `next` roda com
@@ -17,6 +18,7 @@ const cfg = YAML.parse(
       referrerPolicy: string;
       permissionsPolicy: string;
       frameAncestors: 'none' | 'self';
+      contentSecurityPolicy?: Partial<CspConfig>;
     };
   };
 };
@@ -50,10 +52,9 @@ const securityHeaders = [
   { key: 'X-Content-Type-Options', value: h.xContentTypeOptions },
   { key: 'Referrer-Policy', value: h.referrerPolicy },
   { key: 'Permissions-Policy', value: h.permissionsPolicy },
-  // So frame-ancestors por enquanto. A CSP completa com nonce (strict-dynamic)
-  // exige proxy.ts e forca render dinamico em toda rota: decisao em aberto,
-  // ver docs/adr/0009-fase-0-fundacao.md.
-  { key: 'Content-Security-Policy', value: `frame-ancestors '${h.frameAncestors}'` },
+  // CSP de base (sem script-src): nonce por requisicao forcaria render dinamico em toda
+  // rota. Decisao em docs/adr/0025. O schema Zod dos manifests aplica os mesmos defaults.
+  buildCsp({ mode: 'baseline', reportOnly: false, formActionOrigins: [], ...h.contentSecurityPolicy }, h.frameAncestors),
 ];
 
 const nextConfig: NextConfig = {

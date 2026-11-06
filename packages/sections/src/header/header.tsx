@@ -45,6 +45,22 @@ function ActionLink({ href, label, count = 0, children }: { href: string; label:
 }
 
 /**
+ * Skip link: primeiro foco da pagina; o destino (`#conteudo`) vem do layout. Fica no Header
+ * por padrao; o layout raiz o renderiza antes da PromoBar (`skipLink={false}` no Header) para
+ * que nada receba foco antes dele (WCAG 2.4.1, docs/adr/0026).
+ */
+export function SkipLink({ label = defaults.skip, href = '#conteudo' }: { label?: string; href?: string }) {
+  return (
+    <a
+      href={href}
+      className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:inline-flex focus:min-h-11 focus:items-center focus:rounded-md focus:bg-surface-inverse focus:px-4 focus:text-on-inverse"
+    >
+      {label}
+    </a>
+  );
+}
+
+/**
  * Header: logo centralizado, hamburger (abre o NavDrawer), busca, e conta,
  * favoritos e carrinho com badge. Server Component: o unico JS e o
  * `OverlayTrigger` (ilha minima). Altura reservada de 56px (`cwv.reservedHeight`).
@@ -66,6 +82,7 @@ export function Header({
   cartCount = 0,
   wishlistCount = 0,
   variant = 'full',
+  skipLink = true,
   labels,
 }: HeaderProps) {
   const l = { ...defaults, ...labels };
@@ -73,13 +90,7 @@ export function Header({
 
   return (
     <>
-      {/* Primeiro foco da pagina; o destino (#conteudo) vem do layout. */}
-      <a
-        href="#conteudo"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:inline-flex focus:min-h-11 focus:items-center focus:rounded-md focus:bg-surface-inverse focus:px-4 focus:text-on-inverse"
-      >
-        {l.skip}
-      </a>
+      {skipLink && <SkipLink label={l.skip} />}
       {variant !== 'none' && (
         <header className="sticky top-0 z-40 h-14 border-b border-border bg-surface">
           <div className="mx-auto grid h-full max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-2 px-2 md:px-4">
