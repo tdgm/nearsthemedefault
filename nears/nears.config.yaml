@@ -209,6 +209,14 @@ fulfillment:
   cepLookup:
     provider: mock       # mock | external
     endpoint: null        # server-only quando "external"; nunca exposto ao cliente
+  inventory:
+    # MOI (Multi Omni/Level Inventory, esclarecido pelo usuario - ADR 0028): leitura
+    # de estoque por loja, nao um pool unico. "shared" (default) preserva o
+    # comportamento atual - product.offers.availability e um pool so, sem loja.
+    # "per-store" consulta data.storeInventory por loja antes de prometer
+    # retirada/entrega.
+    mode: shared          # shared | per-store
+    provider: mock         # mock | external
 
 observability:
   # RUM de Core Web Vitals (docs/adr/0022): coletor inline, fora do bundle de JS.

@@ -71,6 +71,15 @@ data:
       navigation), nunca hardcoded aqui ou em nears.config.yaml (ADR 0028). Este
       contrato so valida a forma de cada loja que o data layer expoe.
 
+  storeInventory:
+    required: [storeId, sku, quantity, reservable]
+    note: >
+      MOI (Multi Omni/Level Inventory - esclarecido pelo usuario, ADR 0028): leitura
+      de estoque por loja, nao um pool unico. So existe quando
+      fulfillment.inventory.mode = "per-store"; com "shared" (default), o estoque
+      continua vindo de data.product.offers.availability, sem granularidade por
+      loja.
+
 seo:
   global:
     canonical: self-referencing
