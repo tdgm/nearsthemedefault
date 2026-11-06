@@ -66,7 +66,9 @@ export function AddToCartForm({ action, sku, children, cta, disabledLabel, butto
         // Barra fixa (72px) no mobile (`data-sticky-bar` sobe o botao de atendimento, ver globals.css); o botao se liga ao formulario pelo atributo `form`.
         <div data-sticky-bar className="fixed inset-x-0 bottom-0 z-40 flex h-[72px] items-center gap-3 border-t border-border bg-surface px-4 md:hidden">
           <p className="shrink-0 text-lg font-bold">{barPrice}</p>
-          {button('flex-1', formId)}
+          {/* `min-w-0` deixa o flex item encolher abaixo do min-content do rotulo (que entao quebra em
+              duas linhas): sem isso, `flex-1` com `right:0` forca a barra a estourar a viewport. */}
+          {button('min-w-0 flex-1', formId)}
         </div>
       )}
     </>

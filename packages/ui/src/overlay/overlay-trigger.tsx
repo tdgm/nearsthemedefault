@@ -11,6 +11,20 @@ export type OverlayTriggerProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
   children: ReactNode;
 };
 
+// `showModal()` torna o resto da pagina inerte para foco, mas o navegador NAO bloqueia
+// o scroll do documento por conta propria: wheel/touch na area fora do dialog (que nao e
+// um scroll container) sobe ate o `<html>`, que continua rolavel por baixo do painel fixo.
+// Sem isto, no touch isso aparenta "travar" a navegacao (o dedo rola o fundo, nao o menu).
+function lockScroll() {
+  const { style } = document.documentElement;
+  if (style.overflow === 'hidden') return; // ja travado por outro overlay
+  style.overflow = 'hidden';
+}
+
+function unlockScroll() {
+  document.documentElement.style.overflow = '';
+}
+
 export function OverlayTrigger({ targetId, children, ...rest }: OverlayTriggerProps) {
   return (
     <button
@@ -22,9 +36,17 @@ export function OverlayTrigger({ targetId, children, ...rest }: OverlayTriggerPr
         const button = event.currentTarget; // currentTarget some apos o handler
         const dialog = document.getElementById(targetId);
         if (!(dialog instanceof HTMLDialogElement) || dialog.open) return;
+        lockScroll();
         dialog.showModal();
         button.setAttribute('aria-expanded', 'true');
-        dialog.addEventListener('close', () => button.setAttribute('aria-expanded', 'false'), { once: true });
+        dialog.addEventListener(
+          'close',
+          () => {
+            button.setAttribute('aria-expanded', 'false');
+            unlockScroll();
+          },
+          { once: true },
+        );
         // Clique no backdrop: o alvo do evento e o proprio <dialog>. Liga uma vez.
         if (!dialog.dataset.backdropBound) {
           dialog.dataset.backdropBound = 'true';
