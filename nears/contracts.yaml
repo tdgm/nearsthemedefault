@@ -125,11 +125,18 @@ seo:
     notfound:
       robots: "noindex,nofollow"
       schema: []
-    # As entradas de login/cadastro/account (Fase 9, ADR 0027) entram aqui so
-    # quando a rota/template correspondente existir em routes.manifest.yaml ou
+    # Login/cadastro (Fase 9b, ADR 0027): sempre noindex,nofollow - formulario
+    # de dado pessoal, nunca conteudo de catalogo a citar/indexar.
+    login:
+      robots: "noindex,nofollow"
+      schema: []
+    cadastro:
+      robots: "noindex,nofollow"
+      schema: []
+    # As entradas de /account/** (Fase 9c, ADR 0027) entram aqui so quando a
+    # rota/template correspondente existir em routes.manifest.yaml ou
     # sections.registry.yaml - refs.ts > checkContracts exige que toda chave de
-    # seo.byTemplate seja uma rota ou um template conhecido. Chegam em 9b/9c,
-    # sempre como "noindex,nofollow" / schema: [] (dados pessoais).
+    # seo.byTemplate seja uma rota ou um template conhecido.
 
 geo:
   requiredEverywhere:

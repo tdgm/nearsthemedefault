@@ -78,6 +78,49 @@ area da conta.
   contrato (corpo, cookie, redirecionamento) se mantem.
 - 2FA, login social e "lembrar-me" nao fazem parte do escopo pedido.
 
+## Nota de implementacao (Fase 9b, 2026-11-06)
+
+Login e cadastro mock implementados: `apps/web/lib/auth/session.ts` (helpers de
+cookie em texto puro, sem depender de `next/headers`, para serem testaveis sem
+mockar `Request`/`Response` do Next), `apps/web/lib/data/customer.ts`
+(`customerSchema`/`addressSchema` + 2 clientes fixos:
+`ana.souza@exemplo.com.br` e `bruno.lima@exemplo.com.br`),
+`apps/web/app/api/account/session/route.ts` (`POST` login + `DELETE` logout) e
+`apps/web/app/api/account/register/route.ts` (`POST` cadastro), consumidos por
+`apps/web/components/account-auth-form.tsx` (client component, mesmo padrao de
+`add-to-cart-form.tsx`) nas paginas `apps/web/app/login/page.tsx` e
+`apps/web/app/cadastro/page.tsx`. Dois ajustes em relacao ao esboco original
+desta ADR:
+
+- **Senha do login sem minimo de caracteres** (so `min(1)`, nao os "6
+  caracteres" citados acima): o login mock nunca verifica a senha de verdade,
+  entao exigir um tamanho minimo so fingiria uma regra de seguranca que nao
+  existe. O cadastro mock mantem `min(8)` (com `confirmarSenha` igual a
+  `senha` via `.refine`) como piso razoavel de UX, ja que e o unico momento em
+  que a pessoa escolhe a propria senha.
+- **Nenhuma section nova em `packages/sections`.** O formulario virou um
+  componente simples em `apps/web/components/` (como `search-form.tsx`),
+  nao uma section do registry: login/cadastro sao paginas utilitarias fora do
+  fluxo de merchandising, mesma categoria do template `search`, que ja toma
+  essa liberdade. `nears/sections.registry.yaml > templates.login/cadastro`
+  so referenciam `section-title` (existente) para satisfazer
+  `refs.ts > checkTemplates/checkRoutes`.
+- **`render: ssr`, nao `ssg` (ajuste pos-build).** `/login` e `/cadastro` leem
+  `searchParams` (`returnUrl`/`erro`) a cada requisicao - com *Cache
+  Components* do Next 16, isso teria que ficar dentro de `<Suspense>`, senao
+  `pnpm build` falha ao tentar prerenderizar a rota ("uncached or runtime data
+  during prerendering"). Cada pagina virou shell estatico (`<h1>` + rotulos do
+  `vocab`) com uma ilha async dentro de `<Suspense>` lendo `searchParams`,
+  mesmo padrao de `app/s/page.tsx` (comentario la: "searchParams e dado de
+  requisicao: com cacheComponents precisa ficar dentro de Suspense"). Por
+  isso `routes.manifest.yaml` usa `render: ssr`, nao `ssg` como no primeiro
+  commit desta sub-fase.
+
+As entradas reais de rota (`login`, `cadastro`, `ssr`, `noindex,nofollow`) e de
+`contracts.yaml > seo.byTemplate` ja existem a partir desta sub-fase. `account`
+e suas sub-rotas (dados/enderecos/pedidos/favoritos, `requiresAuth: true`,
+`render: ssr`) continuam fora do escopo, para a Fase 9c.
+
 ## Consequencias
 
 - `account`, `login` seguem reservados em `resolution.reserved.firstSegment`;

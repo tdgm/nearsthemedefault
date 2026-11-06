@@ -55,6 +55,27 @@ vocabulary:
   facetCategory: Categoria
   facetBrand: Marca
   facetPrice: Preço
+  # Login/cadastro mock (rotas /login e /cadastro, Fase 9b, ADR 0027).
+  accountLoginTitle: Entrar
+  accountLoginEmail: E-mail
+  accountLoginPassword: Senha
+  accountLoginSubmit: Entrar
+  accountLoginSubmitting: Entrando…
+  accountLoginError: E-mail ou senha incorretos.
+  accountLoginSuccess: Login realizado.
+  accountLoginSwitchPrompt: Ainda não tem conta?
+  accountLoginSwitchLabel: Criar conta
+  accountCadastroTitle: Criar conta
+  accountCadastroName: Nome completo
+  accountCadastroEmail: E-mail
+  accountCadastroPassword: Senha
+  accountCadastroConfirmPassword: Confirmar senha
+  accountCadastroSubmit: Criar conta
+  accountCadastroSubmitting: Criando conta…
+  accountCadastroError: Não foi possível criar sua conta. Verifique os dados.
+  accountCadastroSuccess: Conta criada.
+  accountCadastroSwitchPrompt: Já tem conta?
+  accountCadastroSwitchLabel: Entrar
 
 locale:
   default: pt-BR

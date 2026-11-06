@@ -491,6 +491,17 @@ templates:
   notfound:
     sections: [section-title, showcase:recommended]
 
+  # Login/cadastro (Fase 9b, ADR 0027): paginas utilitarias, fora do fluxo de
+  # merchandising - mesma liberdade que o template `search` ja toma (o
+  # formulario de fato e um componente simples em apps/web/components/, nao
+  # uma section nova; o template so referencia o que ja existe para passar na
+  # checagem cruzada de refs.ts > checkTemplates/checkRoutes).
+  login:
+    sections: [section-title]
+
+  cadastro:
+    sections: [section-title]
+
 validation:
   everySectionMustDeclare: [priority, cwv, a11y]
   onMissing: fail-build

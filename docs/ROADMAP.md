@@ -189,10 +189,16 @@ Sub-fases (mesmo padrao da Fase 8):
   schema de rotas, e as duas ADRs de decisao (0027, 0028). Sem UI e sem entradas novas
   em `routes:` ainda - entram em 9b/9c junto do template e das sections que cada rota usa
   (`refs.ts` exige os dois nascerem juntos).
-- **9b - Autenticacao mock.** `/api/account/session` (login/logout) e `/api/account/register`,
-  paginas `/login` e `/cadastro`, guard de sessao server-side.
+- **9b - Autenticacao mock (concluida).** `/api/account/session` (login/logout) e
+  `/api/account/register`, `apps/web/lib/auth/session.ts` (cookie `nears_session`),
+  fixture `apps/web/lib/data/customer.ts` (2 clientes mock), paginas `/login` e
+  `/cadastro` (rotas reais, `ssg`, `noindex,nofollow`), formulario
+  `account-auth-form.tsx` (funciona sem JS). Guard de sessao server-side fica para a
+  9c, junto das rotas `/account/**` que ele de fato protege.
 - **9c - Area da conta.** `/account` (visao geral) + `dados`, `enderecos`, `pedidos` (lista e
-  detalhe), `favoritos`; fixtures mock de cliente/pedido/favoritos no data layer.
+  detalhe), `favoritos`; fixtures mock de pedido/favoritos no data layer (cliente ja
+  existe desde a 9b); guard de sessao server-side (`requiresAuth`, redireciona para
+  `/login?returnUrl=...`).
 - **9d - Fulfillment por loja.** Fixture mock de lojas e de `storeInventory` (MOI - leitura de
   estoque por loja), calculo de retirada/entrega pela loja mais proxima do CEP *com estoque*
   como opcao adicional ao `quoteShipping` existente, widget na PDP/carrinho; pagina
