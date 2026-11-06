@@ -15,16 +15,16 @@ export type IndexableFacetId = (typeof indexableFacetIds)[number];
 export const geoAttributeIds = [] as const;
 export type GeoAttributeId = (typeof geoAttributeIds)[number];
 
-export const vocabularyKeys = ["cart", "addToCart", "addedToCart", "wishlist", "department", "productType", "bundle", "guide", "search", "searchLabel", "searchPlaceholder", "searchSubmit", "searchEmpty", "searchNoResults", "searchNoResultsHint", "facetCategory", "facetBrand", "facetPrice"] as const;
+export const vocabularyKeys = ["cart", "addToCart", "addedToCart", "wishlist", "department", "productType", "bundle", "guide", "search", "searchLabel", "searchPlaceholder", "searchSubmit", "searchEmpty", "searchNoResults", "searchNoResultsHint", "facetCategory", "facetBrand", "facetPrice", "accountLoginTitle", "accountLoginEmail", "accountLoginPassword", "accountLoginSubmit", "accountLoginSubmitting", "accountLoginError", "accountLoginSuccess", "accountLoginSwitchPrompt", "accountLoginSwitchLabel", "accountCadastroTitle", "accountCadastroName", "accountCadastroEmail", "accountCadastroPassword", "accountCadastroConfirmPassword", "accountCadastroSubmit", "accountCadastroSubmitting", "accountCadastroError", "accountCadastroSuccess", "accountCadastroSwitchPrompt", "accountCadastroSwitchLabel"] as const;
 export type VocabularyKey = (typeof vocabularyKeys)[number];
 
 export const sectionIds = ["hero", "benefit-bar", "section-title", "banner-grid", "category-hub", "showcase", "event-banner", "banner-full", "quick-filter", "product-grid", "product-card", "breadcrumb", "text-seo", "faq", "related-links", "pdp-gallery", "pdp-buybox", "pdp-shipping", "pdp-details", "pdp-reviews", "pdp-bundle", "pdp-related"] as const;
 export type SectionId = (typeof sectionIds)[number];
 
-export const routeIds = ["home", "department", "department-category", "department-category-sub", "category-flat", "category-flat-attribute", "longtail", "campaign", "campaign-segment", "pdp", "search", "institutional", "sitemap-html", "not-found"] as const;
+export const routeIds = ["home", "department", "department-category", "department-category-sub", "category-flat", "category-flat-attribute", "longtail", "campaign", "campaign-segment", "pdp", "search", "institutional", "sitemap-html", "not-found", "login", "cadastro"] as const;
 export type RouteId = (typeof routeIds)[number];
 
-export const templateIds = ["home", "collection", "pdp", "landing", "page", "search", "sitemap", "notfound"] as const;
+export const templateIds = ["home", "collection", "pdp", "landing", "page", "search", "sitemap", "notfound", "login", "cadastro"] as const;
 export type TemplateId = (typeof templateIds)[number];
 
 /** Recursos ligados ou desligados no nicho. */
