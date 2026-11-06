@@ -17,17 +17,19 @@ afterEach(() => vi.restoreAllMocks());
 
 describe('AccountAuthForm', () => {
   it('login: so e-mail e senha, sem nome nem confirmacao', () => {
+    // getByLabelText com regex: todo campo e required, e o Input do design
+    // system acrescenta "(obrigatório)" ao texto do rotulo (ver Input.test.tsx).
     render(<AccountAuthForm variant="login" action="/api/account/session" labels={labels} />);
-    expect(screen.getByLabelText('E-mail')).toHaveAttribute('type', 'email');
-    expect(screen.getByLabelText('Senha')).toHaveAttribute('type', 'password');
-    expect(screen.queryByLabelText('Nome completo')).toBeNull();
-    expect(screen.queryByLabelText('Confirmar senha')).toBeNull();
+    expect(screen.getByLabelText(/^E-mail/)).toHaveAttribute('type', 'email');
+    expect(screen.getByLabelText(/^Senha/)).toHaveAttribute('type', 'password');
+    expect(screen.queryByLabelText(/^Nome completo/)).toBeNull();
+    expect(screen.queryByLabelText(/^Confirmar senha/)).toBeNull();
     expect(screen.getByRole('button', { name: 'Entrar' })).toBeInTheDocument();
   });
 
   it('cadastro: nome, e-mail, senha e confirmacao, todos obrigatorios', () => {
     render(<AccountAuthForm variant="cadastro" action="/api/account/register" labels={labels} />);
-    for (const label of ['Nome completo', 'E-mail', 'Senha', 'Confirmar senha']) {
+    for (const label of [/^Nome completo/, /^E-mail/, /^Senha/, /^Confirmar senha/]) {
       expect(screen.getByLabelText(label)).toBeRequired();
     }
   });
