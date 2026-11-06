@@ -16,7 +16,11 @@ const STAR = 'M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9
 const Stars = ({ className }: { className: string }) => (
   <span className={cn('flex', className)} aria-hidden="true">
     {[0, 1, 2, 3, 4].map((i) => (
-      <svg key={i} viewBox="0 0 24 24" className="size-full shrink-0" fill="currentColor">
+      // `w-1/5` (1 de 5 estrelas) + `h-full`: `size-full` antigo pedia 100% da largura do
+      // container PARA CADA estrela e `shrink-0` proibia encolher, entao as 5 se sobrepunham
+      // e estouravam a largura em ~5x (bug real medido na PDP: 65px de overflow horizontal
+      // no mobile, reproduzido via Playwright em iPhone 13).
+      <svg key={i} viewBox="0 0 24 24" className="h-full w-1/5 shrink-0" fill="currentColor">
         <path d={STAR} />
       </svg>
     ))}
