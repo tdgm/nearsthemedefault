@@ -65,10 +65,15 @@ describe('quotePickup (ADITIVO sobre quoteShipping, ADR 0028)', () => {
     expect(result).toEqual({ error: 'Informe um CEP válido com 8 dígitos.' });
   });
 
-  it('retirada disponivel: loja com pickupEnabled, estoque per-store ok', async () => {
+  it('retirada e entrega disponiveis lado a lado: loja com pickupEnabled e dentro do raio de entrega', async () => {
+    // distanceKm 0 <= deliveryRadiusKm/2 (6): entrega expressa, nao padrao.
     const result = await quotePickup('01310-200', 'SKU-0001', shipFromStore());
-    expect(result).toMatchObject({ store: { id: 'loja-sp', name: 'Loja Paulista' }, distanceKm: 0, pickup: { etaMinutes: 90 } });
-    expect(result).not.toHaveProperty('delivery');
+    expect(result).toMatchObject({
+      store: { id: 'loja-sp', name: 'Loja Paulista' },
+      distanceKm: 0,
+      pickup: { etaMinutes: 90 },
+      delivery: { etaMinutes: 180 },
+    });
   });
 
   it('sem estoque per-store na loja mais proxima: nem retirada nem entrega', async () => {

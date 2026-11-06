@@ -26,6 +26,7 @@ import { showcaseSpec } from './showcase/showcase.spec.ts';
 import { pdpGallerySpec } from './pdp-gallery/pdp-gallery.spec.ts';
 import { pdpBuyboxSpec } from './pdp-buybox/pdp-buybox.spec.ts';
 import { pdpShippingSpec } from './pdp-shipping/pdp-shipping.spec.ts';
+import { pdpPickupSpec } from './pdp-pickup/pdp-pickup.spec.ts';
 import { pdpDetailsSpec } from './pdp-details/pdp-details.spec.ts';
 import { pdpReviewsSpec } from './pdp-reviews/pdp-reviews.spec.ts';
 import { pdpBundleSpec } from './pdp-bundle/pdp-bundle.spec.ts';
@@ -56,6 +57,7 @@ export const sectionSpecs: readonly AnySectionSpec[] = [
   pdpGallerySpec,
   pdpBuyboxSpec,
   pdpShippingSpec,
+  pdpPickupSpec,
   pdpDetailsSpec,
   pdpReviewsSpec,
   pdpBundleSpec,
