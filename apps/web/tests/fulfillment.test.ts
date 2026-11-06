@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { findNearestStore, estimateDistanceKm } from '../lib/data/stores';
 import { hasStockAtStore } from '../lib/data/store-inventory';
-import { quotePickup } from '../lib/data/pickup';
+import { quoteCartPickup, quotePickup } from '../lib/data/pickup';
 import { loadConfig, type NearsConfig } from '../lib/manifest';
 
 /** Config com o default do template (centralized/shared, pickup/delivery desligados). */
@@ -96,5 +96,38 @@ describe('quotePickup (ADITIVO sobre quoteShipping, ADR 0028)', () => {
   it('sku ausente nunca bloqueia a cotacao: estoque por loja e pulado, como em "shared"', async () => {
     const result = await quotePickup('01310-200', undefined, shipFromStore());
     expect(result).toMatchObject({ store: { id: 'loja-sp' }, pickup: { etaMinutes: 90 } });
+  });
+});
+
+describe('quoteCartPickup (varios SKUs de uma vez, Fase 10, ADR 0029)', () => {
+  it('no-op (undefined) com fulfillment.mode = centralized, mesmo com CEP valido', async () => {
+    expect(await quoteCartPickup('01310-200', ['SKU-0001'], centralized())).toBeUndefined();
+  });
+
+  it('no-op (undefined) sem CEP informado, mesmo com fulfillment ligado', async () => {
+    expect(await quoteCartPickup(undefined, ['SKU-0001'], shipFromStore())).toBeUndefined();
+  });
+
+  it('lista de skus vazia: comporta-se como sku ausente (so pickup/delivery habilitados, sem checar estoque)', async () => {
+    const result = await quoteCartPickup('01310-200', [], shipFromStore());
+    expect(result).toMatchObject({ store: { id: 'loja-sp' }, pickup: { etaMinutes: 90 } });
+  });
+
+  it('todos os skus com estoque na mesma loja: retirada e entrega disponiveis', async () => {
+    // SKU-0001 tem estoque em loja-sp; o unico outro item com entrada pra loja-sp (SKU-0003) nao entra aqui.
+    const result = await quoteCartPickup('01310-200', ['SKU-0001'], shipFromStore());
+    expect(result).toMatchObject({ store: { id: 'loja-sp' }, pickup: { etaMinutes: 90 }, delivery: { etaMinutes: 180 } });
+  });
+
+  it('um dos skus sem estoque (ou nao reservavel) na loja mais proxima: reprova o carrinho inteiro, nunca retirada parcial', async () => {
+    // SKU-0003 existe em loja-sp mas reservable: false - hasStockAtStore devolve false.
+    const result = await quoteCartPickup('01310-200', ['SKU-0001', 'SKU-0003'], shipFromStore());
+    expect(result).toEqual({ error: 'Não há retirada nem entrega por loja disponível para este CEP.' });
+  });
+
+  it('inventory.mode = shared: ignora o estoque por loja pra todos os skus', async () => {
+    // loja-rj: SKU-0001 tem quantity 0; com "shared" isso nunca bloqueia.
+    const result = await quoteCartPickup('22020-001', ['SKU-0001', 'SKU-0002'], shipFromStore({ mode: 'shared' }));
+    expect(result).toMatchObject({ store: { id: 'loja-rj' }, pickup: { etaMinutes: 90 } });
   });
 });
