@@ -45,6 +45,32 @@ data:
     required: [name, legalName, url, logo, address, sameAs]
     optional: [foundingDate, taxId, contactPoint]
 
+  # Cliente, pedido e loja fisica (Fase 9, ADR 0027/0028). Nunca indexavel nem GEO:
+  # sao dados pessoais ou operacionais, nao conteudo de catalogo. Fixtures mock
+  # entram no data layer nas sub-fases 9c (customer/order) e 9d (store).
+  customer:
+    required: [id, name, email]
+    optional: [cpf, phone, birthDate]
+    addresses:
+      required: [id, label, recipient, street, number, neighborhood, city, state, postalCode]
+      optional: [complement, isDefault]
+
+  order:
+    required: [id, placedAt, status, items, subtotal, total]
+    items:
+      required: [sku, name, quantity, unitPrice]
+    # inTransit/delivered tambem cobrem retirada em loja (Fase 9d): o status nao
+    # distingue o canal, so o progresso do pedido.
+    status: [placed, processing, inTransit, delivered, canceled]
+
+  store:
+    required: [id, name, cnpj, address, geoCoordinates, pickupEnabled, deliveryRadiusKm]
+    optional: [openingHours]
+    note: >
+      Lista real de lojas de uma loja Nears especifica e dado de runtime (como
+      navigation), nunca hardcoded aqui ou em nears.config.yaml (ADR 0028). Este
+      contrato so valida a forma de cada loja que o data layer expoe.
+
 seo:
   global:
     canonical: self-referencing
@@ -88,6 +114,17 @@ seo:
       robots: "noindex,nofollow"
       schema: []
     notfound:
+      robots: "noindex,nofollow"
+      schema: []
+    # Conta/login/cadastro (Fase 9, ADR 0027): dados pessoais nunca sao indexaveis
+    # nem elegiveis a GEO.
+    login:
+      robots: "noindex,nofollow"
+      schema: []
+    cadastro:
+      robots: "noindex,nofollow"
+      schema: []
+    account:
       robots: "noindex,nofollow"
       schema: []
 

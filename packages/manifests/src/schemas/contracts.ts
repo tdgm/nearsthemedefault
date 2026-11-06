@@ -25,10 +25,35 @@ const productContractSchema = z.strictObject({
   onMissingGeoField: z.enum(['warn-build', 'fail-build']),
 });
 
+// Cliente, pedido e loja fisica (Fase 9, ADR 0027/0028). Nunca indexavel nem GEO:
+// dados pessoais ou operacionais, nao conteudo de catalogo.
+const addressFieldsSchema = z.strictObject({ required: strings.min(1), optional: strings });
+
+const customerContractSchema = z.strictObject({
+  required: strings.min(1),
+  optional: strings,
+  addresses: addressFieldsSchema,
+});
+
+const orderContractSchema = z.strictObject({
+  required: strings.min(1),
+  items: z.strictObject({ required: strings.min(1) }),
+  status: strings.min(1),
+});
+
+const storeContractSchema = z.strictObject({
+  required: strings.min(1),
+  optional: strings,
+  note: z.string().min(1),
+});
+
 const dataSchema = z.strictObject({
   product: productContractSchema,
   collection: z.strictObject({ required: strings.min(1), requiredForGeo: strings }),
   organization: z.strictObject({ required: strings.min(1), optional: strings }),
+  customer: customerContractSchema,
+  order: orderContractSchema,
+  store: storeContractSchema,
 });
 
 const seoGlobalSchema = z.strictObject({

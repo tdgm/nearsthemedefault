@@ -10,7 +10,11 @@ export const routeSchema = z.strictObject({
   pattern: z.string().startsWith('/'),
   template: z.string().min(1),
   source: z.enum(['cms', 'catalog', 'query-preset']).optional(),
-  render: z.enum(['ssg', 'isr', 'csr']).optional(),
+  // ssr: renderizado no servidor a cada requisicao, sem cache entre usuarios -
+  // necessario para paginas que leem cookie de sessao (Fase 9, ADR 0027). Distinto
+  // de isr (cache compartilhado revalidado por tempo): nunca serve o HTML gerado
+  // para um usuario a outro.
+  render: z.enum(['ssg', 'isr', 'csr', 'ssr']).optional(),
   revalidate: positiveInt.optional(),
   priority: z.number().min(0).max(1).optional(),
   /** Caminho do arquivo no App Router; null para arquivos especiais (not-found). */
@@ -21,6 +25,9 @@ export const routeSchema = z.strictObject({
   headerVariant: z.enum(['full', 'minimal', 'none']).optional(),
   enabledBy: z.string().optional(),
   canonicalTo: routeId.optional(),
+  // true: a rota exige sessao (cookie `nears_session`); guard server-side redireciona
+  // para /login?returnUrl=... quando ausente (Fase 9, ADR 0027).
+  requiresAuth: z.boolean().optional(),
   required: z.boolean().optional(),
   scale: z.string().optional(),
   requires: z.array(z.string()).optional(),

@@ -143,6 +143,52 @@ const thirdPartyScriptSchema = z
 export const thirdPartiesSchema = z.strictObject({ scripts: z.array(thirdPartyScriptSchema) });
 export type ThirdPartyScript = z.output<typeof thirdPartyScriptSchema>;
 
+// Modelo operacional de fulfillment (ADR 0028). Fora de catalog/vocabulary de
+// proposito: nao e conceito de nicho. A lista real de lojas nunca vive aqui
+// (dado de runtime, como navigation) - este bloco so declara a politica.
+export const fulfillmentSchema = z
+  .strictObject({
+    mode: z.enum(['centralized', 'ship-from-store', 'hybrid']),
+    pickup: z.strictObject({
+      enabled: z.boolean(),
+      label: z.string().min(1),
+      slaMinutesDefault: positiveInt,
+    }),
+    delivery: z.strictObject({
+      shipFromStore: z.boolean(),
+      radiusKm: positiveInt,
+      slaMinutesExpress: positiveInt,
+      slaMinutesStandard: positiveInt,
+    }),
+    cepLookup: z.strictObject({
+      provider: z.enum(['mock', 'external']),
+      endpoint: z.string().min(1).nullable(),
+    }),
+  })
+  .superRefine((f, ctx) => {
+    if (f.mode === 'centralized' && (f.pickup.enabled || f.delivery.shipFromStore)) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['mode'],
+        message: 'mode "centralized" exige pickup.enabled e delivery.shipFromStore em false',
+      });
+    }
+    if (f.mode !== 'centralized' && !f.pickup.enabled && !f.delivery.shipFromStore) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['mode'],
+        message: `mode "${f.mode}" exige pickup.enabled ou delivery.shipFromStore em true`,
+      });
+    }
+    if (f.cepLookup.provider === 'external' && !f.cepLookup.endpoint) {
+      ctx.addIssue({ code: 'custom', path: ['cepLookup', 'endpoint'], message: 'provider "external" exige endpoint' });
+    }
+    if (f.cepLookup.provider === 'mock' && f.cepLookup.endpoint) {
+      ctx.addIssue({ code: 'custom', path: ['cepLookup', 'endpoint'], message: 'provider "mock" nao usa endpoint' });
+    }
+  });
+export type Fulfillment = z.output<typeof fulfillmentSchema>;
+
 export const configSchema = z.strictObject({
   platform: z.string().min(1),
   template: z.string().min(1),
@@ -207,6 +253,7 @@ export const configSchema = z.strictObject({
       allowlistSource: z.enum(['panel-endpoint', 'build-file', 'upstream']),
     }),
   }),
+  fulfillment: fulfillmentSchema,
   observability: z.strictObject({
     rum: z.strictObject({
       enabled: z.boolean(),

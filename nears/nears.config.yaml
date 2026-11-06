@@ -189,6 +189,27 @@ security:
     hostValidation: allowlist-only
     allowlistSource: panel-endpoint   # consulta server-only a lista de dominios verificados do painel; cache curto + cache negativo; fail-closed
 
+fulfillment:
+  # Nao e conceito de nicho (fora de catalog/vocabulary de proposito): e o modelo
+  # operacional da loja, ortogonal ao nicho de varejo. "centralized" preserva o
+  # comportamento atual de apps/web/lib/data/shipping.ts (cotacao por CEP, sem
+  # loja envolvida). "ship-from-store"/"hybrid" habilitam retirada/entrega a partir
+  # da loja fisica mais proxima, aditivo ao frete por CD (ADR 0028). A lista real
+  # de lojas e dado de runtime (como navigation), nunca fica aqui.
+  mode: centralized   # centralized | ship-from-store | hybrid
+  pickup:
+    enabled: false
+    label: "Retirar na loja"
+    slaMinutesDefault: 90
+  delivery:
+    shipFromStore: false
+    radiusKm: 15
+    slaMinutesExpress: 180
+    slaMinutesStandard: 1440
+  cepLookup:
+    provider: mock       # mock | external
+    endpoint: null        # server-only quando "external"; nunca exposto ao cliente
+
 observability:
   # RUM de Core Web Vitals (docs/adr/0022): coletor inline, fora do bundle de JS.
   # endpoint: caminho local (mock do template) ou URL https do coletor da Nears.

@@ -162,3 +162,36 @@ de 140, CSS 8 KB de 30, HTML da home 17,8 KB de 80.
 com `script-src` (exigiria render dinamico em toda rota, ADR 0025); primeira requisicao a arquivo
 inexistente com ponto ainda responde 200 (ADR 0025); Partytown com um terceiro real nunca rodou,
 porque nenhum esta habilitado (ADR 0023); conferencia manual com NVDA, JAWS e VoiceOver (ADR 0026).
+
+## Fase 9 - Conta, autenticacao e fulfillment por loja
+
+Entregar: login/cadastro mock (sessao por cookie, no espirito de `/api/cart/items` - nunca
+verifica senha real nem substitui um backend de autenticacao), area da conta completa (dados
+pessoais, enderecos, historico de pedidos, favoritos) em rotas Server Component proprias (nao
+SPA hash-routed), e o contrato de dados/config para lojas sem CD centralizado que cumprem pedido
+a partir de loja fisica ("regionalizacao" pedida pelo usuario - nao e selecao de pais/idioma/moeda).
+Referencias pesquisadas a pedido do usuario: hering.com.br (estrutura nativa VTEX de conta/login,
+replicada so no padrao, nunca em marca/codigo/texto) e rihappy.com.br (retirada em loja em ate 90
+minutos / entrega expressa, dirigido por CEP). Vocabulario de fulfillment vem da documentacao
+publica da VTEX (Delivery Promise, Pick and Pack); o termo "MOI" citado pelo usuario nao foi
+confirmado como termo VTEX real e fica pendente de esclarecimento (ADR 0028).
+
+**Gate:** `pnpm validate` verde com os novos contratos/campos de manifest; toda rota de
+`/account/**`, `/login` e `/cadastro` com `robots: noindex,nofollow`; 0 violacoes axe nos
+formularios de login/cadastro/enderecos; nenhuma senha, token real ou PII sensivel logada ou
+armazenada em claro.
+
+Sub-fases (mesmo padrao da Fase 8):
+
+- **9a - Fundacao.** Contratos de dados (`customer`, `order`, `store`), bloco de config
+  `fulfillment`, slug `cadastro` reservado, campos `requiresAuth` e `render: "ssr"` no
+  schema de rotas, e as duas ADRs de decisao (0027, 0028). Sem UI e sem entradas novas
+  em `routes:` ainda - entram em 9b/9c junto do template e das sections que cada rota usa
+  (`refs.ts` exige os dois nascerem juntos).
+- **9b - Autenticacao mock.** `/api/account/session` (login/logout) e `/api/account/register`,
+  paginas `/login` e `/cadastro`, guard de sessao server-side.
+- **9c - Area da conta.** `/account` (visao geral) + `dados`, `enderecos`, `pedidos` (lista e
+  detalhe), `favoritos`; fixtures mock de cliente/pedido/favoritos no data layer.
+- **9d - Fulfillment por loja.** Fixture mock de lojas, calculo de retirada/entrega pela loja
+  mais proxima do CEP como opcao adicional ao `quoteShipping` existente, widget na
+  PDP/carrinho; pagina institucional publica de lojas (reforca `geo.entity.napConsistency`).
