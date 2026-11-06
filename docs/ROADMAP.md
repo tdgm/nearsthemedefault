@@ -173,9 +173,11 @@ a partir de loja fisica ("regionalizacao" pedida pelo usuario - nao e selecao de
 Referencias pesquisadas a pedido do usuario: hering.com.br (estrutura nativa VTEX de conta/login,
 replicada so no padrao, nunca em marca/codigo/texto) e rihappy.com.br (retirada em loja em ate 90
 minutos / entrega expressa, dirigido por CEP). Vocabulario de fulfillment vem da documentacao
-publica da VTEX (Delivery Promise, Pick and Pack); "MOI" (Multi Omni/Level Inventory, segundo
-o usuario) nao e termo VTEX confirmado, mas o conceito - leitura de estoque por loja - entrou
-no contrato como `fulfillment.inventory` e `data.storeInventory` (ADR 0028).
+publica da VTEX (Delivery Promise, Pick and Pack). O estoque granular por loja entrou no contrato
+como `fulfillment.inventory` e `data.storeInventory` (ADR 0028) - **nao e** o MOI (Multilevel
+Omnichannel Inventory) real da VTEX, que e uma configuracao de marketplace multi-seller (qual
+seller de nivel 3 vende no marketplace de nivel 1), sem relacao com estoque por loja fisica; a
+confusao inicial (atribuida a MOI) foi corrigida na ADR 0028 apos o usuario trazer a doc oficial.
 
 **Gate:** `pnpm validate` verde com os novos contratos/campos de manifest; toda rota de
 `/account/**`, `/login` e `/cadastro` com `robots: noindex,nofollow`; 0 violacoes axe nos

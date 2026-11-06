@@ -50,6 +50,44 @@ UI nem fixture - so contrato, igual ao restante da Fase 9a):
   `quantity`, `reservable`. Fixture mock entra na Fase 9d junto do fixture de
   `store`, como a mesma ADR ja previa.
 
+## Correcao (2026-11-06, mesmo dia - "MOI" nao e o que a secao acima diz)
+
+O usuario trouxe a fonte oficial: [VTEX - Multilevel Omnichannel Inventory
+(MOI)](https://help.vtex.com/pt/docs/tutorials/multilevel-omnichannel-inventory).
+O termo existe de verdade, mas descreve algo **diferente** do que a secao
+"Contexto" acima e o ROADMAP registraram (a esclarecimento anterior do
+usuario, de memoria e sem a fonte em maos, nao correspondia ao termo real):
+
+- MOI e uma configuracao de **marketplace multi-seller**, nao de estoque por
+  loja fisica. Hierarquia de 3 niveis: **nivel 1** (o marketplace, onde o
+  produto e vendido), **nivel 2** (o seller direto, dono do estoque e do
+  fulfillment - e tambem marketplace dos proprios sellers white-label),
+  **nivel 3** (sellers white-label, contas de franquia e lojas fisicas - mas
+  so quando essa loja fisica e ela mesma *uma conta VTEX seller*, nao um
+  mero ponto de retirada). So um nivel de recursao e permitido.
+- O que MOI de fato controla: se o estoque de um seller de nivel 3 fica
+  disponivel para venda no marketplace de nivel 1 (por padrao, nao fica).
+  Configuracao e por seller (campo **Fulfillment Endpoint** no admin,
+  formato `.../api/checkout?affiliateid={id}&sc={tradePolicyId}`), com
+  restricoes pesadas: pagamento so do marketplace, sem Price Table/Manual
+  Price, sem Regiao, cupom/giftcard so no nivel 1, pedido rejeitado por um
+  seller de nivel 3 nao e reatribuido.
+- **Nao ha, em nenhum lugar do MOI real, o conceito "ler a quantidade de SKU
+  X disponivel na loja fisica Y antes de prometer retirada/entrega"** - que
+  e o problema que esta ADR precisa resolver (fulfillment por loja sem CD).
+  MOI resolve um problema de *marketplace* (qual seller vende o que), nao de
+  *fulfillment* (de onde sai o pedido fisicamente).
+
+Consequencia pratica: `fulfillment.inventory` (`mode: shared | per-store`) e
+`data.storeInventory` continuam exatamente como modelados abaixo - o
+conceito ("estoque granular por loja") e real e necessario para ship-from-store/
+retirada, so nao vem do MOI da VTEX. Este template e frontend-only e
+backend-agnostico (CLAUDE.md: VTEX/hering.com.br e so referencia estrutural,
+nunca integracao real), entao a hierarquia de marketplace multi-seller do
+MOI simplesmente nao se aplica aqui - nao ha "nivel 1/2/3" para modelar.
+`docs/ROADMAP.md` (secao da Fase 9) atualizado para nao atribuir mais o
+conceito a VTEX/MOI.
+
 ## Decisao
 
 1. **Novo bloco `fulfillment` em `nears.config.yaml`, fora de `catalog`/`vocabulary`.**
