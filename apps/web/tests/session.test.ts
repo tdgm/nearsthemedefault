@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { clearSessionCookieHeader, readSessionCustomerId, sessionCookieHeader, SESSION_COOKIE } from '../lib/auth/session';
 
 const ORIGINAL_ENV = process.env.NODE_ENV;
