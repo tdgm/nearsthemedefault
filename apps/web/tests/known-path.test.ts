@@ -20,6 +20,9 @@ describe('isKnownPath (404 real na primeira requisicao)', () => {
       '/api/cart/items',
       '/login', // Fase 9b (ADR 0027): rota real, ssg, noindex
       '/cadastro',
+      '/account', // Fase 9c (ADR 0027): rota real, ssr, noindex
+      '/account/dados',
+      '/account/pedidos/pedido-1001',
       '/departamento-exemplo/', // barra final
     ]) {
       expect(await isKnownPath(path), path).toBe(true);
@@ -42,10 +45,10 @@ describe('isKnownPath (404 real na primeira requisicao)', () => {
     }
   });
 
-  it('slug reservado sem rota ainda (carrinho, checkout, account) nao vira pagina', async () => {
-    // /login e /cadastro sairam desta lista na Fase 9b: agora sao rotas reais
-    // (ver o teste acima). /account continua so reservado - a rota chega na 9c.
-    for (const path of ['/carrinho', '/checkout', '/account']) expect(await isKnownPath(path), path).toBe(false);
+  it('slug reservado sem rota ainda (carrinho, checkout) nao vira pagina', async () => {
+    // /login, /cadastro (9b) e /account (9c) sairam desta lista: agora sao
+    // rotas reais (ver o 1o teste). carrinho/checkout continuam so reservados.
+    for (const path of ['/carrinho', '/checkout']) expect(await isKnownPath(path), path).toBe(false);
   });
 
   it('percent-encoding invalido e recusado sem lancar', async () => {
