@@ -118,6 +118,30 @@ export function webPageNode({ site }: SeoContext, page: { name: string; descript
   });
 }
 
+/**
+ * Loja fisica (ADR 0028, pagina publica /lojas). `openingHours` nao entra aqui:
+ * e texto livre no fixture (ex.: "Seg a sáb, 10h às 22h"), e o formato
+ * `openingHours`/`openingHoursSpecification` do schema.org exige dias/horas
+ * estruturados - inventar essa estrutura a partir de um texto livre seria
+ * dado factualmente incerto, nunca feito aqui (so aparece na pagina em HTML).
+ */
+export function localBusinessNode(store: { id: string; name: string; address: { street: string; number: string; neighborhood: string; city: string; state: string; postalCode: string }; geoCoordinates: { lat: number; lng: number } }, site: string): JsonLd {
+  return {
+    '@type': 'LocalBusiness',
+    '@id': `${absoluteUrl('/lojas', site)}#${store.id}`,
+    name: store.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: `${store.address.street}, ${store.address.number}`,
+      addressLocality: store.address.city,
+      addressRegion: store.address.state,
+      postalCode: store.address.postalCode,
+      addressCountry: 'BR',
+    },
+    geo: { '@type': 'GeoCoordinates', latitude: store.geoCoordinates.lat, longitude: store.geoCoordinates.lng },
+  };
+}
+
 export function faqNode(items: { question: string; answer: string }[]): JsonLd | null {
   if (items.length === 0) return null;
   return {

@@ -253,6 +253,21 @@ routes:
     appRoute: "/account/favoritos/page"
     jsBudgetCritical: false
 
+# Fulfillment por loja (Fase 9d, ADR 0028). Pagina institucional publica (NAO
+# dado pessoal): reforca geo.entity.napConsistency e serve como pagina-fonte
+# dos LocalBusiness de cada loja fisica. Fixture estatico (stores.ts), sem
+# leitura de cookie/sessao - render: ssg, igual a institutional/sitemap-html.
+# jsBudgetCritical: false pelo mesmo motivo: nao e caminho de descoberta de
+# produto. Linkada pelo footer institucional (storefront.ts) - zero paginas
+# orfas.
+  - id: lojas
+    pattern: "/lojas"
+    template: lojas
+    render: ssg
+    priority: 0.5
+    appRoute: "/lojas/page"
+    jsBudgetCritical: false
+
 # Varios padroes tem a mesma forma de URL: /{department}, /{productType},
 # /{campaign} e /{pageSlug} (um segmento); /{department}/{category},
 # /{productType}/{attributeValue} e /{campaign}/{segment} (dois segmentos).
@@ -292,6 +307,7 @@ resolution:
       - checkout
       - login
       - cadastro                  # Fase 9, ADR 0027 - nao estava reservado antes da rota existir
+      - lojas                     # Fase 9d, ADR 0028 - nao estava reservado antes da rota existir
       - preview
       - quick-view
       - design-system

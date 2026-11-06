@@ -30,6 +30,7 @@ export * from './showcase/index.ts';
 export * from './pdp-gallery/index.ts';
 export * from './pdp-buybox/index.ts';
 export * from './pdp-shipping/index.ts';
+export * from './pdp-pickup/index.ts';
 export * from './pdp-details/index.ts';
 export * from './pdp-reviews/index.ts';
 export * from './pdp-bundle/index.ts';

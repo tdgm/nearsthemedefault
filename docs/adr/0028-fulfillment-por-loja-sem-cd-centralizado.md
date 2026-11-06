@@ -154,3 +154,50 @@ conceito a VTEX/MOI.
   `dataSchema`.
 - Nenhum preset de nicho (`nears/presets/*.yaml`) precisa mudar: `fulfillment` nao e
   sobrescrito por preset (so `catalog` e `vocabulary` sao).
+
+## Implementacao (Fase 9d, 2026-11-06)
+
+Fecha a sub-fase 9d sobre o contrato ja existente desde a 9a/9c - nenhuma mudanca em
+`packages/manifests/src/schemas/*`, so consumo do que ja estava la.
+
+1. **Fixtures novos** (mesmo padrao de `customer.ts`/`orders.ts`): `apps/web/lib/data/stores.ts`
+   (`PhysicalStore` - nao `Store`, nome ja usado em `data/schemas.ts` para a entidade
+   "loja Nears"; `listStores`, `findNearestStore`, `estimateDistanceKm`) e
+   `apps/web/lib/data/store-inventory.ts` (`hasStockAtStore`). Distancia = diferenca
+   dos 3 primeiros digitos do CEP (faixa regional dos Correios) `* 0,6 km` - mock
+   deterministico, exatamente o que a secao "Fora do escopo" da 9a previa para a 9d;
+   calculo geografico real so entra com fonte real de lojas.
+2. **`apps/web/lib/data/pickup.ts` (`quotePickup`)**: aditivo sobre `shipping.ts`,
+   nunca substituicao. `quoteShipping` continua inalterado; `quotePickup` e um no-op
+   (`undefined`) sempre que `fulfillment.mode === 'centralized'` - o default do
+   template, entao o comportamento de hoje nao muda para nenhuma loja que nao ligar
+   o recurso. Quando ligado, calcula a loja mais proxima do CEP (mesmo `?cep=` de
+   `pdp-shipping` - nunca pede o CEP de novo) e decide retirada/entrega por essa
+   loja cruzando `fulfillment.pickup/delivery` com `store.pickupEnabled`/
+   `deliveryRadiusKm` e, se `fulfillment.inventory.mode === 'per-store'`, com
+   `hasStockAtStore`.
+3. **Nova section `pdp-pickup`**, inserida no template `pdp` logo depois de
+   `pdp-shipping`. So renderiza quando `fulfillment.mode !== 'centralized'`
+   (`pdp-content.ts > pickupEnabled`); com o default do template, `propsFor`
+   devolve `null` e a section nem aparece no HTML, igual ao padrao ja usado para o
+   guia de medidas (`guideEnabled`). Server Component sem JS, igual a
+   `pdp-shipping`: zero custo de bundle.
+4. **Pagina publica `/lojas`** (`apps/web/lib/templates/lojas.tsx`, `render: ssg`,
+   indexavel, sem Suspense - fixture estatico, nenhuma API dinamica do Next e lida).
+   Lista cada loja em HTML semantico (`<address>`) com nome, endereco, CEP
+   formatado, horario (texto livre) e disponibilidade de retirada/entrega; JSON-LD
+   com um `LocalBusiness` por loja (`localBusinessNode`, novo em `jsonld.ts`).
+   `openingHours`/`openingHoursSpecification` do schema.org **nao** entra no
+   JSON-LD: o fixture guarda horario como string livre ("Seg a sáb, 10h às 22h"),
+   e o formato estruturado do schema.org exige dias/horas discretos - inventar essa
+   estrutura a partir de texto livre seria dado factualmente incerto (CLAUDE.md >
+   SEO: "texto factual, citável, com números e datas"), entao so aparece como texto
+   simples na pagina. Linkada pelo footer institucional (`storefront.ts`) - zero
+   paginas orfas.
+5. **Fora do escopo desta entrega, ainda**: widget no carrinho/minicart. A 9d
+   entrega o widget na PDP (item 3 acima) e a pagina institucional (item 4), que
+   cobrem os dois consumidores previstos na secao "Decisao > 2" desta ADR; o
+   carrinho real (`/carrinho`) ainda nao existe como pagina nesta base (so o
+   minicart drawer, sem campo de CEP) - adicionar retirada/entrega la fica para
+   quando o carrinho de pagina propria existir, para nao duplicar o calculo de CEP
+   em dois lugares sem um fluxo de checkout real para consumi-lo.
