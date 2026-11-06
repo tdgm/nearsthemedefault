@@ -76,6 +76,44 @@ vocabulary:
   accountCadastroSuccess: Conta criada.
   accountCadastroSwitchPrompt: Já tem conta?
   accountCadastroSwitchLabel: Entrar
+  # Area da conta (rotas /account/**, Fase 9c, ADR 0027).
+  accountLoading: Carregando…
+  accountOverviewTitle: Minha conta
+  accountGreeting: Olá,
+  accountNavDados: Meus dados
+  accountNavEnderecos: Meus endereços
+  accountNavPedidos: Meus pedidos
+  accountNavFavoritos: Favoritos
+  accountLogout: Sair
+  accountBackToOverview: Voltar para minha conta
+  accountDadosTitle: Meus dados
+  accountDadosName: Nome completo
+  accountDadosEmail: E-mail
+  accountDadosPhone: Telefone
+  accountDadosCpf: CPF
+  accountDadosBirthDate: Data de nascimento
+  accountDadosNotInformed: Não informado
+  accountEnderecosTitle: Meus endereços
+  accountEnderecosEmpty: Você ainda não tem endereços cadastrados.
+  accountEnderecosDefault: Padrão
+  accountPedidosTitle: Meus pedidos
+  accountPedidosEmpty: Você ainda não fez nenhum pedido.
+  accountPedidosViewDetail: Ver detalhes
+  accountPedidosStatusPlaced: Pedido realizado
+  accountPedidosStatusProcessing: Em preparação
+  accountPedidosStatusInTransit: Em trânsito
+  accountPedidosStatusDelivered: Entregue
+  accountPedidosStatusCanceled: Cancelado
+  accountPedidoDetalheTitle: Detalhes do pedido
+  accountPedidoVoltar: Voltar para meus pedidos
+  accountPedidoItens: Itens do pedido
+  accountPedidoItemName: Produto
+  accountPedidoQuantity: Qtd.
+  accountPedidoPlacedAt: Realizado em
+  accountPedidoSubtotal: Subtotal
+  accountPedidoTotal: Total
+  accountFavoritosTitle: Favoritos
+  accountFavoritosEmpty: Você ainda não adicionou favoritos.
 
 locale:
   default: pt-BR

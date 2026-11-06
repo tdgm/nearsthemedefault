@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { POST as login, DELETE as logout } from '../app/api/account/session/route';
+import { POST as logoutNoJs } from '../app/api/account/session/logout/route';
 import { POST as register } from '../app/api/account/register/route';
 import { SESSION_COOKIE } from '../lib/auth/session';
 
@@ -66,6 +67,15 @@ describe('DELETE /api/account/session (logout)', () => {
   it('limpa o cookie de sessao', async () => {
     const res = await logout();
     expect(await res.json()).toEqual({ ok: true });
+    expect(res.headers.get('set-cookie') ?? '').toContain('Max-Age=0');
+  });
+});
+
+describe('POST /api/account/session/logout (logout sem JS, botao "Sair" de /account)', () => {
+  it('limpa o cookie de sessao e redireciona (303) para a home', async () => {
+    const res = await logoutNoJs(new Request('http://localhost/api/account/session/logout', { method: 'POST' }));
+    expect(res.status).toBe(303);
+    expect(res.headers.get('location')).toBe('http://localhost/');
     expect(res.headers.get('set-cookie') ?? '').toContain('Max-Age=0');
   });
 });

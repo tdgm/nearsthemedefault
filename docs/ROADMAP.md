@@ -197,11 +197,15 @@ Sub-fases (mesmo padrao da Fase 8):
   `/cadastro` (rotas reais, `ssg`, `noindex,nofollow`), formulario
   `account-auth-form.tsx` (funciona sem JS). Guard de sessao server-side fica para a
   9c, junto das rotas `/account/**` que ele de fato protege.
-- **9c - Area da conta.** `/account` (visao geral) + `dados`, `enderecos`, `pedidos` (lista e
-  detalhe), `favoritos`; fixtures mock de pedido/favoritos no data layer (cliente ja
-  existe desde a 9b); guard de sessao server-side (`requiresAuth`, redireciona para
-  `/login?returnUrl=...`).
-- **9d - Fulfillment por loja.** Fixture mock de lojas e de `storeInventory` (MOI - leitura de
-  estoque por loja), calculo de retirada/entrega pela loja mais proxima do CEP *com estoque*
-  como opcao adicional ao `quoteShipping` existente, widget na PDP/carrinho; pagina
-  institucional publica de lojas (reforca `geo.entity.napConsistency`).
+- **9c - Area da conta (concluida).** `/account` (visao geral) + `dados`, `enderecos`,
+  `pedidos` (lista e detalhe em `/account/pedidos/[orderId]`), `favoritos`; fixtures mock
+  de pedido (`apps/web/lib/data/orders.ts`) e favorito (`favorites.ts`) no data layer;
+  guard de sessao server-side (`apps/web/lib/auth/guard.ts > requireCustomer`,
+  `requiresAuth`, redireciona para `/login?returnUrl=...`). Ver ADR 0027, nota de
+  implementacao da 9c, para as decisoes de escopo (somente-leitura, sem contador de
+  carrinho/favoritos no header).
+- **9d - Fulfillment por loja.** Fixture mock de lojas e de estoque granular por loja
+  (`storeInventory`, ADR 0028 - nao e o MOI real da VTEX, ver nota acima), calculo de
+  retirada/entrega pela loja mais proxima do CEP *com estoque* como opcao adicional ao
+  `quoteShipping` existente, widget na PDP/carrinho; pagina institucional publica de
+  lojas (reforca `geo.entity.napConsistency`).

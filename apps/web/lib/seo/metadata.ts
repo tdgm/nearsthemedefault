@@ -19,7 +19,14 @@ export type SeoTemplate =
   | 'notfound'
   // Fase 9 (ADR 0027): login/cadastro, sempre noindex,nofollow (dado pessoal).
   | 'login'
-  | 'cadastro';
+  | 'cadastro'
+  // Area da conta (Fase 9c, ADR 0027): mesmo motivo, sempre noindex,nofollow.
+  | 'account'
+  | 'account-dados'
+  | 'account-enderecos'
+  | 'account-pedidos'
+  | 'account-pedido-detalhe'
+  | 'account-favoritos';
 
 export type SeoImage = { url: string; width: number; height: number; alt: string };
 

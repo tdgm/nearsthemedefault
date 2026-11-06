@@ -186,11 +186,72 @@ routes:
     appRoute: "/cadastro/page"
     jsBudgetCritical: false
 
-# As rotas de /account/** (Fase 9c, ADR 0027) entram aqui so quando as sections/
-# templates que elas usam existirem em sections.registry.yaml - refs.ts falha o
-# build se route.template nao existir em `templates`. O slug "account" ja fica
-# reservado abaixo e o contrato de dados (customer/order) ja existe em
-# contracts.yaml desde a 9a.
+# Area da conta (Fase 9c, ADR 0027). Mesmo padrao de login/cadastro (9b): leem
+# cookie de sessao a cada requisicao, nunca servem o HTML de um cliente para
+# outro - render: ssr, nunca isr/ssg. requiresAuth: true aciona o guard
+# server-side (apps/web/lib/auth/guard.ts > requireCustomer) que redireciona
+# para /login?returnUrl=... quando a sessao falta. Nunca indexavel (dado
+# pessoal, nunca conteudo de catalogo). jsBudgetCritical: false pelo mesmo
+# motivo de login/cadastro: nao e caminho de conversao/descoberta de produto.
+  - id: account
+    pattern: "/account"
+    template: account
+    render: ssr
+    requiresAuth: true
+    indexable: false
+    robots: "noindex,nofollow"
+    appRoute: "/account/page"
+    jsBudgetCritical: false
+
+  - id: account-dados
+    pattern: "/account/dados"
+    template: account-dados
+    render: ssr
+    requiresAuth: true
+    indexable: false
+    robots: "noindex,nofollow"
+    appRoute: "/account/dados/page"
+    jsBudgetCritical: false
+
+  - id: account-enderecos
+    pattern: "/account/enderecos"
+    template: account-enderecos
+    render: ssr
+    requiresAuth: true
+    indexable: false
+    robots: "noindex,nofollow"
+    appRoute: "/account/enderecos/page"
+    jsBudgetCritical: false
+
+  - id: account-pedidos
+    pattern: "/account/pedidos"
+    template: account-pedidos
+    render: ssr
+    requiresAuth: true
+    indexable: false
+    robots: "noindex,nofollow"
+    appRoute: "/account/pedidos/page"
+    jsBudgetCritical: false
+
+  - id: account-pedido-detalhe
+    pattern: "/account/pedidos/{orderId}"
+    template: account-pedido-detalhe
+    render: ssr
+    requiresAuth: true
+    indexable: false
+    robots: "noindex,nofollow"
+    appRoute: "/account/pedidos/[orderId]/page"   # 3o segmento: refs.ts nao valida (so 1o/2o) - ver nota de resolution abaixo
+    jsBudgetCritical: false
+
+  - id: account-favoritos
+    pattern: "/account/favoritos"
+    template: account-favoritos
+    render: ssr
+    requiresAuth: true
+    indexable: false
+    robots: "noindex,nofollow"
+    appRoute: "/account/favoritos/page"
+    jsBudgetCritical: false
 
 # Varios padroes tem a mesma forma de URL: /{department}, /{productType},
 # /{campaign} e /{pageSlug} (um segmento); /{department}/{category},
@@ -237,7 +298,7 @@ resolution:
       - test
       - teste
       - qa
-    secondSegment: [p]           # /{x}/p e sempre PDP
+    secondSegment: [p, dados, enderecos, pedidos, favoritos]   # /{x}/p e sempre PDP; os demais sao sub-rotas literais de /account (Fase 9c)
 
 canonical:
   strategy: self-referencing

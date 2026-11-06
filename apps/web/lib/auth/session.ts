@@ -29,6 +29,23 @@ export function clearSessionCookieHeader(): string {
   return `${SESSION_COOKIE}=; ${cookieAttrs(0)}`;
 }
 
+/**
+ * Decodifica o VALOR ja extraido do cookie `nears_session` (o nome do cookie
+ * ja foi conferido por quem chama). Reusado por `readSessionCustomerId`
+ * (header `Cookie` cru, usado pelas API routes) e pelo guard server-side
+ * (`apps/web/lib/auth/guard.ts`, Fase 9c), que recebe o valor ja separado de
+ * `cookies().get(SESSION_COOKIE)?.value` do `next/headers` - `next/headers`
+ * so faz o parsing do header, nao o decode do valor.
+ */
+function decodeSessionValue(value: string | undefined | null): string | null {
+  if (!value) return null;
+  try {
+    return decodeURIComponent(value) || null;
+  } catch {
+    return null;
+  }
+}
+
 /** Id do cliente mock a partir do header `Cookie` de uma requisicao, ou `null` sem sessao. */
 export function readSessionCustomerId(cookieHeader: string | null | undefined): string | null {
   if (!cookieHeader) return null;
@@ -37,13 +54,13 @@ export function readSessionCustomerId(cookieHeader: string | null | undefined): 
     if (separator === -1) continue;
     const name = part.slice(0, separator).trim();
     if (name !== SESSION_COOKIE) continue;
-    const value = part.slice(separator + 1).trim();
-    if (!value) return null;
-    try {
-      return decodeURIComponent(value);
-    } catch {
-      return null;
-    }
+    return decodeSessionValue(part.slice(separator + 1).trim());
   }
   return null;
+}
+
+/** Mesmo decode de `readSessionCustomerId`, para quando o valor do cookie ja
+ * vem extraido (Server Component via `cookies()`, Fase 9c). */
+export function decodeSessionCustomerId(value: string | undefined | null): string | null {
+  return decodeSessionValue(value);
 }
