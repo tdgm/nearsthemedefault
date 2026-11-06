@@ -55,9 +55,10 @@ export function AccountAuthForm(props: AccountAuthFormProps) {
     // Navegacao fora do try acima: uma falha aqui (ambiente sem navegacao real,
     // ex.: teste) nao pode reverter a mensagem de sucesso ja anunciada.
     try {
-      // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- reload de verdade de proposito: o cookie
-      // nears_session acabou de ser setado pela resposta e o destino pode depender dele (ex.: /account na Fase 9c); uma navegacao
-      // client-side do App Router (useRouter().push) correria risco de servir uma RSC em cache sem o cookie novo.
+      // Reload de pagina de verdade, de proposito: o cookie nears_session acabou de ser setado pela resposta e o destino pode
+      // depender dele (ex.: /account na Fase 9c); uma navegacao client-side do App Router (useRouter().push) correria risco de
+      // servir uma RSC em cache sem o cookie novo.
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       window.location.assign(returnUrl);
     } catch {
       // Sessao ja comecou (cookie setado pela resposta); a pessoa so nao foi
