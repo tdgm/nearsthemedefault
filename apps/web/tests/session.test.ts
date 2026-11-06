@@ -1,12 +1,8 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { clearSessionCookieHeader, readSessionCustomerId, sessionCookieHeader, SESSION_COOKIE } from '../lib/auth/session';
 
-const ORIGINAL_ENV = process.env.NODE_ENV;
-
 describe('sessionCookieHeader / clearSessionCookieHeader', () => {
-  afterEach(() => {
-    process.env.NODE_ENV = ORIGINAL_ENV;
-  });
+  afterEach(() => vi.unstubAllEnvs());
 
   it('cookie de sessao: httpOnly, SameSite=Lax, valor = id do cliente (nunca um JWT)', () => {
     const header = sessionCookieHeader('cliente-exemplo-1');
@@ -22,9 +18,9 @@ describe('sessionCookieHeader / clearSessionCookieHeader', () => {
   });
 
   it('Secure so em producao: dev (http://localhost) nao pode perder o cookie', () => {
-    process.env.NODE_ENV = 'development';
+    vi.stubEnv('NODE_ENV', 'development');
     expect(sessionCookieHeader('x')).not.toContain('Secure');
-    process.env.NODE_ENV = 'production';
+    vi.stubEnv('NODE_ENV', 'production');
     expect(sessionCookieHeader('x')).toContain('Secure');
   });
 
