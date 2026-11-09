@@ -144,6 +144,21 @@ export const REQUIRED_VOCABULARY_KEYS = [
   'accountPedidoTotal',
   'accountFavoritosTitle',
   'accountFavoritosEmpty',
+  // Carrinho de pagina propria (Fase 10, ADR 0029).
+  'cartTitle',
+  'cartEmpty',
+  'cartContinueShopping',
+  'cartQuantityLabel',
+  'cartUpdate',
+  'cartRemove',
+  'cartSubtotal',
+  'cartCheckout',
+  'cartUpdated',
+  'cartItemRemoved',
+  'cartItemUnavailable',
+  'checkoutStubTitle',
+  'checkoutStubMessage',
+  'checkoutStubBack',
 ] as const;
 
 export const vocabularySchema = z

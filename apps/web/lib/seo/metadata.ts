@@ -28,7 +28,11 @@ export type SeoTemplate =
   | 'account-pedido-detalhe'
   | 'account-favoritos'
   // Fulfillment por loja (Fase 9d, ADR 0028): pagina publica, indexavel.
-  | 'lojas';
+  | 'lojas'
+  // Carrinho de pagina propria e stub de checkout (Fase 10, ADR 0029):
+  // mesmo motivo de login/account, sempre noindex,nofollow.
+  | 'carrinho'
+  | 'checkout';
 
 export type SeoImage = { url: string; width: number; height: number; alt: string };
 

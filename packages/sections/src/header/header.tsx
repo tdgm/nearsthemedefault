@@ -45,6 +45,21 @@ function ActionLink({ href, label, count = 0, children }: { href: string; label:
 }
 
 /**
+ * Botao do carrinho (abre o Minicart). Exportado para o app layer poder
+ * renderizar uma versao com a contagem real do cookie `nears_cart` numa ilha
+ * dinamica PROPRIA (Fase 10, ADR 0029) sem precisar tornar o `Header` inteiro
+ * dinamico - ver `cartTrigger` em `Header` abaixo.
+ */
+export function CartButton({ cartCount = 0, label }: { cartCount?: number; label: string }) {
+  return (
+    <OverlayTrigger targetId={MINICART_ID} aria-controls={MINICART_ID} aria-label={countLabel(label, cartCount)} className={iconBox}>
+      <BagIcon />
+      <Count value={cartCount} />
+    </OverlayTrigger>
+  );
+}
+
+/**
  * Skip link: primeiro foco da pagina; o destino (`#conteudo`) vem do layout. Fica no Header
  * por padrao; o layout raiz o renderiza antes da PromoBar (`skipLink={false}` no Header) para
  * que nada receba foco antes dele (WCAG 2.4.1, docs/adr/0026).
@@ -84,7 +99,17 @@ export function Header({
   variant = 'full',
   skipLink = true,
   labels,
-}: HeaderProps) {
+  cartTrigger,
+}: HeaderProps & {
+  /**
+   * Override do botao de carrinho (ReactNode ja construido pelo chamador,
+   * tipicamente um `<Suspense>` em volta de uma ilha que le a contagem real -
+   * Fase 10, ADR 0029). Fora do schema Zod de proposito: e composicao de
+   * React, nunca dado de CMS. Ausente (Storybook, testes, `cartCount`
+   * estatico): cai no `CartButton` interno de sempre.
+   */
+  cartTrigger?: ReactNode;
+}) {
   const l = { ...defaults, ...labels };
   const full = variant === 'full';
 
@@ -139,12 +164,7 @@ export function Header({
                   <HeartIcon />
                 </ActionLink>
               )}
-              {cart && (
-                <OverlayTrigger targetId={MINICART_ID} aria-controls={MINICART_ID} aria-label={countLabel(l.cart, cartCount)} className={iconBox}>
-                  <BagIcon />
-                  <Count value={cartCount} />
-                </OverlayTrigger>
-              )}
+              {cart && (cartTrigger ?? <CartButton cartCount={cartCount} label={l.cart} />)}
             </div>
           </div>
         </header>

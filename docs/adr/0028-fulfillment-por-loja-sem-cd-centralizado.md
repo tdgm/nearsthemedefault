@@ -201,3 +201,8 @@ Fecha a sub-fase 9d sobre o contrato ja existente desde a 9a/9c - nenhuma mudanc
    minicart drawer, sem campo de CEP) - adicionar retirada/entrega la fica para
    quando o carrinho de pagina propria existir, para nao duplicar o calculo de CEP
    em dois lugares sem um fluxo de checkout real para consumi-lo.
+
+   **Fechado na Fase 10 (ADR 0029, 2026-11-06)**: com `/carrinho` existindo
+   como pagina propria, `quoteCartPickup` (aditivo sobre `quotePickup`,
+   mesmo `apps/web/lib/data/pickup.ts`) cobre varios SKUs de uma vez - a
+   pagina reusa o mesmo componente `PdpPickup` com seu proprio campo de CEP.

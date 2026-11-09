@@ -268,6 +268,35 @@ routes:
     appRoute: "/lojas/page"
     jsBudgetCritical: false
 
+# Carrinho de pagina propria (Fase 10, ADR 0029). Mesmo padrao de
+# /account/**: le o cookie `nears_cart` a cada requisicao, nunca serve o
+# carrinho de um visitante para outro - render: ssr, nunca isr/ssg. Nunca
+# indexavel (dado por visitante, nunca conteudo de catalogo, mesmo motivo de
+# login/account). jsBudgetCritical: false pelo mesmo motivo de
+# login/account: nao e caminho de descoberta de produto. `carrinho` ja
+# estava reservado desde a Fase 9a.
+  - id: carrinho
+    pattern: "/carrinho"
+    template: carrinho
+    render: ssr
+    indexable: false
+    robots: "noindex,nofollow"
+    appRoute: "/carrinho/page"
+    jsBudgetCritical: false
+
+# Stub de checkout (Fase 10, ADR 0029): so avisa que o checkout de verdade e
+# responsabilidade do backend/painel (CLAUDE.md > Seguranca) - nao processa
+# nem simula pagamento, nenhum dado dinamico lido (render: ssg, igual a
+# institutional/lojas). `checkout` ja estava reservado desde a Fase 9a.
+  - id: checkout
+    pattern: "/checkout"
+    template: checkout
+    render: ssg
+    indexable: false
+    robots: "noindex,nofollow"
+    appRoute: "/checkout/page"
+    jsBudgetCritical: false
+
 # Varios padroes tem a mesma forma de URL: /{department}, /{productType},
 # /{campaign} e /{pageSlug} (um segmento); /{department}/{category},
 # /{productType}/{attributeValue} e /{campaign}/{segment} (dois segmentos).

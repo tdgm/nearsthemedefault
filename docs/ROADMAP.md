@@ -213,3 +213,41 @@ Sub-fases (mesmo padrao da Fase 8):
   novo); pagina institucional publica `/lojas` (reforca `geo.entity.napConsistency`,
   um `LocalBusiness` por loja). Widget no carrinho fica para quando `/carrinho`
   existir como pagina propria (ver ADR 0028, nota de implementacao da 9d).
+
+## Fase 10 - Carrinho (pagina propria) - concluida
+
+Entregar: carrinho de pagina propria (`/carrinho`), fechando as duas pontas deixadas em aberto
+nas Fases 9c e 9d - contador real de carrinho no header/minicart (9c) e o widget de
+retirada/entrega por loja pro carrinho inteiro, nao so por produto (9d). Ver ADR 0029.
+
+- Cookie mock `nears_cart` (`apps/web/lib/cart/session.ts`, mesmo padrao de
+  `auth/session.ts`): so `{sku, quantity}[]`, HttpOnly, cap de 50 itens/99 por linha -
+  nunca guarda preco/nome/estado de compra (CLAUDE.md > Seguranca).
+- `/api/cart/items` (Fase 6) passou a persistir de verdade (mescla no cookie, nunca so
+  valida); novo `/api/cart/items/update` define quantidade absoluta ou remove
+  (`quantity: 0`) - os dois funcionam sem JS.
+- `apps/web/lib/data/cart.ts` (`resolveCartLines`/`cartSummary`) junta o cookie com
+  `getProducts()` a cada leitura - preco/nome/imagem nunca sao um snapshot do momento
+  em que o item foi adicionado; SKU descontinuado e descartado silenciosamente.
+  `quoteCartPickup` (aditivo em `pickup.ts`) fecha o widget da 9d: mesma loja mais
+  proxima, estoque exigido pra TODOS os SKUs do carrinho (retirada/entrega do carrinho
+  inteiro, nunca parcial).
+- Contador real no `Header`/`Minicart` globais via duas ilhas dinamicas em `Suspense`
+  dentro de `app/layout.tsx` (`getCartAwareChrome` em `storefront.ts`) - mesmo padrao
+  "shell estatico + ilha dinamica" de login/cadastro/account/PDP (Cache Components,
+  ADR 0007); `getStorefront()` continua 100% estatica, usada por toda rota do site.
+  Favoritos/wishlist continuam sem contador real (fora do escopo desta fase).
+  Reusa o componente `PdpPickup` (ADR 0028) com seu proprio campo de CEP na pagina.
+- Stub de `/checkout` (`render: ssg`, sem Suspense): "checkout" ja estava reservado e
+  o CTA "Finalizar compra" sempre apontou pra la sem a rota existir (link morto) - a
+  pagina so avisa que o checkout de verdade e do backend/painel, nunca processa ou
+  simula pagamento.
+
+**Gate:** `pnpm validate` verde; `/carrinho` e `/checkout` com `robots: noindex,nofollow`;
+nenhum dado de pagamento ou preco "congelado" gravado no cookie; zero layout shift no
+contador do header (fallback do `Suspense` = mesmo valor estatico de hoje).
+
+**Pendente / fora do escopo desta fase:** contador real de favoritos/wishlist no header
+(exigiria sessao de cliente pra todo visitante, inclusive anonimo); checkout/pagamento de
+verdade (responsabilidade do backend/painel); carrinho multi-dispositivo (o cookie e por
+navegador); cupom; retirada parcial (loja unica por carrinho, nunca split entre lojas).

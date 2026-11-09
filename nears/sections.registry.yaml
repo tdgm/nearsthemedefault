@@ -543,6 +543,15 @@ templates:
   lojas:
     sections: [section-title]
 
+  # Carrinho de pagina propria e stub de checkout (Fase 10, ADR 0029): mesma
+  # liberdade de login/cadastro/account/lojas - a lista do carrinho e so um
+  # componente simples em apps/web/app/carrinho/page.tsx, nenhuma section nova.
+  carrinho:
+    sections: [section-title]
+
+  checkout:
+    sections: [section-title]
+
 validation:
   everySectionMustDeclare: [priority, cwv, a11y]
   onMissing: fail-build
