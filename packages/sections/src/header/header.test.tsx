@@ -96,6 +96,18 @@ describe('Header', () => {
     render(<Header logo={logo} nav={nav} labels={{ cart: 'Sacola' }} />);
     expect(screen.getByRole('button', { name: 'Sacola' })).toBeInTheDocument();
   });
+
+  it('cartTrigger substitui o botao interno (ilha dinamica do app layer, Fase 10/ADR 0029)', () => {
+    render(<Header logo={logo} nav={nav} cartCount={5} cartTrigger={<button type="button">Carrinho sob medida</button>} />);
+    expect(screen.getByRole('button', { name: 'Carrinho sob medida' })).toBeInTheDocument();
+    // Com override, o botao interno (que usaria `cartCount`) nao e renderizado.
+    expect(screen.queryByRole('button', { name: 'Carrinho, 5 itens' })).toBeNull();
+  });
+
+  it('cartTrigger so aparece quando cart={true} (mesma flag do botao interno)', () => {
+    render(<Header logo={logo} nav={nav} cart={false} cartTrigger={<button type="button">Carrinho sob medida</button>} />);
+    expect(screen.queryByRole('button', { name: 'Carrinho sob medida' })).toBeNull();
+  });
 });
 
 describe('headerSchema', () => {

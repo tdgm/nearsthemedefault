@@ -25,3 +25,15 @@ export const Minimo: Story = { args: { variant: 'minimal', cartCount: 2 } };
 export const Nenhum: Story = { args: { variant: 'none' } };
 export const SemBusca: Story = { args: { search: false } };
 export const SemNavegacao: Story = { args: { nav: undefined } };
+
+/**
+ * `cartTrigger`: slot usado pelo app layer para injetar um botao de carrinho
+ * ja resolvido numa ilha dinamica propria (Fase 10, ADR 0029) - o Header em
+ * si continua estatico (o "Menu" nao muda de DOM a cada request). Fora do
+ * Storybook o conteudo real e `<Suspense><CartButtonLive /></Suspense>`
+ * (apps/web/app/layout.tsx); aqui um botao simples ja basta pra documentar o
+ * contrato do slot.
+ */
+export const ComCartTriggerCustomizado: Story = {
+  args: { cartTrigger: <button type="button">Carrinho sob medida</button> },
+};

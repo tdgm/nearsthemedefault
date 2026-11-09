@@ -190,3 +190,48 @@ pagamento - e so a pagina parar de ser um link morto.
   multi-dispositivo/multi-sessao (o cookie e por navegador), cupom, frete
   por CEP no carrinho em si (a pagina reusa o CEP via `?cep=` igual a PDP,
   nao duplica o campo).
+
+## Addendum: `Suspense` no `Header` inteiro quebrava o "Menu" por teclado
+
+A primeira versao desta fase envolvia o `Header` INTEIRO (nao so o botao de
+carrinho) num unico `<Suspense>` no layout raiz (`CartAwareHeader`). O E2E
+`e2e/keyboard.spec.ts:67` (`"Menu" abre com Enter, prende o foco...`) passava
+limpo em `main` e falhou de forma deterministica (2/2 tentativas, identico)
+no CI da PR depois dessa mudanca - so o caso `/` ("Menu"); o caso
+`/departamento-exemplo` ("Filtrar", que nao tem nada a ver com carrinho/Header)
+continuou passando, o que ja apontava pra algo especifico do `Header`.
+
+Causa raiz: com Cache Components, o `Suspense` em volta do `Header` faz o
+Next fazer *streaming* do HTML - a pagina chega primeiro com o fallback
+estatico, e o conteudo resolvido (com `cartCount` real) substitui aquele
+subtree inteiro do DOM quando a leitura do cookie termina, **mesmo quando o
+valor resultante e identico ao fallback** (carrinho vazio). O teste faz
+`button.focus()` seguido de `page.keyboard.press('Enter')`
+(`OverlayTrigger`, `packages/ui/src/overlay/overlay-trigger.tsx`, usa
+`document.getElementById(targetId)` no `onClick` - nao e um ref obsoleto).
+O problema e outro: se a troca do subtree acontecer entre o `focus()` e o
+`Enter`, o navegador remove o elemento focado e o foco cai pra `<body>`;
+`Enter` so ativa `click()` num botao que esta focado, entao nada abre o
+`NavDrawer`. O botao "Menu" nao depende do carrinho em nada - ele so estava
+dentro do MESMO subtree React que o botao de carrinho, que de fato precisa
+ser dinamico.
+
+Fix: o `Header` ganhou um prop `cartTrigger?: ReactNode` (fora do schema Zod
+- e composicao de React, nunca dado de CMS) que, quando presente, substitui
+o botao de carrinho interno (`CartButton`, agora exportado de
+`@nears/sections`). O layout raiz para de envolver o `Header` inteiro em
+`Suspense`: ele renderiza `<Header>` direto (100% estatico, igual a antes da
+Fase 10) e constroi so o `cartTrigger` como
+`<Suspense fallback={<CartButton .../>}><CartButtonLive /></Suspense>` -
+uma ilha dinamica do tamanho de UM botao, nunca do Header inteiro. O "Menu"
+nunca mais troca de DOM; so o botao de carrinho (que precisa mesmo refletir
+a contagem real no `aria-label`) continua sujeito ao mesmo streaming -
+nenhum teste hoje faz foco+Enter nele, mas o risco e o mesmo caso um dia
+exista um; vale a pena ter em mente se for escrito.
+
+O `Minicart` (o `<dialog>` que esse botao abre) continua inteiro dentro de
+`Suspense` (`CartAwareMinicart`) - nao ha teste de teclado abrindo o
+minicart hoje (o fluxo testado usa `.click()`, que o Playwright reavalia
+contra o DOM atual, sem depender de foco persistido entao nao sofre do
+mesmo bug), entao nao foi alterado. Fica documentado como risco aceito
+igual ao botao de carrinho, nao como um bug corrigido.
