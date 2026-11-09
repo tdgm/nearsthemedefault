@@ -3,8 +3,17 @@ import { getSnapshot } from '../lib/data/client';
 import { graphqlRequest, GraphQLError } from '../lib/data/graphql';
 import { toProductCard } from '../lib/data/mappers';
 import { z } from 'zod';
-import { exampleHref } from '../lib/evolution';
 import { getSlugIndex } from '../lib/routing';
+
+/** URLs de exemplo do mock ("-exemplo"), as mesmas usadas pelos E2E. */
+const exampleHref: Record<string, string> = {
+  department: '/departamento-exemplo',
+  'category-flat': '/tipo-exemplo',
+  campaign: '/campanha-exemplo',
+  institutional: '/pagina-exemplo',
+  pdp: '/produto-exemplo/p',
+  longtail: '/b/palavra-chave-exemplo',
+};
 
 describe('mock do data layer', () => {
   it('passa pelo schema do snapshot', async () => {
@@ -22,7 +31,7 @@ describe('mock do data layer', () => {
     expect(index.get('inexistente')).toBeUndefined();
   });
 
-  it('os links de exemplo do painel existem no mock', async () => {
+  it('as URLs de exemplo ("-exemplo") existem no mock', async () => {
     const s = await getSnapshot();
     const slugs = new Set([...s.departments, ...s.productTypes, ...s.campaigns, ...s.pages].map((x) => x.slug));
     for (const id of ['department', 'category-flat', 'campaign', 'institutional'] as const) {

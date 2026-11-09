@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { EvolutionPanel } from '../components/evolution-panel';
 import { getStore } from '../lib/data/client';
 import { loadAllManifests } from '../lib/manifest';
 import { JsonLdScript, buildMetadata, getSeoContext, graph, organizationNode, searchPath, websiteNode } from '../lib/seo';
@@ -32,7 +31,6 @@ export default async function HomePage() {
       <JsonLdScript data={graph(organizationNode(ctx), websiteNode(ctx, searchPath()))} />
       <h1 className="sr-only">{home.storeName}</h1>
       {renderInstances(instances, home.propsFor)}
-      {process.env.NODE_ENV !== 'production' && <EvolutionPanel />}
     </main>
   );
 }

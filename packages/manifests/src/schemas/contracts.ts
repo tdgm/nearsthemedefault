@@ -1,7 +1,7 @@
 // Schema de nears/contracts.yaml - contratos de dados, SEO e GEO por template,
-// e os gates (performance/a11y/seguranca/SEO/GEO/governanca) lidos por scripts
-// e pelo painel de evolucao. Tipado por completo (CLAUDE.md > Codigo: "Zod
-// para validar todo manifest") - nao so os campos que o codigo ja le hoje.
+// e os gates (performance/a11y/seguranca/SEO/GEO/governanca) lidos por scripts.
+// Tipado por completo (CLAUDE.md > Codigo: "Zod para validar todo manifest") -
+// nao so os campos que o codigo ja le hoje.
 import { z } from 'zod';
 
 const strings = z.array(z.string().min(1));

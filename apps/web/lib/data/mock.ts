@@ -1,6 +1,6 @@
 // Catalogo de desenvolvimento: neutro, sem marca nem nicho. Passa pelos mesmos
 // schemas que a resposta real (catalogSnapshotSchema.parse no client). Os slugs
-// "-exemplo" sao os mesmos de exampleHref (lib/evolution.ts) e dos E2E.
+// "-exemplo" sao os mesmos usados pelos E2E e por apps/web/tests/data.test.ts.
 import type { CatalogSnapshot } from './schemas';
 
 /**
