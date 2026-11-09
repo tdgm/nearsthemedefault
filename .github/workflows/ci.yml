@@ -87,7 +87,20 @@ jobs:
       - run: pnpm build
       # O proprio LHCI sobe e derruba o servidor (collect.startServerCommand em
       # lighthouserc.json): sem `&` solto e sem dependencia extra tipo wait-on.
-      - run: pnpm lh
+      # Retry de 1x (ADR 0030): runner compartilhado do GH Actions tem variancia de
+      # CPU grande o bastante pra fazer `pnpm lh` falhar sozinho (confirmado: um
+      # commit so de docs, sem nenhuma mudanca de codigo, ja falhou este job).
+      # Sem acao externa nova de terceiro: so um loop de shell, sem custo de KB
+      # na rota critica (roda so no CI, nunca no bundle do site).
+      - name: pnpm lh (ate 2 tentativas - ruido conhecido do runner, ADR 0030)
+        run: |
+          for attempt in 1 2; do
+            if pnpm lh; then
+              exit 0
+            fi
+            echo "pnpm lh falhou (tentativa $attempt/2)"
+          done
+          exit 1
       # Relatorios completos (trace, LCP element, rede) para diagnosticar falhas de CWV:
       # o upload do LHCI vai para um storage publico temporario, fora do alcance do repo.
       - uses: actions/upload-artifact@v4
