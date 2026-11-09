@@ -20,7 +20,7 @@ export async function checkoutMetadata() {
 export function CheckoutStubPage() {
   return (
     <main className="mx-auto max-w-2xl p-4">
-      <h1 className="my-4 text-2xl font-bold">{vocab('checkoutStubTitle')}</h1>
+      <h1 className="my-4 text-2xl font-heading">{vocab('checkoutStubTitle')}</h1>
       <p className="mb-6 text-on-surface-muted">{vocab('checkoutStubMessage')}</p>
       <Link href="/carrinho" appearance={{ variant: 'primary' }}>
         {vocab('checkoutStubBack')}

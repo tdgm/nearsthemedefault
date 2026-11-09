@@ -40,7 +40,7 @@ export function PdpBuybox({
   return (
     <section aria-labelledby="pdp-title" className="grid content-start gap-4 py-4 lg:sticky lg:top-4">
       <div className="grid gap-2">
-        <h1 id="pdp-title" className="text-2xl font-bold text-balance md:text-3xl">
+        <h1 id="pdp-title" className="text-2xl font-heading text-balance md:text-3xl">
           {name}
         </h1>
         {sku && (

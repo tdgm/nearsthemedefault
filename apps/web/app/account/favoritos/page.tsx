@@ -47,7 +47,7 @@ async function AccountFavoritos() {
 export default function Page() {
   return (
     <main className="mx-auto max-w-5xl p-4">
-      <h1 className="my-4 text-2xl font-bold">{vocab('accountFavoritosTitle')}</h1>
+      <h1 className="my-4 text-2xl font-heading">{vocab('accountFavoritosTitle')}</h1>
       <Suspense fallback={<Skeleton shape="rect" className="h-48 w-full" label={vocab('accountLoading')} />}>
         <AccountFavoritos />
       </Suspense>

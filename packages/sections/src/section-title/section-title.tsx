@@ -8,7 +8,7 @@ import type { SectionTitleProps } from './section-title.schema';
 export function SectionTitle({ text, level = 'h2', href }: SectionTitleProps) {
   const H = level;
   return (
-    <H className="mx-auto max-w-7xl px-4 pt-8 pb-4 text-xl font-bold text-balance md:text-2xl">
+    <H className="mx-auto max-w-7xl px-4 pt-8 pb-4 text-xl font-heading text-balance md:text-2xl">
       {href ? (
         <a href={href} className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
           {text}

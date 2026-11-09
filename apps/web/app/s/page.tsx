@@ -69,7 +69,7 @@ async function Results({ searchParams }: { searchParams: SearchParams }) {
 export default function Page({ searchParams }: { searchParams: SearchParams }) {
   return (
     <main className="mx-auto max-w-7xl p-4">
-      <h1 className="my-4 text-2xl font-bold">{vocab('search')}</h1>
+      <h1 className="my-4 text-2xl font-heading">{vocab('search')}</h1>
       <Suspense fallback={<SearchForm {...formProps()} />}>
         <Results searchParams={searchParams} />
       </Suspense>

@@ -20,7 +20,7 @@ export function BannerFull({ image, alt, headline, body, cta, href, imageSide = 
           className={cn('h-auto w-full object-cover', imageSide === 'right' && 'md:order-2')}
         />
         <div className="flex flex-col items-start justify-center gap-3 p-6 md:p-10">
-          <h2 className="text-2xl font-bold text-balance">{headline}</h2>
+          <h2 className="text-2xl font-heading text-balance">{headline}</h2>
           {body && <p className="text-on-surface-muted">{body}</p>}
           {cta && href && (
             <a href={href} className={buttonClasses({ variant: 'primary', size: 'md' })}>

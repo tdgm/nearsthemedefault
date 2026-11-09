@@ -44,7 +44,7 @@ export function Price({
       )}
       <p className="flex flex-wrap items-center gap-2">
         {onSale && <span className="sr-only">{labels.to} </span>}
-        <span className={cn('leading-tight font-bold', sizes[size], onSale ? 'text-price-sale' : 'text-price')}>
+        <span className={cn('leading-tight font-medium', sizes[size], onSale ? 'text-price-sale' : 'text-price')}>
           {formatBRL(price)}
         </span>
         {onSale && showDiscount && <Badge tone="promo">-{off}%</Badge>}

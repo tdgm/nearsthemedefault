@@ -39,7 +39,7 @@ export function Footer({ service, newsletter, columns, apps, social, seals, lega
           <div className="grid gap-8 border-b border-border pb-8 md:grid-cols-2">
             {service && service.length > 0 && (
               <section aria-labelledby="footer-service">
-                <h2 id="footer-service" className="mb-2 text-lg font-bold">
+                <h2 id="footer-service" className="mb-2 text-lg font-heading">
                   {l.service}
                 </h2>
                 <dl className="grid gap-1">
@@ -62,7 +62,7 @@ export function Footer({ service, newsletter, columns, apps, social, seals, lega
             )}
             {showNewsletter && newsletter && (
               <section aria-labelledby="footer-newsletter">
-                <h2 id="footer-newsletter" className="mb-1 text-lg font-bold">
+                <h2 id="footer-newsletter" className="mb-1 text-lg font-heading">
                   {newsletter.title ?? 'Newsletter'}
                 </h2>
                 {newsletter.description && <p className="mb-3 text-on-surface-muted">{newsletter.description}</p>}

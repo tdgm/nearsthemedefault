@@ -58,7 +58,7 @@ async function AccountOverview() {
 export default function Page() {
   return (
     <main className="mx-auto max-w-5xl p-4">
-      <h1 className="my-4 text-2xl font-bold">{vocab('accountOverviewTitle')}</h1>
+      <h1 className="my-4 text-2xl font-heading">{vocab('accountOverviewTitle')}</h1>
       <Suspense fallback={<Skeleton shape="rect" className="h-48 w-full" label={vocab('accountLoading')} />}>
         <AccountOverview />
       </Suspense>

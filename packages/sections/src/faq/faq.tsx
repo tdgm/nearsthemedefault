@@ -10,7 +10,7 @@ import type { FaqProps } from './faq.schema';
 export function Faq({ items, title = 'Perguntas frequentes' }: FaqProps) {
   return (
     <section className="mx-auto max-w-4xl px-4 py-8 [contain-intrinsic-size:auto_480px] [content-visibility:auto]">
-      <h2 className="mb-4 text-xl font-bold text-balance">{title}</h2>
+      <h2 className="mb-4 text-xl font-heading text-balance">{title}</h2>
       <Accordion
         headingLevel={3}
         items={items.map((item, i) => ({

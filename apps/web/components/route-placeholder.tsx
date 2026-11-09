@@ -36,7 +36,7 @@ async function ParamsList({ params }: { params: Params }) {
 export function RoutePlaceholder({ id, template, params }: Props) {
   return (
     <main className="mx-auto max-w-3xl p-4">
-      <h1 className="my-4 text-2xl font-bold">Rota «{id}»</h1>
+      <h1 className="my-4 text-2xl font-heading">Rota «{id}»</h1>
       <p>
         Placeholder do template <code>{template}</code>. A implementação real chega na Fase 6 (veja
         docs/ROADMAP.md).

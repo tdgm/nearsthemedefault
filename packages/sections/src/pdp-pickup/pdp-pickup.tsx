@@ -25,7 +25,7 @@ export function PdpPickup({ cep, quote, labels }: PdpPickupProps) {
 
   return (
     <section aria-labelledby="retirada-titulo" className="py-4">
-      <h2 id="retirada-titulo" className="mb-3 text-lg font-bold">
+      <h2 id="retirada-titulo" className="mb-3 text-lg font-heading">
         {l.title}
       </h2>
       <div role="status" className="min-h-16">

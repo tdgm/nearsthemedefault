@@ -61,7 +61,7 @@ async function CadastroForm({ searchParams }: { searchParams: SearchParams }) {
 export default function Page({ searchParams }: { searchParams: SearchParams }) {
   return (
     <main className="mx-auto max-w-md p-4">
-      <h1 className="my-4 text-2xl font-bold">{vocab('accountCadastroTitle')}</h1>
+      <h1 className="my-4 text-2xl font-heading">{vocab('accountCadastroTitle')}</h1>
       <Suspense
         fallback={
           <>
