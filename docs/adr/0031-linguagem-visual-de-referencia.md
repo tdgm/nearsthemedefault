@@ -52,9 +52,12 @@ partir do painel `painel.nears.com.br`, medido em 2026-11-10):
   (`#B3410F`, 5,7:1) e o anel de foco o 600 (`#D9531A`, 4,0:1).
 - **Azul-marinho `#0F172A` / `#111827`** vira neutral.1000/900: e a cor do
   botao primario (branco sobre ele: 17,9:1) e do texto. Neutros em cinza frio.
-- **Logo**: `apps/web/public/logo-nears.webp` (112x112 WebP, exibido a 32px de
-  altura no header) substitui o placeholder "LOJA". Vem do dado da loja
-  (`store.logo`), nao de componente: cada loja troca pelo seu.
+- **Logo**: dois arquivos WebP gerados do original do painel.
+  `logo-nears-64.webp` (64x64, 2,7 KB) e o `store.logo` do header, exibido a
+  28px: o Lighthouse reprova (`image-delivery-insight`) arquivo maior que o
+  dobro do tamanho exibido. `logo-nears.webp` (112x112) e o novo campo opcional
+  `store.organizationLogo`, usado so no JSON-LD `Organization.logo`, porque o
+  Google pede no minimo 112x112. Ambos vem do dado da loja, nao de componente.
 - **Fonte**: o painel usa Roboto (Apache-2.0, permitida pela ADR 0001). O
   template segue em `system` (zero download, ADR 0020); adotar Roboto custa
   ~76 KB no caminho critico e fica como decisao a parte.

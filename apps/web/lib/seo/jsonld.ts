@@ -27,6 +27,8 @@ const compact = (node: JsonLd): JsonLd => Object.fromEntries(Object.entries(node
 
 export function organizationNode({ site, store }: SeoContext): JsonLd {
   const o: Organization = store.organization;
+  // Google pede logo >= 112x112; o do header e menor de proposito (ADR 0031).
+  const orgLogo = store.organizationLogo ?? store.logo;
   return compact({
     '@type': 'Organization',
     '@id': ids(site).organization,
@@ -34,7 +36,7 @@ export function organizationNode({ site, store }: SeoContext): JsonLd {
     legalName: o.legalName,
     url: site,
     description: o.description,
-    logo: { '@type': 'ImageObject', url: absoluteAsset(store.logo.src, site), width: store.logo.width, height: store.logo.height },
+    logo: { '@type': 'ImageObject', url: absoluteAsset(orgLogo.src, site), width: orgLogo.width, height: orgLogo.height },
     foundingDate: o.foundingDate,
     taxID: o.taxId,
     address: {
