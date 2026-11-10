@@ -23,11 +23,6 @@
   --nears-color-brand-700: #B3410F;
   --nears-color-brand-800: #8F3410;
   --nears-color-brand-900: #742C10;
-  --nears-color-accent-50: #FFF4ED;
-  --nears-color-accent-300: #FDAC74;
-  --nears-color-accent-500: #F26F35;
-  --nears-color-accent-600: #D9531A;
-  --nears-color-accent-700: #B3410F;
   --nears-color-status-success: #1A7F4B;
   --nears-color-status-warning: #B45309;
   --nears-color-status-danger: #C0281F;
@@ -141,9 +136,9 @@
   --nears-color-action-on: var(--nears-color-neutral-0);
   --nears-color-link: var(--nears-color-brand-700);
   --nears-color-price: var(--nears-color-neutral-900);
-  --nears-color-price-sale: var(--nears-color-accent-700);
+  --nears-color-price-sale: var(--nears-color-status-danger);
   --nears-color-price-list: var(--nears-color-neutral-500);
-  --nears-color-badge-promo-bg: var(--nears-color-accent-700);
+  --nears-color-badge-promo-bg: var(--nears-color-status-danger);
   --nears-color-badge-promo-on: var(--nears-color-neutral-0);
   --nears-color-success: var(--nears-color-status-success);
   --nears-color-warning: var(--nears-color-status-warning);
@@ -171,9 +166,9 @@
   --nears-color-action-on: var(--nears-color-neutral-900);
   --nears-color-link: var(--nears-color-brand-300);
   --nears-color-price: var(--nears-color-neutral-50);
-  --nears-color-price-sale: var(--nears-color-accent-300);
+  --nears-color-price-sale: var(--nears-color-status-danger-on-dark);
   --nears-color-price-list: var(--nears-color-neutral-400);
-  --nears-color-badge-promo-bg: var(--nears-color-accent-700);
+  --nears-color-badge-promo-bg: var(--nears-color-status-danger);
   --nears-color-badge-promo-on: var(--nears-color-neutral-0);
   --nears-color-success: var(--nears-color-status-success-on-dark);
   --nears-color-warning: var(--nears-color-status-warning-on-dark);
@@ -201,9 +196,9 @@
     --nears-color-action-on: var(--nears-color-neutral-900);
     --nears-color-link: var(--nears-color-brand-300);
     --nears-color-price: var(--nears-color-neutral-50);
-    --nears-color-price-sale: var(--nears-color-accent-300);
+    --nears-color-price-sale: var(--nears-color-status-danger-on-dark);
     --nears-color-price-list: var(--nears-color-neutral-400);
-    --nears-color-badge-promo-bg: var(--nears-color-accent-700);
+    --nears-color-badge-promo-bg: var(--nears-color-status-danger);
     --nears-color-badge-promo-on: var(--nears-color-neutral-0);
     --nears-color-success: var(--nears-color-status-success-on-dark);
     --nears-color-warning: var(--nears-color-status-warning-on-dark);

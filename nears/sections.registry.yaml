@@ -467,7 +467,14 @@ templates:
           blocks: [section-title, banner-grid, category-hub]
       - event-banner
       - showcase:tabs
-      - showcase:wishlist
+      # showcase:wishlist removido da home (docs/adr/0032): a home e render: ssg
+      # (routes.manifest.yaml), igual pra qualquer visitante, entao uma secao de
+      # "favoritos" aqui sempre mostraria o mesmo estado vazio pra todo mundo,
+      # pra sempre - nao ha como ler a sessao do visitante numa pagina estatica.
+      # A variante `wishlist` do showcase continua declarada (outro template, ou
+      # uma ilha client-side pos-hidratacao na home, podem usa-la no futuro);
+      # /account/favoritos (render: ssr, le a sessao a cada request) ja resolve
+      # o caso real hoje com ProductGrid direto, sem passar pelo showcase.
       - event-banner
       - section-title
       - banner-grid

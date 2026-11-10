@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 export type ArtSource = { src: string; width: number; height: number; avif?: string; webp?: string };
 
 /** `<source>` por formato moderno de uma arte, na ordem de preferencia (AVIF, WebP). */
@@ -26,12 +28,14 @@ export function ArtImage({
   alt,
   priority = false,
   className,
+  style,
 }: {
   desktop: ArtSource;
   mobile: ArtSource;
   alt: string;
   priority?: boolean;
   className?: string;
+  style?: CSSProperties;
 }) {
   return (
     <picture>
@@ -47,6 +51,7 @@ export function ArtImage({
         decoding={priority ? 'sync' : 'async'}
         fetchPriority={priority ? 'high' : undefined}
         className={className ?? 'block h-auto w-full'}
+        style={style}
       />
     </picture>
   );

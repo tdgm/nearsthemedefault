@@ -1,4 +1,4 @@
-import { Checkbox, Overlay, OverlayTrigger, Pagination, Select } from '@nears/ui';
+import { buttonClasses, Button, Checkbox, Overlay, OverlayTrigger, Pagination, Select } from '@nears/ui';
 import { ProductCard } from '../product-card/product-card.tsx';
 import { fill } from '../shared/template.ts';
 import { pageHref, toQueryString, type GridQuery } from './grid-url.ts';
@@ -87,10 +87,7 @@ export function ProductGrid({
         </p>
         <div className="flex flex-wrap items-end gap-3">
           {visibleFilters.length > 0 && (
-            <OverlayTrigger
-              targetId={FILTERS_ID}
-              className="inline-flex min-h-11 items-center rounded-md border border-border-control px-4 text-sm font-medium hover:bg-surface-subtle"
-            >
+            <OverlayTrigger targetId={FILTERS_ID} className={buttonClasses({ variant: 'secondary', size: 'sm' })}>
               {l.filter}
             </OverlayTrigger>
           )}
@@ -103,9 +100,9 @@ export function ProductGrid({
                 defaultValue={active}
                 options={sort.map((id) => ({ value: id, label: sortLabels[id] ?? id }))}
               />
-              <button type="submit" className="inline-flex min-h-11 items-center rounded-md border border-border-control px-4 text-sm font-medium hover:bg-surface-subtle">
+              <Button type="submit" variant="secondary" size="sm">
                 {l.sortApply}
-              </button>
+              </Button>
             </form>
           )}
         </div>
@@ -135,9 +132,9 @@ export function ProductGrid({
               })}
             </div>
             <div className="flex gap-2 border-t border-border p-4">
-              <button type="submit" className="inline-flex min-h-11 flex-1 items-center justify-center rounded-md bg-action px-4 font-medium text-action-on hover:bg-action-hover">
+              <Button type="submit" className="flex-1">
                 {l.filtersApply}
-              </button>
+              </Button>
               <a href={`${basePath}${toQueryString(Object.fromEntries(Object.entries(q).filter(([k]) => k === 'sort')))}` || '?'} className="inline-flex min-h-11 items-center px-4 underline underline-offset-4">
                 {l.filtersClear}
               </a>
