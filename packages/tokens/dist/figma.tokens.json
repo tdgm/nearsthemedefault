@@ -7,111 +7,111 @@
           "type": "color"
         },
         "50": {
-          "value": "#F7F7F7",
+          "value": "#F9FAFB",
           "type": "color"
         },
         "100": {
-          "value": "#EBEBEB",
+          "value": "#F3F4F6",
           "type": "color"
         },
         "200": {
-          "value": "#DEDEDE",
+          "value": "#E5E7EB",
           "type": "color"
         },
         "300": {
-          "value": "#C7C7C7",
+          "value": "#D1D5DB",
           "type": "color"
         },
         "400": {
-          "value": "#A3A3A3",
+          "value": "#9CA3AF",
           "type": "color"
         },
         "500": {
-          "value": "#6B6B6B",
+          "value": "#667085",
           "type": "color"
         },
         "600": {
-          "value": "#575757",
+          "value": "#4B5563",
           "type": "color"
         },
         "700": {
-          "value": "#444444",
+          "value": "#374151",
           "type": "color"
         },
         "800": {
-          "value": "#2B2B2B",
+          "value": "#1F2937",
           "type": "color"
         },
         "900": {
-          "value": "#171717",
+          "value": "#111827",
           "type": "color"
         },
         "1000": {
-          "value": "#000000",
+          "value": "#0F172A",
           "type": "color"
         }
       },
       "brand": {
         "50": {
-          "value": "#EFF3FF",
+          "value": "#FFF4ED",
           "type": "color"
         },
         "100": {
-          "value": "#DCE4FF",
+          "value": "#FFE6D5",
           "type": "color"
         },
         "200": {
-          "value": "#BCCBFF",
+          "value": "#FECCAA",
           "type": "color"
         },
         "300": {
-          "value": "#92A8FB",
+          "value": "#FDAC74",
           "type": "color"
         },
         "400": {
-          "value": "#6681F2",
+          "value": "#F68B55",
           "type": "color"
         },
         "500": {
-          "value": "#3F5BE0",
+          "value": "#F26F35",
           "type": "color"
         },
         "600": {
-          "value": "#2B43C2",
+          "value": "#D9531A",
           "type": "color"
         },
         "700": {
-          "value": "#22349B",
+          "value": "#B3410F",
           "type": "color"
         },
         "800": {
-          "value": "#1C2A79",
+          "value": "#8F3410",
           "type": "color"
         },
         "900": {
-          "value": "#16215C",
+          "value": "#742C10",
           "type": "color"
         }
       },
       "accent": {
         "50": {
-          "value": "#FFF1EC",
+          "value": "#FFF4ED",
           "type": "color"
         },
         "300": {
-          "value": "#FFA183",
+          "value": "#FDAC74",
           "type": "color"
         },
         "500": {
-          "value": "#F2602F",
+          "value": "#F26F35",
           "type": "color"
         },
         "600": {
-          "value": "#D14716",
+          "value": "#D9531A",
           "type": "color"
         },
         "700": {
-          "value": "#A8360F",
+          "value": "#B3410F",
           "type": "color"
         }
       },
@@ -585,7 +585,7 @@
       "type": "color"
     },
     "focus-ring": {
-      "value": "{color.neutral.900}",
+      "value": "{color.brand.600}",
       "type": "color"
     },
     "action": {
@@ -601,7 +601,7 @@
       "type": "color"
     },
     "link": {
-      "value": "{color.neutral.900}",
+      "value": "{color.brand.700}",
       "type": "color"
     },
     "price": {
@@ -609,7 +609,7 @@
       "type": "color"
     },
     "price-sale": {
-      "value": "{color.neutral.900}",
+      "value": "{color.accent.700}",
       "type": "color"
     },
     "price-list": {
@@ -617,7 +617,7 @@
       "type": "color"
     },
     "badge-promo-bg": {
-      "value": "{color.status.success}",
+      "value": "{color.accent.700}",
       "type": "color"
     },
     "badge-promo-on": {
@@ -687,7 +687,7 @@
       "type": "color"
     },
     "focus-ring": {
-      "value": "{color.neutral.0}",
+      "value": "{color.brand.300}",
       "type": "color"
     },
     "action": {
@@ -703,7 +703,7 @@
       "type": "color"
     },
     "link": {
-      "value": "{color.neutral.50}",
+      "value": "{color.brand.300}",
       "type": "color"
     },
     "price": {
@@ -711,7 +711,7 @@
       "type": "color"
     },
     "price-sale": {
-      "value": "{color.neutral.50}",
+      "value": "{color.accent.300}",
       "type": "color"
     },
     "price-list": {
@@ -719,7 +719,7 @@
       "type": "color"
     },
     "badge-promo-bg": {
-      "value": "{color.status.success}",
+      "value": "{color.accent.700}",
       "type": "color"
     },
     "badge-promo-on": {
