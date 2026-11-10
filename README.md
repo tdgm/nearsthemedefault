@@ -44,7 +44,7 @@ Fontes: so open source (OFL/Apache), self-hosted, com fallback websafe -
 | `nears/presets/*.yaml` | Presets de nicho (moda, eletronicos, casa, beleza, mercado, pet) |
 | `packages/tokens/tokens.json` | Design tokens com valores concretos e contrastes medidos |
 | `packages/ui` | Design system: atomos e moleculas (ADR 0013) |
-| `apps/web/public/logo-nears.png` | Logo padrao (Nears); paleta e forma dos elementos em docs/adr/0031 |
+| `apps/web/public/logo-nears.webp` | Logo padrao (Nears); paleta e forma dos elementos em docs/adr/0031 |
 | `packages/manifests` | Schemas Zod, loader, referencias e tipos gerados dos manifests (ADR 0012) |
 | `packages/sections` | Contrato, registry e sections implementadas (globais da Fase 4; `defineSection`, `createRegistry`) |
 | `.github/workflows/ci.yml` | Cinco jobs: validate, test, budgets, lighthouse, e2e |

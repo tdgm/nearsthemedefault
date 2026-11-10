@@ -97,7 +97,7 @@ describe('JSON-LD', () => {
     const org = asObj(organizationNode(await ctx()));
     expect(org['@type']).toBe('Organization');
     expect(org.url).toBe(SITE);
-    expect(org.logo.url).toBe(`${SITE}/logo-nears.png`);
+    expect(org.logo.url).toBe(`${SITE}/logo-nears.webp`);
     expect(org.address['@type']).toBe('PostalAddress');
     expect(org.address.addressCountry).toBe('BR');
     expect(org.sameAs.length).toBeGreaterThan(0);

@@ -52,7 +52,7 @@ partir do painel `painel.nears.com.br`, medido em 2026-11-10):
   (`#B3410F`, 5,7:1) e o anel de foco o 600 (`#D9531A`, 4,0:1).
 - **Azul-marinho `#0F172A` / `#111827`** vira neutral.1000/900: e a cor do
   botao primario (branco sobre ele: 17,9:1) e do texto. Neutros em cinza frio.
-- **Logo**: `apps/web/public/logo-nears.png` (160x160, exibido a 32px de
+- **Logo**: `apps/web/public/logo-nears.webp` (112x112 WebP, exibido a 32px de
   altura no header) substitui o placeholder "LOJA". Vem do dado da loja
   (`store.logo`), nao de componente: cada loja troca pelo seu.
 - **Fonte**: o painel usa Roboto (Apache-2.0, permitida pela ADR 0001). O

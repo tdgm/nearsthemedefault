@@ -127,7 +127,7 @@ const buildProducts = (catalog: MockCatalog): CatalogSnapshot['products'] => Arr
 export const buildMockSnapshot = (catalog: MockCatalog): CatalogSnapshot => ({
   store: {
     name: 'Loja',
-    logo: { src: '/logo-nears.png', width: 160, height: 160, alt: 'Nears' },
+    logo: { src: '/logo-nears.webp', width: 112, height: 112, alt: 'Nears' },
     ogImage: { src: '/placeholders/og-default.jpg', width: 1200, height: 630, alt: 'Loja' },
     organization: {
       legalName: 'Loja Exemplo Comércio Ltda.',
