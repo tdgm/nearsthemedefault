@@ -58,13 +58,17 @@ test.describe('skip link e ordem do foco', () => {
 });
 
 test.describe('overlays: focus trap, Esc e retorno do foco', () => {
-  const cases = [
-    { url: '/', trigger: 'Menu', dialog: /./ },
+  const cases: Array<{ url: string; trigger: string; dialog: string | RegExp; viewport?: { width: number; height: number } }> = [
+    // O hamburger ("Menu") so existe abaixo de `lg:` (1024px): a partir dali os
+    // departamentos ficam inline no Header, com mega-menu `<details>` (ADR
+    // 0033). Testado no viewport mobile, onde o controle existe de verdade.
+    { url: '/', trigger: 'Menu', dialog: /./, viewport: { width: 390, height: 844 } },
     { url: '/departamento-exemplo', trigger: 'Filtrar', dialog: 'Filtros' },
-  ] as const;
+  ];
 
-  for (const { url, trigger, dialog } of cases) {
+  for (const { url, trigger, dialog, viewport } of cases) {
     test(`${url}: "${trigger}" abre com Enter, prende o foco, fecha com Esc e devolve o foco`, async ({ page }) => {
+      if (viewport) await page.setViewportSize(viewport);
       await page.goto(url);
       const button = page.getByRole('button', { name: trigger, exact: true });
       await button.focus();
@@ -169,6 +173,9 @@ test.describe('leitor de tela: landmarks, nomes e hierarquia', () => {
   }
 
   test('arvore de acessibilidade da home: skip link, marcos e carrinho nomeado', async ({ page }) => {
+    // O botao "Menu" (hamburger) so existe abaixo de `lg:` (ADR 0033): auditado
+    // no viewport mobile, onde o controle existe de verdade.
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
     const tree = await page.locator('body').ariaSnapshot();
     for (const expected of ['link "Ir para o conteúdo"', '- banner', '- navigation', '- main', '- contentinfo', 'button "Menu"']) {
