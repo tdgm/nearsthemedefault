@@ -87,7 +87,7 @@ export function PdpPage({ view, searchParams }: { view: PdpView; searchParams: P
     <main className="pb-[72px] md:pb-0">
       <PdpJsonLd view={view} />
       {render(pick('breadcrumb'))}
-      <div className="mx-auto max-w-7xl px-4 lg:grid lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
+      <div className="mx-auto mb-20 max-w-7xl px-4 lg:grid lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
         {render(group(GALLERY_GROUP))}
       </div>
       <div className="mx-auto max-w-7xl px-4">

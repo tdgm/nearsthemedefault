@@ -15,7 +15,7 @@ import type { EventBannerProps } from './event-banner.schema';
 export function EventBanner({ imageDesktop, imageMobile, alt, href }: EventBannerProps) {
   const picture = <ArtImage desktop={imageDesktop} mobile={imageMobile} alt={alt} style={{ filter: illustrationFilter(alt) }} />;
   return (
-    <section className="[contain-intrinsic-size:auto_240px] [content-visibility:auto]">
+    <section className="mb-20 [contain-intrinsic-size:auto_240px] [content-visibility:auto]">
       {href ? (
         <a href={href} className="block">
           {picture}

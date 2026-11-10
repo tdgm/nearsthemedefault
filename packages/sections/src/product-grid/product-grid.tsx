@@ -78,7 +78,7 @@ export function ProductGrid({
   const active = currentSort ?? asArray(q.sort)[0] ?? sort[0];
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-4">
+    <section className="mx-auto mb-20 max-w-7xl px-4">
       <h2 className="sr-only">{l.heading}</h2>
 
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">

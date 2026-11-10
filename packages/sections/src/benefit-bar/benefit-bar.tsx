@@ -7,7 +7,7 @@ import type { BenefitBarProps } from './benefit-bar.schema';
  */
 export function BenefitBar({ items, label = 'Vantagens' }: BenefitBarProps) {
   return (
-    <section aria-label={label} className="border-y border-border bg-surface-subtle">
+    <section aria-label={label} className="mb-20 border-y border-border bg-surface-subtle">
       <ul
         tabIndex={0}
         className="mx-auto flex min-h-11 max-w-7xl snap-x snap-mandatory items-center gap-6 overflow-x-auto px-4 [scrollbar-width:none] md:justify-between [&::-webkit-scrollbar]:hidden"

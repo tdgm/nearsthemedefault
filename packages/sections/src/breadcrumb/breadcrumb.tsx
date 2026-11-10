@@ -8,7 +8,7 @@ import type { BreadcrumbSectionProps } from './breadcrumb.schema';
  */
 export function BreadcrumbSection({ items, label }: BreadcrumbSectionProps) {
   return (
-    <div className="mx-auto min-h-11 max-w-7xl px-4">
+    <div className="mx-auto mb-4 min-h-11 max-w-7xl px-4">
       <Breadcrumb items={items} label={label} />
     </div>
   );
