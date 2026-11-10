@@ -48,7 +48,7 @@ A forma vem da referencia; a cor e o logo vem da Nears (pedido do dono, a
 partir do painel `painel.nears.com.br`, medido em 2026-11-10):
 
 - **Laranja `#F26F35`** vira `brand.500`/`accent.500`, com rampa 50-900.
-  Branco sobre `#F26F35` da 2,9:1, entao texto e selo usam o tom 700
+  Branco sobre `#F26F35` da 2,96:1, entao texto e selo usam o tom 700
   (`#B3410F`, 5,7:1) e o anel de foco o 600 (`#D9531A`, 4,0:1).
 - **Azul-marinho `#0F172A` / `#111827`** vira neutral.1000/900: e a cor do
   botao primario (branco sobre ele: 17,9:1) e do texto. Neutros em cinza frio.
@@ -64,9 +64,9 @@ partir do painel `painel.nears.com.br`, medido em 2026-11-10):
 
 ## Botao primario: azul-marinho, nao laranja
 
-O painel da Nears usa botao laranja com texto branco (2,9:1, abaixo de AA).
+O painel da Nears usa botao laranja com texto branco (2,96:1, abaixo dos 4,5:1 de AA).
 As duas saidas conformes eram azul-marinho com texto branco (17,9:1) ou
-laranja com texto azul-marinho (6,1:1). Ficou a primeira: o laranja ja marca
+laranja com texto azul-marinho (6,0:1). Ficou a primeira: o laranja ja marca
 preco promocional, selo de desconto, link e foco, e um botao laranja ao lado
 deles disputaria a mesma atencao. Trocar e um token (`semantic.*.action`).
 
