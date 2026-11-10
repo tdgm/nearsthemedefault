@@ -35,7 +35,7 @@ export async function InstitutionalPage({ resolved }: { resolved: Institutional 
   return (
     <main>
       <JsonLdScript data={graph(organizationNode(ctx), webPageNode(ctx, { name: page.title, description: firstParagraph(page.body), path: `/${page.slug}` }))} />
-      <h1 className="mx-auto max-w-3xl px-4 pt-8 pb-2 text-2xl font-bold text-balance md:text-3xl">{page.title}</h1>
+      <h1 className="mx-auto max-w-3xl px-4 pt-8 pb-2 text-2xl font-heading text-balance md:text-3xl">{page.title}</h1>
       {renderInstances(instances, propsFor)}
     </main>
   );

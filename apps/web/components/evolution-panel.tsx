@@ -17,7 +17,7 @@ export function EvolutionPanel() {
       <p>Mostra em que fase do roadmap o template está e permite abrir cada rota do manifest.</p>
 
       <section aria-labelledby="fases" className="mt-8">
-        <h2 id="fases" className="mb-2 text-xl font-semibold">
+        <h2 id="fases" className="mb-2 text-xl font-heading">
           Fases do roadmap
         </h2>
         <ol className="list-decimal pl-6">
@@ -30,7 +30,7 @@ export function EvolutionPanel() {
       </section>
 
       <section aria-labelledby="estados" className="mt-8">
-        <h2 id="estados" className="mb-2 text-xl font-semibold">
+        <h2 id="estados" className="mb-2 text-xl font-heading">
           Estados de tela
         </h2>
         <ul className="list-disc pl-6">
@@ -46,7 +46,7 @@ export function EvolutionPanel() {
       </section>
 
       <section aria-labelledby="rotas" className="mt-8">
-        <h2 id="rotas" className="mb-2 text-xl font-semibold">
+        <h2 id="rotas" className="mb-2 text-xl font-heading">
           Rotas do manifest
         </h2>
         <div className="overflow-x-auto">

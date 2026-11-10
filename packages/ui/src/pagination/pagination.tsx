@@ -35,7 +35,7 @@ export function pageWindow(current: number, total: number, siblings: number): (n
   return out;
 }
 
-const item = 'inline-flex size-11 items-center justify-center rounded-md border border-border-control';
+const item = 'inline-flex size-11 items-center justify-center rounded-control border border-border-control';
 
 /**
  * Paginacao SEO-friendly: links reais (`<a href>`), `rel="prev"/"next"` e

@@ -10,7 +10,7 @@ export const ComLink: Story = { args: { href: '/categorias' } };
 export const Nivel3: Story = {
   render: (args) => (
     <>
-      <h2 className="px-4 pt-4 text-xl font-bold">Departamento</h2>
+      <h2 className="px-4 pt-4 text-xl font-heading">Departamento</h2>
       <SectionTitle {...args} level="h3" />
     </>
   ),

@@ -41,7 +41,7 @@ export function names(path) {
       if (a === 'size') return { css: `text-${k}`, tw: `text-${k}` };
       if (a === 'family') return { css: `font-${k}`, tw: k === 'brand' ? 'font-sans' : `font-${k}` };
       if (a === 'weight') {
-        const tw = { regular: 'normal', medium: 'medium', bold: 'bold' }[b];
+        const tw = { regular: 'normal', medium: 'medium', bold: 'bold', heading: 'heading', control: 'control' }[b];
         return { css: `font-weight-${k}`, tw: tw ? `font-weight-${tw}` : null };
       }
       if (a === 'leading') return { css: `leading-${k}`, tw: `leading-${k}` };

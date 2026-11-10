@@ -151,6 +151,11 @@ export const policiesSchema = z.strictObject({
 export const storeSchema = z.strictObject({
   name: z.string().min(1),
   logo: imageSchema,
+  /**
+   * Logo para dados estruturados (Organization.logo). O Google pede >= 112x112;
+   * o do header e menor para nao desperdicar bytes (ADR 0031). Sem ele, usa `logo`.
+   */
+  organizationLogo: imageSchema.optional(),
   /** Imagem padrao de compartilhamento (1200x630, contracts.yaml > seo.global.openGraph.imageSize). */
   ogImage: imageSchema.optional(),
   organization: organizationSchema,

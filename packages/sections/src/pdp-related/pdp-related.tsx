@@ -10,7 +10,7 @@ export function PdpRelated({ title = 'Você também pode gostar', products = [] 
   if (products.length === 0) return null;
   return (
     <section className="py-6 [contain-intrinsic-size:auto_520px] [content-visibility:auto]">
-      <h2 className="mb-4 text-xl font-bold text-balance md:text-2xl">{title}</h2>
+      <h2 className="mb-4 text-xl font-heading text-balance md:text-2xl">{title}</h2>
       <ProductRail products={products} limit={8} />
     </section>
   );

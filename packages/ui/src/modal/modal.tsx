@@ -52,7 +52,7 @@ export function Modal({ open, onClose, title, children, variant = 'modal', side 
     >
       <div className="flex h-full flex-col p-4">
         <div className="mb-4 flex items-center justify-between gap-4">
-          <h2 id={titleId} className="text-lg font-bold">
+          <h2 id={titleId} className="text-lg font-heading">
             {title}
           </h2>
           <button

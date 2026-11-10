@@ -57,7 +57,7 @@ async function AccountPedidoDetalhe({ params }: { params: Params }) {
           {vocab('accountPedidoPlacedAt')} {formatDate(order.placedAt)}
         </span>
       </div>
-      <h2 className="mb-2 text-lg font-semibold">{vocab('accountPedidoItens')}</h2>
+      <h2 className="mb-2 text-lg font-heading">{vocab('accountPedidoItens')}</h2>
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="border-b border-border-control">
@@ -102,7 +102,7 @@ async function AccountPedidoDetalhe({ params }: { params: Params }) {
 export default function Page({ params }: { params: Params }) {
   return (
     <main className="mx-auto max-w-3xl p-4">
-      <h1 className="my-4 text-2xl font-bold">{vocab('accountPedidoDetalheTitle')}</h1>
+      <h1 className="my-4 text-2xl font-heading">{vocab('accountPedidoDetalheTitle')}</h1>
       <Suspense fallback={<Skeleton shape="rect" className="h-40 w-full" label={vocab('accountLoading')} />}>
         <AccountPedidoDetalhe params={params} />
       </Suspense>

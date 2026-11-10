@@ -50,7 +50,7 @@ async function AccountEnderecos() {
 export default function Page() {
   return (
     <main className="mx-auto max-w-3xl p-4">
-      <h1 className="my-4 text-2xl font-bold">{vocab('accountEnderecosTitle')}</h1>
+      <h1 className="my-4 text-2xl font-heading">{vocab('accountEnderecosTitle')}</h1>
       <Suspense fallback={<Skeleton shape="rect" className="h-40 w-full" label={vocab('accountLoading')} />}>
         <AccountEnderecos />
       </Suspense>

@@ -78,6 +78,8 @@
   --font-weight-normal: var(--nears-font-weight-regular);
   --font-weight-medium: var(--nears-font-weight-medium);
   --font-weight-bold: var(--nears-font-weight-bold);
+  --font-weight-heading: var(--nears-font-weight-heading);
+  --font-weight-control: var(--nears-font-weight-control);
   --text-2xs: var(--nears-text-2xs);
   --text-xs: var(--nears-text-xs);
   --text-sm: var(--nears-text-sm);
@@ -99,6 +101,7 @@
   --radius-sm: var(--nears-radius-sm);
   --radius-md: var(--nears-radius-md);
   --radius-lg: var(--nears-radius-lg);
+  --radius-control: var(--nears-radius-control);
   --radius-full: var(--nears-radius-full);
   --shadow-sm: var(--nears-shadow-sm);
   --shadow-md: var(--nears-shadow-md);

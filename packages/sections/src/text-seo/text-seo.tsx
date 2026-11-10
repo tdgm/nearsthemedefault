@@ -17,7 +17,7 @@ export function TextSeo({ title, richText, collapsible = true, collapsedHeight =
   const paragraph = 'mb-3 text-on-surface-muted';
   return (
     <section className="mx-auto max-w-4xl px-4 py-8 [contain-intrinsic-size:auto_320px] [content-visibility:auto]">
-      {title && <h2 className="mb-3 text-xl font-bold text-balance">{title}</h2>}
+      {title && <h2 className="mb-3 text-xl font-heading text-balance">{title}</h2>}
       <p className={paragraph}>{lead}</p>
       {rest.length > 0 &&
         (collapsible ? (

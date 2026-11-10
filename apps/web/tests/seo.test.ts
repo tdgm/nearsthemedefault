@@ -97,7 +97,9 @@ describe('JSON-LD', () => {
     const org = asObj(organizationNode(await ctx()));
     expect(org['@type']).toBe('Organization');
     expect(org.url).toBe(SITE);
-    expect(org.logo.url).toBe(`${SITE}/logo-placeholder.svg`);
+    expect(org.logo.url).toBe(`${SITE}/logo-nears.webp`);
+    // logo de dados estruturados (>= 112px), nao o do header (64px)
+    expect(org.logo.width).toBeGreaterThanOrEqual(112);
     expect(org.address['@type']).toBe('PostalAddress');
     expect(org.address.addressCountry).toBe('BR');
     expect(org.sameAs.length).toBeGreaterThan(0);

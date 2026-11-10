@@ -36,7 +36,7 @@ export function Overlay({ id, title, children, side = 'left', closeLabel = 'Fech
     >
       <div className="flex h-full flex-col">
         <div className="flex items-center justify-between gap-4 border-b border-border p-4">
-          <h2 id={titleId} className="text-lg font-bold">
+          <h2 id={titleId} className="text-lg font-heading">
             {title}
           </h2>
           <form method="dialog">

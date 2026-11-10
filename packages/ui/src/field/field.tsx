@@ -36,6 +36,6 @@ export function FieldMessages({ ids, hint, error, className }: FieldMessagesProp
 
 /** Estilo comum de controles de texto (Input, Select). Alvo minimo de 44px. */
 export const controlClasses =
-  'min-h-11 w-full rounded-md border border-border-control bg-surface px-3 text-md text-on-surface ' +
+  'min-h-12 w-full rounded-control border border-border-control bg-surface px-5 text-md text-on-surface ' +
   'placeholder:text-on-surface-faint disabled:cursor-not-allowed disabled:opacity-50 ' +
   'aria-invalid:border-danger aria-invalid:border-2';

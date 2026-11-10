@@ -22,7 +22,7 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-md font-medium select-none ' +
+  'inline-flex items-center justify-center gap-2 rounded-control font-control select-none ' +
   'transition-colors duration-(--nears-duration-fast) ease-standard ' +
   'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 disabled:cursor-not-allowed disabled:opacity-50';
 

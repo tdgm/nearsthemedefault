@@ -181,7 +181,7 @@ async function CartContent({ searchParams }: { searchParams: Promise<RawQuery> }
 export function CartPage({ searchParams }: { searchParams: Promise<RawQuery> }): ReactNode {
   return (
     <main className="mx-auto max-w-3xl p-4">
-      <h1 className="my-4 text-2xl font-bold">{vocab('cartTitle')}</h1>
+      <h1 className="my-4 text-2xl font-heading">{vocab('cartTitle')}</h1>
       <Suspense fallback={<Skeleton shape="rect" className="h-64 w-full" label={vocab('accountLoading')} />}>
         <CartContent searchParams={searchParams} />
       </Suspense>

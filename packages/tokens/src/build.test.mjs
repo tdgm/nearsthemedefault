@@ -24,7 +24,7 @@ describe('saidas do build', () => {
   it('gera CSS com temas claro e escuro, theme.css do Tailwind e JSON do Figma', async () => {
     const files = await generate();
     const css = dist(files, 'tokens.css');
-    expect(css).toContain('--nears-color-neutral-500: #67717D;');
+    expect(css).toContain('--nears-color-neutral-500: #667085;');
     expect(css).toContain('--nears-color-surface: var(--nears-color-neutral-0);');
     expect(css).toContain(':root[data-theme="dark"] {');
     expect(css).toContain('@media (prefers-color-scheme: dark)');
@@ -42,7 +42,7 @@ describe('saidas do build', () => {
 
     const figma = JSON.parse(dist(files, 'figma.tokens.json'));
     expect(Object.keys(figma)).toEqual(expect.arrayContaining(['global', 'light', 'dark', '$themes', '$metadata']));
-    expect(figma.global.color.neutral['500']).toEqual({ value: '#67717D', type: 'color' });
+    expect(figma.global.color.neutral['500']).toEqual({ value: '#667085', type: 'color' });
     expect(figma.light.surface.value).toBe('{color.neutral.0}');
     expect(Object.keys(figma.light)).toEqual(Object.keys(figma.dark));
   });
@@ -98,6 +98,6 @@ describe('troca de marca por um unico arquivo', () => {
     expect(css).toContain('--nears-color-brand-600: #0B6E4F;');
     expect(css).toContain('--nears-color-accent-600: #8A2BE2;');
     // semanticos continuam apontando para os mesmos primitivos
-    expect(css).toContain('--nears-color-link: var(--nears-color-brand-600);');
+    expect(css).toContain('--nears-color-link: var(--nears-color-brand-700);');
   });
 });

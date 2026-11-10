@@ -53,7 +53,7 @@ export async function LojasPage() {
         {stores.map((store) => (
           <li key={store.id} className="border-t border-border pt-6 first:border-t-0 first:pt-0">
             <address className="not-italic">
-              <h2 className="text-lg font-bold">{store.name}</h2>
+              <h2 className="text-lg font-heading">{store.name}</h2>
               <p>
                 {store.address.street}, {store.address.number}
                 {store.address.complement ? ` - ${store.address.complement}` : ''} · {store.address.neighborhood}

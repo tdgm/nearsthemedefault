@@ -26,7 +26,7 @@ export function PdpShipping({ zipInput = true, helpHref, cep, quote, labels }: P
   const error = quote && 'error' in quote ? quote.error : undefined;
   return (
     <section id="frete" aria-labelledby="frete-titulo" className="py-4">
-      <h2 id="frete-titulo" className="mb-3 text-lg font-bold">
+      <h2 id="frete-titulo" className="mb-3 text-lg font-heading">
         {l.title}
       </h2>
       {zipInput && (
