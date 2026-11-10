@@ -91,13 +91,13 @@ describe('troca de marca por um unico arquivo', () => {
     const dir = await mkdtemp(join(tmpdir(), 'nears-brand-'));
     const t = structuredClone(base);
     t.color.brand['600'].value = '#0B6E4F'; // marca verde
-    t.color.accent['600'].value = '#8A2BE2';
     const tokensPath = join(dir, 'tokens.json');
     await writeFile(tokensPath, JSON.stringify(t));
     const css = dist(await generate({ tokensPath }), 'tokens.css');
     expect(css).toContain('--nears-color-brand-600: #0B6E4F;');
-    expect(css).toContain('--nears-color-accent-600: #8A2BE2;');
     // semanticos continuam apontando para os mesmos primitivos
     expect(css).toContain('--nears-color-link: var(--nears-color-brand-700);');
+    // price-sale/badge-promo-bg nao dependem de brand: trocar a marca nao muda o preco promocional (docs/adr/0032)
+    expect(css).toContain('--nears-color-price-sale: var(--nears-color-status-danger);');
   });
 });

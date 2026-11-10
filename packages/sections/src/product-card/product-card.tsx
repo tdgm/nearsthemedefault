@@ -1,4 +1,5 @@
-import { Badge, Image, Price, buildAlt, cn } from '@nears/ui';
+import { Badge, Button, Image, Price, buildAlt } from '@nears/ui';
+import { illustrationFilter } from '../shared/illustration.ts';
 import { fill } from '../shared/template.ts';
 import type { ProductCardProps } from './product-card.schema';
 
@@ -63,6 +64,7 @@ export function ProductCard({
             priority={priority}
             sizes={sizes}
             className="size-full object-cover"
+            style={{ filter: illustrationFilter(href) }}
           />
           {hoverImage && (
             <Image
@@ -123,14 +125,9 @@ export function ProductCard({
       <Price price={price} listPrice={listPrice} installments={installments} size="md" />
       {quickAdd && quickAddAction && (
         <form method="post" action={quickAddAction}>
-          <button
-            type="submit"
-            className={cn(
-              'inline-flex min-h-11 w-full items-center justify-center rounded-md border border-border-control px-4 text-sm font-medium hover:bg-surface-subtle',
-            )}
-          >
+          <Button type="submit" variant="secondary" size="sm" fullWidth>
             {l.quickAdd}
-          </button>
+          </Button>
         </form>
       )}
     </article>

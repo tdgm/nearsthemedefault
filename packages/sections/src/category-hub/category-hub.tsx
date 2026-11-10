@@ -1,4 +1,5 @@
 import { Image, formatBRL } from '@nears/ui';
+import { illustrationFilter } from '../shared/illustration.ts';
 import type { CategoryHubProps } from './category-hub.schema';
 
 const defaults = { region: 'Compre por categoria', fromPrice: 'a partir de' } as const;
@@ -27,6 +28,7 @@ export function CategoryHub({ items, limit = 6, labels }: CategoryHubProps) {
                 height={item.image.height}
                 sizes="(min-width: 1024px) 16vw, (min-width: 768px) 33vw, 144px"
                 className="h-auto w-full rounded-md"
+                style={{ filter: illustrationFilter(item.href) }}
               />
               <span className="font-medium underline-offset-4 group-hover:underline">{item.label}</span>{' '}
               {item.fromPrice !== undefined && (
