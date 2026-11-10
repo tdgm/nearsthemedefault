@@ -56,3 +56,36 @@ Reduzir de verdade exigiria sair do App Router (fora do escopo, ADR 0007).
 - Como o limite saiu do patamar original de 120, vale conferir Lighthouse
   (LCP/INP p75 mobile) assim que houver rota real; o gate de CWV continua o
   mesmo.
+
+## Atualizacao (2026-11-10): de onde vem os 139,4 KB e por que nao mexer agora
+
+Medido no build da branch do PR #28 (`.next/diagnostics/route-bundle-stats.json`,
+gzip nivel 9). As seis rotas criticas carregam exatamente os mesmos 7 chunks:
+
+| Chunk | gzip |
+| --- | --- |
+| react-dom (+ scheduler) | 70,1 KB |
+| cliente/router do Next | 45,5 KB |
+| compilado do Next | 7,7 KB |
+| runtime do Turbopack | 3,8 KB |
+| demais chunks do router | 5,1 KB |
+| **ilhas da loja + um pedaco do router** | **7,2 KB** |
+
+Total 139,4 KB; folga de 0,6 KB. O codigo de loja e ~3,9 KB.
+
+- O chunk de 7,2 KB contem so as ilhas em uso (Tabs, Carousel,
+  VariantSelector, AddToCartForm, PromoBar e OverlayTrigger). Modal, Toast e
+  Radio, que nenhuma tela usa, **nao** estao nele: o barrel de `@nears/ui` ja
+  e podado. Nao ha codigo morto para cortar.
+- As ilhas vao juntas para todas as rotas porque todas compartilham o mesmo
+  grafo de modulos (o registry importa todas as sections). Separar por rota
+  exigiria carregar sections sob demanda no registry (ADR 0006/0012). Ganho
+  maximo estimado: ~1 KB por rota, porque header e barra promocional sao
+  globais e ficam.
+- `packages/sections` nao depende do Next; usar `next/dynamic` ali acoplaria
+  o pacote ao framework.
+
+**Decisao:** o limite continua em 140 KB e nada muda no codigo. A proxima
+ilha de cliente que nao couber nos 0,6 KB reabre este ADR com a opcao de
+carregar sections por rota no registry; subir o limite continua sendo a
+ultima resposta.

@@ -62,6 +62,24 @@ partir do painel `painel.nears.com.br`, medido em 2026-11-10):
   template segue em `system` (zero download, ADR 0020); adotar Roboto custa
   ~76 KB no caminho critico e fica como decisao a parte.
 
+## Botao primario: azul-marinho, nao laranja
+
+O painel da Nears usa botao laranja com texto branco (2,9:1, abaixo de AA).
+As duas saidas conformes eram azul-marinho com texto branco (17,9:1) ou
+laranja com texto azul-marinho (6,1:1). Ficou a primeira: o laranja ja marca
+preco promocional, selo de desconto, link e foco, e um botao laranja ao lado
+deles disputaria a mesma atencao. Trocar e um token (`semantic.*.action`).
+
+## Imagens de exemplo
+
+Os placeholders cinza com um "X" deram lugar a ilustracoes abstratas
+originais na paleta da marca, sem conceito de nicho (o template serve
+qualquer segmento): `product.svg`, `category.svg` e os rasters do hero
+(1440x560 e 750x900, AVIF/WebP/JPG) e do OG (1200x630). Os rasters sao
+gerados dos SVG em `apps/web/placeholders-src/` com sharp (AVIF q50, WebP
+q72, JPG q74 mozjpeg) e ficaram menores que os anteriores: o AVIF do hero
+desktop caiu de 19,7 KB para 4,4 KB. Loja real troca tudo pelo CMS.
+
 ## O que NAO foi copiado (de proposito)
 
 - **Fonte**: a referencia usa uma familia proprietaria. O template segue em
