@@ -98,6 +98,6 @@ describe('troca de marca por um unico arquivo', () => {
     expect(css).toContain('--nears-color-brand-600: #0B6E4F;');
     expect(css).toContain('--nears-color-accent-600: #8A2BE2;');
     // semanticos continuam apontando para os mesmos primitivos
-    expect(css).toContain('--nears-color-link: var(--nears-color-brand-600);');
+    expect(css).toContain('--nears-color-link: var(--nears-color-neutral-900);');
   });
 });

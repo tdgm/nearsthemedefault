@@ -33,10 +33,10 @@ describe('Input', () => {
     expect(screen.getByText('(obrigatório)')).toBeInTheDocument();
   });
 
-  it('desabilitado e alvo minimo de 44px', () => {
+  it('desabilitado e altura de 48px (acima do alvo minimo de 44px)', () => {
     render(<Input label="Nome" disabled />);
     const input = screen.getByLabelText('Nome');
     expect(input).toBeDisabled();
-    expect(input).toHaveClass('min-h-11');
+    expect(input).toHaveClass('min-h-12');
   });
 });
