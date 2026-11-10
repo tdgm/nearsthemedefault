@@ -30,7 +30,7 @@ O que a referencia usa, em resumo:
 
 Tudo via `packages/tokens/tokens.json`; nenhum valor literal em componente.
 
-1. **Neutros acromaticos** (`color.neutral.*`), de `#FFFFFF` a `#000000`.
+1. **Paleta da propria Nears** (ver "Marca padrao" abaixo), nao a da referencia.
 2. **Raio**: `sm` 2px, `md` 4px, `lg` 8px e o novo `radius.control` (9999px),
    usado por Button, Input, Select e Pagination (`rounded-control`). Marca de
    cantos retos troca um token.
@@ -38,9 +38,26 @@ Tudo via `packages/tokens/tokens.json`; nenhum valor literal em componente.
    como `font-heading` e `font-control`. Titulos (h1/h2) e rotulo de botao
    usam esses tokens em vez de `font-bold`/`font-medium`. Preco passa a 500.
 4. **Semanticos**: `action` = neutral.1000 (hover neutral.800); `link`,
-   `focus-ring` e `price-sale` = cor do texto; `badge-promo-bg` = success.
+   `price-sale` e `badge-promo-bg` = laranja escuro (700); `focus-ring` = 600.
 5. **Campo**: 48px de altura e padding horizontal de 20px (pilula precisa de
    mais respiro lateral).
+
+## Marca padrao: Nears
+
+A forma vem da referencia; a cor e o logo vem da Nears (pedido do dono, a
+partir do painel `painel.nears.com.br`, medido em 2026-11-10):
+
+- **Laranja `#F26F35`** vira `brand.500`/`accent.500`, com rampa 50-900.
+  Branco sobre `#F26F35` da 2,9:1, entao texto e selo usam o tom 700
+  (`#B3410F`, 5,7:1) e o anel de foco o 600 (`#D9531A`, 4,0:1).
+- **Azul-marinho `#0F172A` / `#111827`** vira neutral.1000/900: e a cor do
+  botao primario (branco sobre ele: 17,9:1) e do texto. Neutros em cinza frio.
+- **Logo**: `apps/web/public/logo-nears.png` (160x160, exibido a 32px de
+  altura no header) substitui o placeholder "LOJA". Vem do dado da loja
+  (`store.logo`), nao de componente: cada loja troca pelo seu.
+- **Fonte**: o painel usa Roboto (Apache-2.0, permitida pela ADR 0001). O
+  template segue em `system` (zero download, ADR 0020); adotar Roboto custa
+  ~76 KB no caminho critico e fica como decisao a parte.
 
 ## O que NAO foi copiado (de proposito)
 
@@ -54,8 +71,6 @@ Tudo via `packages/tokens/tokens.json`; nenhum valor literal em componente.
 
 ## Consequencias
 
-- Link inline e o botao terciario dependem do sublinhado (ja existente) para
-  se distinguir do texto, nao mais da cor (WCAG 1.4.1).
 - `packages/tokens/dist/*` regenerado; testes do build de tokens atualizados
-  para o novo neutral.500 (`#6B6B6B`, 5,3:1 sobre branco).
+  para o novo neutral.500 (`#667085`, 4,97:1 sobre branco).
 - Qualquer loja volta ao visual anterior, ou a outro, so trocando tokens.

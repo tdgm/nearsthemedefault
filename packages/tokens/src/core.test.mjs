@@ -45,7 +45,7 @@ describe('referencias', () => {
     expect(out.$schema).toBeUndefined();
     expect(out.meta).toBeUndefined();
     expect(out.semantic.$note).toBeUndefined();
-    expect(out.color.neutral['500']).toEqual({ value: '#6B6B6B' });
+    expect(out.color.neutral['500']).toEqual({ value: '#667085' });
   });
 
   it('resolve referencias aninhadas e dentro de strings', () => {
