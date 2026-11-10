@@ -20,7 +20,7 @@ export function PdpReviews({ provider, aggregate, items = [], labels }: PdpRevie
   const l = { ...defaults, ...labels };
   const total = aggregate?.count ?? items.length;
   return (
-    <section id="avaliacoes" aria-labelledby="avaliacoes-titulo" data-provider={provider} className="py-6 [contain-intrinsic-size:auto_360px] [content-visibility:auto]">
+    <section id="avaliacoes" aria-labelledby="avaliacoes-titulo" data-provider={provider} className="mb-20 [contain-intrinsic-size:auto_360px] [content-visibility:auto]">
       <h2 id="avaliacoes-titulo" className="mb-3 text-xl font-heading">
         {l.title}
       </h2>

@@ -32,7 +32,7 @@ export function Footer({ service, newsletter, columns, apps, social, seals, lega
   return (
     <footer
       aria-label={l.region}
-      className="mt-12 border-t border-border bg-surface-subtle [contain-intrinsic-size:auto_640px] [content-visibility:auto]"
+      className="mt-20 border-t border-border bg-surface-subtle [contain-intrinsic-size:auto_640px] [content-visibility:auto]"
     >
       <div className="mx-auto max-w-7xl px-4 py-8">
         {(service?.length || showNewsletter) && (

@@ -46,7 +46,7 @@ export function Hero({ slides, autoplay = false, intervalMs = 6000, labels }: He
   const region = labels?.region ?? 'Destaques';
   if (slides.length === 1) {
     return (
-      <section aria-label={region}>
+      <section aria-label={region} className="mb-20">
         <HeroSlide slide={slides[0]!} first />
       </section>
     );
@@ -54,6 +54,7 @@ export function Hero({ slides, autoplay = false, intervalMs = 6000, labels }: He
   return (
     <Carousel
       label={region}
+      className="mb-20"
       autoplayMs={autoplay ? intervalMs : undefined}
       slides={slides.map((slide, i) => (
         <HeroSlide key={`${slide.alt}-${i}`} slide={slide} first={i === 0} />

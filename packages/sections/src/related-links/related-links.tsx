@@ -7,7 +7,7 @@ import type { RelatedLinksProps } from './related-links.schema';
  */
 export function RelatedLinks({ title = 'Veja também', links }: RelatedLinksProps) {
   return (
-    <nav aria-label={title} className="mx-auto max-w-7xl px-4 py-8 [contain-intrinsic-size:auto_160px] [content-visibility:auto]">
+    <nav aria-label={title} className="mx-auto mb-20 max-w-7xl px-4 [contain-intrinsic-size:auto_160px] [content-visibility:auto]">
       <h2 className="mb-3 text-lg font-heading">{title}</h2>
       <ul className="flex flex-wrap gap-2">
         {links.map((link) => (

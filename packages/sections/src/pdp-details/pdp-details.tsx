@@ -97,7 +97,7 @@ export function PdpDetails({ description, specs = [], instructions, guide, label
 
   if (items.length === 0) return null;
   return (
-    <section id="detalhes" aria-labelledby="detalhes-titulo" className="py-6 [contain-intrinsic-size:auto_480px] [content-visibility:auto]">
+    <section id="detalhes" aria-labelledby="detalhes-titulo" className="mb-20 [contain-intrinsic-size:auto_480px] [content-visibility:auto]">
       <h2 id="detalhes-titulo" className="mb-4 text-xl font-heading">
         {l.title}
       </h2>

@@ -32,7 +32,7 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: 'Saltar' })).toHaveAttribute('href', '#principal');
   });
 
-  it('logo centralizado e link para a home, com dimensoes e prioridade (LCP)', () => {
+  it('logo a esquerda, link para a home, com dimensoes e prioridade (LCP)', () => {
     render(<Header logo={logo} nav={nav} homeHref="/inicio" />);
     const img = screen.getByAltText('Loja');
     expect(img).toHaveAttribute('width', '120');
@@ -50,6 +50,29 @@ describe('Header', () => {
   it('sem departamentos nao mostra o hamburger', () => {
     render(<Header logo={logo} nav={{ departments: [] }} />);
     expect(screen.queryByRole('button', { name: 'Menu' })).toBeNull();
+  });
+
+  it('departamento sem grupos/destaque/promo vira link direto no nav inline', () => {
+    render(<Header logo={logo} nav={nav} />);
+    expect(screen.getByRole('link', { name: 'Feminino' })).toHaveAttribute('href', '/feminino');
+  });
+
+  it('departamento com grupos vira mega-menu inline (details/summary nativo, fechado por padrao, sem JS)', () => {
+    const navWithGroups = {
+      departments: [
+        {
+          label: 'Masculino',
+          href: '/masculino',
+          groups: [{ label: 'Camisetas', links: [{ label: 'Manga curta', href: '/masculino/camisetas/manga-curta' }] }],
+        },
+      ],
+    };
+    const { container } = render(<Header logo={logo} nav={navWithGroups} />);
+    const details = container.querySelector('details');
+    expect(details).not.toHaveAttribute('open');
+    expect(screen.getByRole('link', { name: 'Ver tudo em Masculino', hidden: true })).toHaveAttribute('href', '/masculino');
+    // Mesmo fechado, o link ja esta no HTML inicial (indexavel, sem precisar de JS pra abrir).
+    expect(Array.from(details!.querySelectorAll('a')).map((a) => a.getAttribute('href'))).toContain('/masculino/camisetas/manga-curta');
   });
 
   it('busca: form GET para /s com input q e label', () => {

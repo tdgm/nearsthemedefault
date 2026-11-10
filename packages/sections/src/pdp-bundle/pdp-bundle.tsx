@@ -9,7 +9,7 @@ import type { PdpBundleProps } from './pdp-bundle.schema';
 export function PdpBundle({ title = 'Compre junto', products = [] }: PdpBundleProps) {
   if (products.length === 0) return null;
   return (
-    <section className="py-6 [contain-intrinsic-size:auto_520px] [content-visibility:auto]">
+    <section className="mb-20 [contain-intrinsic-size:auto_520px] [content-visibility:auto]">
       <h2 className="mb-4 text-xl font-heading text-balance md:text-2xl">{title}</h2>
       <ProductRail products={products} limit={8} />
     </section>

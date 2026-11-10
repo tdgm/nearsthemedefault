@@ -10,6 +10,22 @@ const logo = {
 };
 const nav = { departments: [{ label: 'Feminino', href: '/feminino' }, { label: 'Masculino', href: '/masculino' }] };
 
+const navComMegaMenu = {
+  departments: [
+    {
+      label: 'Feminino',
+      href: '/feminino',
+      highlight: { label: 'Novidades', href: '/feminino/novidades' },
+      groups: [
+        { label: 'Roupas', href: '/feminino/roupas', links: [{ label: 'Blusas', href: '/feminino/roupas/blusas' }, { label: 'Calças', href: '/feminino/roupas/calcas' }] },
+        { label: 'Calçados', links: [{ label: 'Tênis', href: '/feminino/calcados/tenis' }] },
+      ],
+      promo: { title: 'Coleção de verão', href: '/colecao-verao' },
+    },
+    { label: 'Masculino', href: '/masculino' },
+  ],
+};
+
 const meta = {
   title: 'Sections/Globais/Header',
   component: Header,
@@ -25,6 +41,12 @@ export const Minimo: Story = { args: { variant: 'minimal', cartCount: 2 } };
 export const Nenhum: Story = { args: { variant: 'none' } };
 export const SemBusca: Story = { args: { search: false } };
 export const SemNavegacao: Story = { args: { nav: undefined } };
+
+/**
+ * Departamento com `groups`/`highlight`/`promo` vira mega-menu inline a partir
+ * de `md:` (ADR 0033) - `<details>` nativo, clique no "Feminino" pra abrir.
+ */
+export const ComMegaMenu: Story = { args: { nav: navComMegaMenu } };
 
 /**
  * `cartTrigger`: slot usado pelo app layer para injetar um botao de carrinho

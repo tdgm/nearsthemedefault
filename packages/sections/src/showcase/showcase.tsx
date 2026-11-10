@@ -26,7 +26,7 @@ export function Showcase({ variant = 'static', title, limit = 8, tabs, products 
   if (!isTabs && products.length === 0 && variant !== 'wishlist') return null;
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-6 [contain-intrinsic-size:auto_520px] [content-visibility:auto]">
+    <section className="mx-auto mb-20 max-w-7xl px-4 [contain-intrinsic-size:auto_520px] [content-visibility:auto]">
       <h2 className="mb-4 text-xl font-heading text-balance md:text-2xl">{heading}</h2>
       {isTabs ? (
         <Tabs
