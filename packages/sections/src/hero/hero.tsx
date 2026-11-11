@@ -16,7 +16,7 @@ function HeroSlide({ slide, first }: { slide: Slide; first: boolean }) {
   return (
     <Container>
       <div className={hasPanel ? 'grid gap-4 lg:grid-cols-[5fr_6fr]' : undefined}>
-        <div className="overflow-hidden rounded-2xl lg:order-2">
+        <div className="overflow-hidden rounded-2xl lg:order-2 lg:[&_a]:h-full lg:[&_img]:h-full lg:[&_img]:object-cover lg:[&_picture]:block lg:[&_picture]:h-full">
           {slide.href ? (
             <a href={slide.href} className="block">
               {art}
