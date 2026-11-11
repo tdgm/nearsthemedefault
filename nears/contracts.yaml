@@ -239,6 +239,7 @@ gates:
       - { fg: price-list,       bg: [surface, surface-subtle, surface-raised], min: text }
       - { fg: on-inverse,       bg: [surface-inverse], min: text }
       - { fg: action-on,        bg: [action, action-hover], min: text }
+      - { fg: on-brand,         bg: [surface-brand], min: text }
       - { fg: badge-promo-on,   bg: [badge-promo-bg], min: text }
       - { fg: success,         bg: [surface, surface-subtle, surface-raised], min: text }
       - { fg: warning,         bg: [surface, surface-subtle, surface-raised], min: text }
