@@ -2,17 +2,22 @@
 
 :root {
   --nears-color-neutral-0: #FFFFFF;
-  --nears-color-neutral-50: #F9FAFB;
-  --nears-color-neutral-100: #F3F4F6;
+  --nears-color-neutral-50: #F8F9FA;
+  --nears-color-neutral-100: #F1F3F6;
   --nears-color-neutral-200: #E5E7EB;
   --nears-color-neutral-300: #D1D5DB;
   --nears-color-neutral-400: #9CA3AF;
   --nears-color-neutral-500: #667085;
-  --nears-color-neutral-600: #4B5563;
+  --nears-color-neutral-600: #4B5565;
   --nears-color-neutral-700: #374151;
-  --nears-color-neutral-800: #1F2937;
-  --nears-color-neutral-900: #111827;
+  --nears-color-neutral-800: #29364B;
+  --nears-color-neutral-900: #172033;
   --nears-color-neutral-1000: #0F172A;
+  --nears-color-navy-100: #E5EAF1;
+  --nears-color-navy-200: #D6E0F0;
+  --nears-color-navy-600: #153E79;
+  --nears-color-navy-700: #172A55;
+  --nears-color-navy-800: #12213F;
   --nears-color-brand-50: #FFF4ED;
   --nears-color-brand-100: #FFE6D5;
   --nears-color-brand-200: #FECCAA;
@@ -37,7 +42,7 @@
   --nears-font-weight-regular: 400;
   --nears-font-weight-medium: 500;
   --nears-font-weight-bold: 700;
-  --nears-font-weight-heading: 400;
+  --nears-font-weight-heading: 700;
   --nears-font-weight-control: 400;
   --nears-text-2xs: clamp(0.6875rem, 0.68rem + 0.04vw, 0.75rem);
   --nears-text-xs: clamp(0.75rem, 0.73rem + 0.09vw, 0.8125rem);
@@ -56,6 +61,7 @@
   --nears-tracking-tight: -0.02em;
   --nears-tracking-normal: 0;
   --nears-tracking-wide: 0.04em;
+  --nears-width-heading: 88;
   --nears-space-0: 0;
   --nears-space-1: 0.25rem;
   --nears-space-2: 0.5rem;
@@ -74,6 +80,8 @@
   --nears-radius-sm: 2px;
   --nears-radius-md: 4px;
   --nears-radius-lg: 8px;
+  --nears-radius-xl: 16px;
+  --nears-radius-2xl: 24px;
   --nears-radius-control: 9999px;
   --nears-radius-full: 9999px;
   --nears-shadow-sm: 0 1px 2px rgba(11,14,18,0.06);
@@ -131,19 +139,26 @@
   --nears-color-border-strong: var(--nears-color-neutral-300);
   --nears-color-border-control: var(--nears-color-neutral-500);
   --nears-color-focus-ring: var(--nears-color-brand-600);
-  --nears-color-action: var(--nears-color-neutral-1000);
-  --nears-color-action-hover: var(--nears-color-neutral-800);
-  --nears-color-action-on: var(--nears-color-neutral-0);
-  --nears-color-link: var(--nears-color-brand-700);
+  --nears-color-action: var(--nears-color-brand-500);
+  --nears-color-action-hover: var(--nears-color-brand-400);
+  --nears-color-action-on: var(--nears-color-neutral-900);
+  --nears-color-link: var(--nears-color-navy-600);
   --nears-color-price: var(--nears-color-neutral-900);
-  --nears-color-price-sale: var(--nears-color-status-danger);
+  --nears-color-price-sale: var(--nears-color-brand-700);
   --nears-color-price-list: var(--nears-color-neutral-500);
-  --nears-color-badge-promo-bg: var(--nears-color-status-danger);
+  --nears-color-badge-promo-bg: var(--nears-color-brand-700);
   --nears-color-badge-promo-on: var(--nears-color-neutral-0);
   --nears-color-success: var(--nears-color-status-success);
   --nears-color-warning: var(--nears-color-status-warning);
   --nears-color-danger: var(--nears-color-status-danger);
   --nears-color-info: var(--nears-color-status-info);
+  --nears-color-surface-brand: var(--nears-color-navy-800);
+  --nears-color-on-brand: var(--nears-color-neutral-0);
+  --nears-color-tint-a: var(--nears-color-brand-100);
+  --nears-color-tint-b: var(--nears-color-navy-100);
+  --nears-color-tint-c: var(--nears-color-brand-200);
+  --nears-color-tint-d: var(--nears-color-navy-200);
+  --nears-color-on-tint: var(--nears-color-neutral-900);
 }
 
 /* Tema escuro: manual via [data-theme="dark"] ou automatico pelo sistema */
@@ -161,19 +176,26 @@
   --nears-color-border-strong: var(--nears-color-neutral-600);
   --nears-color-border-control: var(--nears-color-neutral-400);
   --nears-color-focus-ring: var(--nears-color-brand-300);
-  --nears-color-action: var(--nears-color-neutral-0);
-  --nears-color-action-hover: var(--nears-color-neutral-100);
+  --nears-color-action: var(--nears-color-brand-500);
+  --nears-color-action-hover: var(--nears-color-brand-400);
   --nears-color-action-on: var(--nears-color-neutral-900);
   --nears-color-link: var(--nears-color-brand-300);
   --nears-color-price: var(--nears-color-neutral-50);
   --nears-color-price-sale: var(--nears-color-status-danger-on-dark);
   --nears-color-price-list: var(--nears-color-neutral-400);
-  --nears-color-badge-promo-bg: var(--nears-color-status-danger);
+  --nears-color-badge-promo-bg: var(--nears-color-brand-700);
   --nears-color-badge-promo-on: var(--nears-color-neutral-0);
   --nears-color-success: var(--nears-color-status-success-on-dark);
   --nears-color-warning: var(--nears-color-status-warning-on-dark);
   --nears-color-danger: var(--nears-color-status-danger-on-dark);
   --nears-color-info: var(--nears-color-status-info-on-dark);
+  --nears-color-surface-brand: var(--nears-color-navy-800);
+  --nears-color-on-brand: var(--nears-color-neutral-0);
+  --nears-color-tint-a: var(--nears-color-brand-100);
+  --nears-color-tint-b: var(--nears-color-navy-100);
+  --nears-color-tint-c: var(--nears-color-brand-200);
+  --nears-color-tint-d: var(--nears-color-navy-200);
+  --nears-color-on-tint: var(--nears-color-neutral-900);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -191,18 +213,25 @@
     --nears-color-border-strong: var(--nears-color-neutral-600);
     --nears-color-border-control: var(--nears-color-neutral-400);
     --nears-color-focus-ring: var(--nears-color-brand-300);
-    --nears-color-action: var(--nears-color-neutral-0);
-    --nears-color-action-hover: var(--nears-color-neutral-100);
+    --nears-color-action: var(--nears-color-brand-500);
+    --nears-color-action-hover: var(--nears-color-brand-400);
     --nears-color-action-on: var(--nears-color-neutral-900);
     --nears-color-link: var(--nears-color-brand-300);
     --nears-color-price: var(--nears-color-neutral-50);
     --nears-color-price-sale: var(--nears-color-status-danger-on-dark);
     --nears-color-price-list: var(--nears-color-neutral-400);
-    --nears-color-badge-promo-bg: var(--nears-color-status-danger);
+    --nears-color-badge-promo-bg: var(--nears-color-brand-700);
     --nears-color-badge-promo-on: var(--nears-color-neutral-0);
     --nears-color-success: var(--nears-color-status-success-on-dark);
     --nears-color-warning: var(--nears-color-status-warning-on-dark);
     --nears-color-danger: var(--nears-color-status-danger-on-dark);
     --nears-color-info: var(--nears-color-status-info-on-dark);
+    --nears-color-surface-brand: var(--nears-color-navy-800);
+    --nears-color-on-brand: var(--nears-color-neutral-0);
+    --nears-color-tint-a: var(--nears-color-brand-100);
+    --nears-color-tint-b: var(--nears-color-navy-100);
+    --nears-color-tint-c: var(--nears-color-brand-200);
+    --nears-color-tint-d: var(--nears-color-navy-200);
+    --nears-color-on-tint: var(--nears-color-neutral-900);
   }
 }

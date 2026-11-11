@@ -10,7 +10,7 @@ import type { SectionTitleProps } from './section-title.schema';
  */
 export function SectionTitle({ text, level = 'h2', href }: SectionTitleProps) {
   return (
-    <Container as={level} className="pb-4 text-xl font-heading text-balance md:text-2xl">
+    <Container as={level} className="pb-6 text-2xl font-heading tracking-tight text-balance md:text-4xl">
       {href ? (
         <a href={href} className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
           {text}

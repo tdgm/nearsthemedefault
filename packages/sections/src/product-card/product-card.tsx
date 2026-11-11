@@ -53,7 +53,7 @@ export function ProductCard({
           href={href}
           tabIndex={-1}
           aria-hidden="true"
-          className="relative block overflow-hidden rounded-md bg-surface-subtle"
+          className="relative block overflow-hidden rounded-xl bg-surface-subtle"
           style={{ aspectRatio: `var(--nears-aspect-${aspect})` }}
         >
           <Image
@@ -98,7 +98,7 @@ export function ProductCard({
           </form>
         )}
       </div>
-      <h3 className="text-md font-medium">
+      <h3 className="text-md font-bold">
         <a href={href} className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
           {name}
         </a>

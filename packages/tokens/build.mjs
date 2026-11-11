@@ -46,6 +46,8 @@ export function names(path) {
       }
       if (a === 'leading') return { css: `leading-${k}`, tw: `leading-${k}` };
       if (a === 'tracking') return { css: `tracking-${k}`, tw: `tracking-${k}` };
+      // Eixo wdth da fonte variavel: so custom property (`--nears-width-heading`), sem utilitario Tailwind.
+      if (a === 'width') return { css: `width-${k}`, tw: null };
       return null;
     }
     case 'space':

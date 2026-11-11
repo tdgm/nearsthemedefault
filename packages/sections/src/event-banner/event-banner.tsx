@@ -1,3 +1,4 @@
+import { Container } from '@nears/ui';
 import { ArtImage } from '../shared/art-image.tsx';
 import { illustrationFilter } from '../shared/illustration.ts';
 import type { EventBannerProps } from './event-banner.schema';
@@ -15,14 +16,16 @@ import type { EventBannerProps } from './event-banner.schema';
 export function EventBanner({ imageDesktop, imageMobile, alt, href }: EventBannerProps) {
   const picture = <ArtImage desktop={imageDesktop} mobile={imageMobile} alt={alt} style={{ filter: illustrationFilter(alt) }} />;
   return (
-    <section className="mb-20 [contain-intrinsic-size:auto_240px] [content-visibility:auto]">
-      {href ? (
-        <a href={href} className="block">
-          {picture}
-        </a>
-      ) : (
-        picture
-      )}
-    </section>
+    <Container as="section" className="mb-20 [contain-intrinsic-size:auto_240px] [content-visibility:auto]">
+      <div className="overflow-hidden rounded-2xl">
+        {href ? (
+          <a href={href} className="block">
+            {picture}
+          </a>
+        ) : (
+          picture
+        )}
+      </div>
+    </Container>
   );
 }

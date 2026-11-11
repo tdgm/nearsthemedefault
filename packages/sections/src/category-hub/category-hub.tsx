@@ -4,6 +4,9 @@ import type { CategoryHubProps } from './category-hub.schema';
 
 const defaults = { region: 'Compre por categoria', fromPrice: 'a partir de' } as const;
 
+/** Tintas da V1 (tokens `tint-*`, texto `on-tint`): alternam por posicao, sem depender do nicho. */
+const tints = ['bg-tint-a', 'bg-tint-b', 'bg-tint-c', 'bg-tint-d'] as const;
+
 /**
  * "Compre por categoria": ate `limit` cards (padrao 6) numa lista real de links
  * no HTML inicial (`seo.linksInHtml`). Mobile: faixa com scroll-snap nativo
@@ -16,23 +19,23 @@ export function CategoryHub({ items, limit = 6, labels }: CategoryHubProps) {
     <Container as="section" aria-label={l.region} className="mb-20 [contain-intrinsic-size:auto_280px] [content-visibility:auto]">
       <ul
         tabIndex={0}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] md:grid md:grid-cols-3 md:overflow-visible lg:grid-cols-6 [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] md:grid md:grid-cols-3 md:overflow-visible [&::-webkit-scrollbar]:hidden"
       >
-        {items.slice(0, limit).map((item) => (
-          <li key={item.href} className="w-36 shrink-0 snap-start md:w-auto">
-            <a href={item.href} className="group flex min-h-11 flex-col gap-2">
+        {items.slice(0, limit).map((item, i) => (
+          <li key={item.href} className="w-44 shrink-0 snap-start md:w-auto">
+            <a href={item.href} className={`group flex min-h-11 flex-col gap-2 rounded-xl p-4 text-on-tint ${tints[i % tints.length]}`}>
               <Image
                 src={item.image.src}
                 alt=""
                 width={item.image.width}
                 height={item.image.height}
                 sizes="(min-width: 1024px) 16vw, (min-width: 768px) 33vw, 144px"
-                className="h-auto w-full rounded-md"
+                className="h-auto w-full rounded-lg"
                 style={{ filter: illustrationFilter(item.href) }}
               />
-              <span className="font-medium underline-offset-4 group-hover:underline">{item.label}</span>{' '}
+              <span className="text-lg font-bold tracking-tight underline-offset-4 group-hover:underline">{item.label}</span>{' '}
               {item.fromPrice !== undefined && (
-                <span className="text-sm text-on-surface-muted">
+                <span className="text-sm">
                   {l.fromPrice} {formatBRL(item.fromPrice)}
                 </span>
               )}

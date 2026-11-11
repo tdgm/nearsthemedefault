@@ -162,7 +162,7 @@ design:
     weights: [400, 500, 700]         # maximo 3, servidos por um unico arquivo variavel
     preload: [400]
     display: swap
-    subset: [latin, latin-ext]
+    subset: [latin]                  # latin cobre pt-BR; latin-ext custaria +32 KB (ADR 0039)
     fallback:
       adjust: metric-override        # automatico via next/font/local
       stack: websafe                 # tokens.json > typography.family.system

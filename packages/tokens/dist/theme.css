@@ -24,6 +24,11 @@
   --color-neutral-800: var(--nears-color-neutral-800);
   --color-neutral-900: var(--nears-color-neutral-900);
   --color-neutral-1000: var(--nears-color-neutral-1000);
+  --color-navy-100: var(--nears-color-navy-100);
+  --color-navy-200: var(--nears-color-navy-200);
+  --color-navy-600: var(--nears-color-navy-600);
+  --color-navy-700: var(--nears-color-navy-700);
+  --color-navy-800: var(--nears-color-navy-800);
   --color-brand-50: var(--nears-color-brand-50);
   --color-brand-100: var(--nears-color-brand-100);
   --color-brand-200: var(--nears-color-brand-200);
@@ -67,6 +72,13 @@
   --color-warning: var(--nears-color-warning);
   --color-danger: var(--nears-color-danger);
   --color-info: var(--nears-color-info);
+  --color-surface-brand: var(--nears-color-surface-brand);
+  --color-on-brand: var(--nears-color-on-brand);
+  --color-tint-a: var(--nears-color-tint-a);
+  --color-tint-b: var(--nears-color-tint-b);
+  --color-tint-c: var(--nears-color-tint-c);
+  --color-tint-d: var(--nears-color-tint-d);
+  --color-on-tint: var(--nears-color-on-tint);
   --font-sans: var(--nears-font-brand);
   --font-system: var(--nears-font-system);
   --font-mono: var(--nears-font-mono);
@@ -96,6 +108,8 @@
   --radius-sm: var(--nears-radius-sm);
   --radius-md: var(--nears-radius-md);
   --radius-lg: var(--nears-radius-lg);
+  --radius-xl: var(--nears-radius-xl);
+  --radius-2xl: var(--nears-radius-2xl);
   --radius-control: var(--nears-radius-control);
   --radius-full: var(--nears-radius-full);
   --shadow-sm: var(--nears-shadow-sm);
