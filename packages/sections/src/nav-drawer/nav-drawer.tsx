@@ -17,14 +17,14 @@ export function NavDrawer({ departments, labels }: NavDrawerProps) {
   return (
     <Overlay id={NAV_DRAWER_ID} title={l.title} closeLabel={l.close} side="left">
       <nav aria-label={l.nav}>
-        <ul className="divide-y divide-border">
+        <ul className="space-y-1 p-2">
           {departments.map((dep) => {
             const hasChildren = Boolean(dep.groups?.length || dep.highlight || dep.promo);
             return (
               <li key={dep.href}>
                 {hasChildren ? (
                   <details className="group">
-                    <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between px-4 font-medium [&::-webkit-details-marker]:hidden">
+                    <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between rounded-md px-4 font-medium group-open:bg-action group-open:font-bold group-open:text-action-on [&::-webkit-details-marker]:hidden">
                       {dep.label}
                       <span aria-hidden="true" className="transition-transform duration-(--nears-duration-fast) group-open:rotate-180">
                         <ChevronDownIcon />

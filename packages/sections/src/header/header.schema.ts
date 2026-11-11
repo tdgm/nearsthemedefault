@@ -25,6 +25,7 @@ export const headerSchema = z.strictObject({
       searchLabel: z.string(),
       searchPlaceholder: z.string(),
       searchSubmit: z.string(),
+      nav: z.string(),
       account: z.string(),
       wishlist: z.string(),
       cart: z.string(),
