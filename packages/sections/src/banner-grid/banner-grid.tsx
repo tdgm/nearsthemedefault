@@ -26,7 +26,7 @@ export function BannerGrid({ columns = '3', banners }: BannerGridProps) {
               width={banner.image.width}
               height={banner.image.height}
               sizes={sizesFor[columns]}
-              className="h-auto w-full rounded-md"
+              className="h-auto w-full rounded-xl"
             />
           );
           return (

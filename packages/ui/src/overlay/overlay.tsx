@@ -9,6 +9,8 @@ export type OverlayProps = {
   children: ReactNode;
   side?: 'left' | 'right' | 'center';
   closeLabel?: string;
+  /** `brand`: painel em superficie de marca (marinho) com texto `on-brand`. Default: superficie normal. */
+  tone?: 'default' | 'brand';
   className?: string;
 };
 
@@ -18,7 +20,7 @@ export type OverlayProps = {
  * para fecha-lo (`<form method="dialog">`). Abrir e Esc/focus trap sao do
  * navegador (`showModal()`), disparado por `OverlayTrigger`.
  */
-export function Overlay({ id, title, children, side = 'left', closeLabel = 'Fechar', className }: OverlayProps) {
+export function Overlay({ id, title, children, side = 'left', closeLabel = 'Fechar', tone = 'default', className }: OverlayProps) {
   const titleId = `${id}-title`;
   return (
     <dialog
@@ -26,7 +28,8 @@ export function Overlay({ id, title, children, side = 'left', closeLabel = 'Fech
       aria-labelledby={titleId}
       data-overlay
       className={cn(
-        'max-w-none bg-surface-raised p-0 text-on-surface backdrop:bg-black/50',
+        'max-w-none p-0 backdrop:bg-black/50',
+        tone === 'brand' ? 'bg-surface-brand text-on-brand' : 'bg-surface-raised text-on-surface',
         // `center`: modal de conteudo largo (ex.: zoom de imagem); lateral: painel de altura total.
         side === 'center' ? 'm-auto max-h-dvh w-[min(64rem,100vw)]' : 'm-0 h-dvh max-h-dvh w-[min(24rem,100vw)]',
         side === 'right' && 'ml-auto',
@@ -35,7 +38,7 @@ export function Overlay({ id, title, children, side = 'left', closeLabel = 'Fech
       )}
     >
       <div className="flex h-full flex-col">
-        <div className="flex items-center justify-between gap-4 border-b border-border p-4">
+        <div className={cn('flex items-center justify-between gap-4 border-b p-4', tone === 'brand' ? 'border-current/15' : 'border-border')}>
           <h2 id={titleId} className="text-lg font-heading">
             {title}
           </h2>

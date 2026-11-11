@@ -8,11 +8,11 @@ import type { BenefitBarProps } from './benefit-bar.schema';
  */
 export function BenefitBar({ items, label = 'Vantagens' }: BenefitBarProps) {
   return (
-    <section aria-label={label} className="mb-20 border-y border-border bg-surface-subtle">
+    <section aria-label={label} className="mb-20">
       <Container
         as="ul"
         tabIndex={0}
-        className="flex min-h-11 snap-x snap-mandatory items-center gap-6 overflow-x-auto [scrollbar-width:none] md:justify-between [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory items-stretch gap-3 overflow-x-auto [scrollbar-width:none] md:grid md:grid-cols-4 md:overflow-visible [&::-webkit-scrollbar]:hidden"
       >
         {items.map((item) => {
           const content = (
@@ -25,7 +25,7 @@ export function BenefitBar({ items, label = 'Vantagens' }: BenefitBarProps) {
               <span>{item.label}</span>
             </>
           );
-          const row = 'flex min-h-11 shrink-0 items-center gap-2 text-sm whitespace-nowrap';
+          const row = 'flex min-h-11 shrink-0 items-center gap-2 rounded-xl border border-border bg-surface-raised px-5 py-3 text-sm font-medium whitespace-nowrap md:h-full';
           return (
             <li key={item.label} className="snap-start">
               {item.href ? (

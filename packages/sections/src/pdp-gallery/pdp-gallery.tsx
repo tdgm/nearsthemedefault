@@ -39,7 +39,7 @@ export function PdpGallery({ images, zoom = true, video, thumbs = 'vertical', as
         style={{ overscrollBehaviorX: 'contain' }}
       >
         {images.map((img, i) => (
-          <li key={img.src} id={`pdp-img-${i + 1}`} className="relative w-full shrink-0 snap-center overflow-hidden rounded-md bg-surface-subtle" style={ratio}>
+          <li key={img.src} id={`pdp-img-${i + 1}`} className="relative w-full shrink-0 snap-center overflow-hidden rounded-xl bg-surface-subtle" style={ratio}>
             <Image
               src={img.src}
               width={img.width}
@@ -61,7 +61,7 @@ export function PdpGallery({ images, zoom = true, video, thumbs = 'vertical', as
           </li>
         ))}
         {video && (
-          <li className="w-full shrink-0 snap-center overflow-hidden rounded-md bg-surface-subtle" style={ratio}>
+          <li className="w-full shrink-0 snap-center overflow-hidden rounded-xl bg-surface-subtle" style={ratio}>
             <video controls preload="none" playsInline aria-label={l.video} src={video} className="size-full object-cover" />
           </li>
         )}
