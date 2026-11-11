@@ -62,3 +62,10 @@ Node local (nvm/Volta) resolve sem tocar em nenhuma dependencia do repo.
 - As 8 majors listadas ficam como trabalho futuro explicito, cada uma com o
   motivo registrado aqui - uma por uma, nao em lote, quando houver janela
   pra validar a migracao de cada uma isoladamente.
+
+## Atualizacao: Dependabot
+
+O PR #35 do Dependabot (12 majors em lote) foi fechado sem merge e
+`.github/dependabot.yml` passou a ignorar `version-update:semver-major` das
+bibliotecas da tabela acima. Patches e minors continuam automaticos; uma major
+so entra por PR proprio, com ADR.
