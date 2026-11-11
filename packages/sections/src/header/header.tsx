@@ -28,6 +28,7 @@ const defaults = {
   searchLabel: 'O que você procura?',
   searchPlaceholder: 'Digite o nome do produto',
   searchSubmit: 'Buscar',
+  nav: 'Departamentos',
   account: 'Minha conta',
   wishlist: 'Favoritos',
   cart: 'Carrinho',
@@ -75,6 +76,10 @@ export function SkipLink({ label = defaults.skip, href = '#conteudo' }: { label?
   );
 }
 
+/** Item da barra de departamentos: 48px de alto, sublinhado laranja (`action`) no hover/aberto (V1, ADR 0037). */
+const deptItem =
+  'inline-flex h-12 items-center border-b-[3px] border-transparent px-3.5 text-sm font-bold text-on-surface hover:border-action';
+
 /**
  * Mega-menu por departamento, inline no header (so `lg:` pra cima). Mesmo dado
  * de `nav.departments` que o `NavDrawer` (off-canvas, so mobile) ja consome -
@@ -91,28 +96,29 @@ export function SkipLink({ label = defaults.skip, href = '#conteudo' }: { label?
  */
 function DepartmentMenu({ dep, viewAllLabel }: { dep: NavDepartment; viewAllLabel: string }) {
   return (
-    <details className="group relative">
-      <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-1 px-1 text-sm font-medium [&::-webkit-details-marker]:hidden">
+    // Sem `relative`: o painel ancora no <header> (lg:relative) e ocupa a largura toda.
+    <details className="group">
+      <summary className={`${deptItem} cursor-pointer list-none gap-1 group-open:border-action [&::-webkit-details-marker]:hidden`}>
         {dep.label}
         <span aria-hidden="true" className="transition-transform duration-(--nears-duration-fast) group-open:rotate-180">
           <ChevronDownIcon />
         </span>
       </summary>
-      <div className="absolute top-full left-0 z-50 mt-2 w-max min-w-64 rounded-md border border-border bg-surface p-6 shadow-lg">
-        <div className="flex flex-wrap gap-8">
+      <div className="absolute inset-x-0 top-full z-50 border-b border-border bg-surface shadow-lg">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 md:grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] lg:px-4">
           {dep.groups?.map((group) => (
-            <div key={group.label} className="min-w-36">
+            <div key={group.label}>
               {group.href ? (
-                <Link href={group.href} variant="standalone" className="mb-2 text-sm font-medium">
+                <Link href={group.href} variant="standalone" className="mb-1 text-md font-bold text-on-surface">
                   {group.label}
                 </Link>
               ) : (
-                <p className="mb-2 text-sm font-medium text-on-surface-muted">{group.label}</p>
+                <p className="mb-1 flex min-h-11 items-center text-md font-bold">{group.label}</p>
               )}
-              <ul className="space-y-1">
+              <ul>
                 {group.links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} variant="standalone" className="text-sm">
+                    <Link href={link.href} variant="standalone" className="text-sm text-on-surface-muted">
                       {link.label}
                     </Link>
                   </li>
@@ -120,21 +126,22 @@ function DepartmentMenu({ dep, viewAllLabel }: { dep: NavDepartment; viewAllLabe
               </ul>
             </div>
           ))}
-        </div>
-        <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-border pt-4">
-          <Link href={dep.href} variant="standalone" className="text-sm font-medium">
-            {viewAllLabel} {dep.label}
-          </Link>
-          {dep.highlight && (
-            <a href={dep.highlight.href} className="inline-flex min-h-11 items-center gap-2">
-              <Badge tone="promo">{dep.highlight.label}</Badge>
+          {(dep.promo || dep.highlight) && (
+            <a
+              href={dep.promo?.href ?? dep.highlight?.href}
+              className="flex min-h-48 flex-col justify-end gap-2 rounded-lg bg-surface-subtle p-5 no-underline hover:underline"
+            >
+              {dep.highlight && <Badge tone="promo">{dep.highlight.label}</Badge>}
+              {dep.promo && <span className="text-xl font-bold text-on-surface">{dep.promo.title}</span>}
             </a>
           )}
-          {dep.promo && (
-            <Link href={dep.promo.href} variant="standalone" className="text-sm font-medium">
-              {dep.promo.title}
+        </div>
+        <div className="border-t border-border bg-surface-subtle">
+          <div className="mx-auto flex h-13 max-w-7xl items-center px-4">
+            <Link href={dep.href} variant="standalone" className="text-sm font-bold">
+              {viewAllLabel} {dep.label}
             </Link>
-          )}
+          </div>
         </div>
       </div>
     </details>
@@ -142,12 +149,13 @@ function DepartmentMenu({ dep, viewAllLabel }: { dep: NavDepartment; viewAllLabe
 }
 
 /**
- * Header: logo a esquerda com a navegacao de departamentos inline ao lado
- * (`lg:` pra cima, com mega-menu - ver `DepartmentMenu`), busca/conta/
- * favoritos/carrinho agrupados a direita. Hamburger (abre o `NavDrawer`) so
- * aparece abaixo de `lg:`. Server Component: o unico JS e o `OverlayTrigger`
+ * Header (V1 Nears, ADR 0037): linha 1 com logo, busca em pilula e conta/favoritos/
+ * carrinho; linha 2 (`lg:` pra cima) com a barra de departamentos e mega-menu em
+ * largura total (ver `DepartmentMenu`). Hamburger (abre o `NavDrawer`) so abaixo de `lg:`,
+ * onde o header e uma linha so, sticky. Server Component: o unico JS e o `OverlayTrigger`
  * do carrinho/drawer (ilha minima); o mega-menu e `<details>` nativo.
- * Altura reservada de 56px (`cwv.reservedHeight`).
+ * Altura reservada: 56px no mobile (sticky, `cwv.reservedHeight`); 80 + 52px no desktop, onde
+ * o header rola junto com a pagina (nao e sticky) para nao roubar tela.
  *
  * Variantes (nears/sections.registry.yaml > variantRules): `full`; `minimal`
  * (PDP: so logo e carrinho); `none` (so o skip link).
@@ -186,64 +194,47 @@ export function Header({
     <>
       {skipLink && <SkipLink label={l.skip} />}
       {variant !== 'none' && (
-        <header className="sticky top-0 z-40 h-14 border-b border-border bg-surface">
-          <div className="mx-auto flex h-full max-w-7xl items-center gap-4 px-2 md:px-4">
-            <div className="flex items-center gap-2 lg:gap-8">
-              {full && nav && nav.departments.length > 0 && (
-                <OverlayTrigger targetId={NAV_DRAWER_ID} aria-controls={NAV_DRAWER_ID} aria-label={l.menu} className={`${iconButtonClasses('tertiary')} lg:hidden`}>
-                  <MenuIcon />
-                </OverlayTrigger>
-              )}
+        <header className="sticky top-0 z-40 border-b border-border bg-surface lg:relative">
+          <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-2 md:px-4 lg:h-20 lg:gap-8">
+            {full && nav && nav.departments.length > 0 && (
+              <OverlayTrigger targetId={NAV_DRAWER_ID} aria-controls={NAV_DRAWER_ID} aria-label={l.menu} className={`${iconButtonClasses('tertiary')} lg:hidden`}>
+                <MenuIcon />
+              </OverlayTrigger>
+            )}
 
-              <a href={homeHref} className="inline-flex min-h-11 items-center">
-                <Image src={logo.src} width={logo.width} height={logo.height} alt={logo.alt} priority className="h-8 w-auto" />
-              </a>
+            <a href={homeHref} className="inline-flex min-h-11 items-center">
+              <Image src={logo.src} width={logo.width} height={logo.height} alt={logo.alt} priority className="h-8 w-auto" />
+            </a>
 
-              {full && nav && nav.departments.length > 0 && (
-                <ul className="hidden items-center gap-6 lg:flex">
-                  {nav.departments.map((dep) =>
-                    dep.groups?.length || dep.highlight || dep.promo ? (
-                      <li key={dep.href}>
-                        <DepartmentMenu dep={dep} viewAllLabel={l.viewAll} />
-                      </li>
-                    ) : (
-                      <li key={dep.href}>
-                        <Link href={dep.href} variant="standalone" className="px-1 text-sm font-medium">
-                          {dep.label}
-                        </Link>
-                      </li>
-                    ),
-                  )}
-                </ul>
-              )}
-            </div>
+            {full && search && (
+              <form
+                role="search"
+                aria-label={l.search}
+                action={searchHref}
+                method="get"
+                className="hidden h-12 max-w-2xl flex-1 items-center rounded-control border border-border-control bg-surface pr-1 pl-5 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-focus-ring md:flex"
+              >
+                <label htmlFor="header-search" className="sr-only">
+                  {l.searchLabel}
+                </label>
+                <input
+                  id="header-search"
+                  name="q"
+                  type="search"
+                  placeholder={l.searchPlaceholder}
+                  className="min-h-11 min-w-0 flex-1 bg-transparent outline-none"
+                />
+                <button type="submit" aria-label={l.searchSubmit} className={iconButtonClasses('primary')}>
+                  <SearchIcon />
+                </button>
+              </form>
+            )}
 
             <div className="ml-auto flex items-center gap-1">
               {full && search && (
-                <>
-                  <a href={searchHref} aria-label={l.search} className={`${iconButtonClasses('tertiary')} md:hidden`}>
-                    <SearchIcon />
-                  </a>
-                  <form role="search" aria-label={l.search} action={searchHref} method="get" className="hidden items-center md:flex">
-                    <label htmlFor="header-search" className="sr-only">
-                      {l.searchLabel}
-                    </label>
-                    <input
-                      id="header-search"
-                      name="q"
-                      type="search"
-                      placeholder={l.searchPlaceholder}
-                      className="min-h-11 w-48 rounded-l-md border border-border-control bg-surface px-3 lg:w-64"
-                    />
-                    <button
-                      type="submit"
-                      aria-label={l.searchSubmit}
-                      className={`${iconButtonClasses('tertiary')} rounded-l-none rounded-r-md border border-l-0 border-border-control`}
-                    >
-                      <SearchIcon />
-                    </button>
-                  </form>
-                </>
+                <a href={searchHref} aria-label={l.search} className={`${iconButtonClasses('tertiary')} md:hidden`}>
+                  <SearchIcon />
+                </a>
               )}
               {full && account && (
                 <ActionLink href={accountHref} label={l.account}>
@@ -258,6 +249,26 @@ export function Header({
               {cart && (cartTrigger ?? <CartButton cartCount={cartCount} label={l.cart} />)}
             </div>
           </div>
+
+          {full && nav && nav.departments.length > 0 && (
+            <nav aria-label={l.nav} className="hidden lg:block">
+              <ul className="mx-auto flex h-13 max-w-7xl items-center gap-2 px-4">
+                {nav.departments.map((dep) =>
+                  dep.groups?.length || dep.highlight || dep.promo ? (
+                    <li key={dep.href}>
+                      <DepartmentMenu dep={dep} viewAllLabel={l.viewAll} />
+                    </li>
+                  ) : (
+                    <li key={dep.href}>
+                      <Link href={dep.href} variant="standalone" className={`${deptItem} text-on-surface`}>
+                        {dep.label}
+                      </Link>
+                    </li>
+                  ),
+                )}
+              </ul>
+            </nav>
+          )}
         </header>
       )}
     </>

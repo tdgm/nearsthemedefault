@@ -7,9 +7,10 @@ const logo = { src: '/logo.svg', width: 120, height: 32, alt: 'Loja' };
 const nav = { departments: [{ label: 'Feminino', href: '/feminino' }] };
 
 describe('Header', () => {
-  it('landmark banner com altura reservada de 56px', () => {
-    render(<Header logo={logo} nav={nav} />);
-    expect(screen.getByRole('banner')).toHaveClass('h-14', 'sticky');
+  it('landmark banner: sticky no mobile (linha de 56px) e estatico no desktop (ADR 0037)', () => {
+    const { container } = render(<Header logo={logo} nav={nav} />);
+    expect(screen.getByRole('banner')).toHaveClass('sticky', 'lg:relative');
+    expect(container.querySelector('header > div')).toHaveClass('h-14', 'lg:h-20');
   });
 
   it('skip link e o primeiro item focavel e aponta para #conteudo', () => {
