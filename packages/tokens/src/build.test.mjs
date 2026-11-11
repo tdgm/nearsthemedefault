@@ -96,8 +96,9 @@ describe('troca de marca por um unico arquivo', () => {
     const css = dist(await generate({ tokensPath }), 'tokens.css');
     expect(css).toContain('--nears-color-brand-600: #0B6E4F;');
     // semanticos continuam apontando para os mesmos primitivos
-    expect(css).toContain('--nears-color-link: var(--nears-color-brand-700);');
-    // price-sale/badge-promo-bg nao dependem de brand: trocar a marca nao muda o preco promocional (docs/adr/0032)
-    expect(css).toContain('--nears-color-price-sale: var(--nears-color-status-danger);');
+    expect(css).toContain('--nears-color-action: var(--nears-color-brand-500);');
+    expect(css).toContain('--nears-color-link: var(--nears-color-navy-600);');
+    // oferta usa brand.700 (docs/adr/0036) e segue distinta de link (marinho), como pedia o docs/adr/0032
+    expect(css).toContain('--nears-color-price-sale: var(--nears-color-brand-700);');
   });
 });

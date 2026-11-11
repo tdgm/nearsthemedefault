@@ -21,7 +21,7 @@ export function PromoBarShell({
   const [dismissed, setDismissed] = useState(false);
   if (dismissed) return null;
   return (
-    <section aria-label={regionLabel} className="h-12 overflow-hidden bg-surface-inverse text-on-inverse">
+    <section aria-label={regionLabel} className="h-12 overflow-hidden bg-surface-brand text-on-brand">
       {/* Mesmo gutter do Container, mas literal: esta ilha e "use client" e importar o barrel
           de @nears/ui aqui arrasta o index inteiro para o JS inicial (+~1 KB gzip, estourou o budget). */}
       <div className="mx-auto flex h-full max-w-7xl items-center justify-center gap-2 px-4">
