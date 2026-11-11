@@ -32,6 +32,13 @@
     }
   }
 
+  /* Titulos condensados da V1 (eixo wdth da fonte de marca; ADR 0039). Ignorado por fonte sem esse eixo. */
+  h1,
+  h2,
+  h3 {
+    font-variation-settings: 'wdth' var(--nears-width-heading, 100);
+  }
+
   /* Foco visivel sempre (WCAG 2.2 AA, CLAUDE.md > Acessibilidade). */
   :focus-visible {
     outline: 2px solid var(--nears-color-focus-ring);
