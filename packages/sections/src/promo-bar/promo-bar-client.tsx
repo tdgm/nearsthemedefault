@@ -4,7 +4,6 @@
 // Nenhuma das duas altera a altura da barra (reservada em h-12): CLS zero.
 
 import { useEffect, useState, type ReactNode } from 'react';
-import { Container } from '@nears/ui';
 
 export function PromoBarShell({
   children,
@@ -23,7 +22,9 @@ export function PromoBarShell({
   if (dismissed) return null;
   return (
     <section aria-label={regionLabel} className="h-12 overflow-hidden bg-surface-inverse text-on-inverse">
-      <Container className="flex h-full items-center justify-center gap-2">
+      {/* Mesmo gutter do Container, mas literal: esta ilha e "use client" e importar o barrel
+          de @nears/ui aqui arrasta o index inteiro para o JS inicial (+~1 KB gzip, estourou o budget). */}
+      <div className="mx-auto flex h-full max-w-7xl items-center justify-center gap-2 px-4">
         {children}
         {dismissible && (
           <button
@@ -35,7 +36,7 @@ export function PromoBarShell({
             <span aria-hidden="true">✕</span>
           </button>
         )}
-      </Container>
+      </div>
     </section>
   );
 }

@@ -63,6 +63,11 @@ segunda variante "muted" so para o mega-menu - trade-off deliberado por
 consistencia; hierarquia entre item principal e filho continua via
 `font-medium` (peso), nao mais via cor.
 
+Excecao de performance: `promo-bar-client.tsx` (`"use client"`) NAO usa
+`Container`. Importar o barrel `@nears/ui` numa ilha client arrasta o index
+inteiro para o JS inicial (+~1 KB gzip em todas as rotas, estourando o budget
+de 140 KB). Regra: componente client nao importa o barrel de `@nears/ui`.
+
 Excecoes mantidas como `<a>` simples (nao `Link`): links que envolvem um
 `Badge` (destaque do departamento) ou uma imagem (selo do rodape) - natureza
 de chip/imagem, nao de link de texto, mesmo raciocinio do `RelatedLinks`
