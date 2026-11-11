@@ -53,7 +53,7 @@ function ActionLink({ href, label, count = 0, children }: { href: string; label:
  */
 export function CartButton({ cartCount = 0, label }: { cartCount?: number; label: string }) {
   return (
-    <OverlayTrigger targetId={MINICART_ID} aria-controls={MINICART_ID} aria-label={countLabel(label, cartCount)} className={iconButtonClasses('tertiary')}>
+    <OverlayTrigger targetId={MINICART_ID} aria-controls={MINICART_ID} aria-label={countLabel(label, cartCount)} className={iconButtonClasses('primary')}>
       <BagIcon />
       <CountBadge value={cartCount} />
     </OverlayTrigger>
@@ -105,7 +105,7 @@ function DepartmentMenu({ dep, viewAllLabel }: { dep: NavDepartment; viewAllLabe
         </span>
       </summary>
       <div className="absolute inset-x-0 top-full z-50 border-b border-border bg-surface shadow-lg">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 md:grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] lg:px-4">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 md:grid-cols-4">
           {dep.groups?.map((group) => (
             <div key={group.label}>
               {group.href ? (
