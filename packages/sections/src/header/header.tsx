@@ -212,7 +212,7 @@ export function Header({
                 aria-label={l.search}
                 action={searchHref}
                 method="get"
-                className="hidden h-12 max-w-2xl flex-1 items-center rounded-control border border-border-control bg-surface pr-1 pl-5 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-focus-ring md:flex"
+                className="hidden h-12 max-w-2xl flex-1 items-center rounded-control border border-border-control bg-surface pr-1 pl-5 md:flex"
               >
                 <label htmlFor="header-search" className="sr-only">
                   {l.searchLabel}
@@ -222,7 +222,7 @@ export function Header({
                   name="q"
                   type="search"
                   placeholder={l.searchPlaceholder}
-                  className="min-h-11 min-w-0 flex-1 bg-transparent outline-none"
+                  className="min-h-11 min-w-0 flex-1 rounded-control bg-transparent focus-visible:outline-2 focus-visible:outline-focus-ring"
                 />
                 <button type="submit" aria-label={l.searchSubmit} className={iconButtonClasses('primary')}>
                   <SearchIcon />
