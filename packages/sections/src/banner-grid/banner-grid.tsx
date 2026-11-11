@@ -1,4 +1,4 @@
-import { Image } from '@nears/ui';
+import { Container, Image } from '@nears/ui';
 import type { BannerGridProps } from './banner-grid.schema';
 
 const columnsClass = {
@@ -16,7 +16,7 @@ const sizesFor = { '2': '(min-width: 768px) 50vw, 100vw', '3': '(min-width: 768p
  */
 export function BannerGrid({ columns = '3', banners }: BannerGridProps) {
   return (
-    <section className="mx-auto mb-20 max-w-7xl px-4 [contain-intrinsic-size:auto_360px] [content-visibility:auto]">
+    <Container as="section" className="mb-20 [contain-intrinsic-size:auto_360px] [content-visibility:auto]">
       <ul className={`grid gap-4 ${columnsClass[columns]}`}>
         {banners.map((banner) => {
           const img = (
@@ -42,6 +42,6 @@ export function BannerGrid({ columns = '3', banners }: BannerGridProps) {
           );
         })}
       </ul>
-    </section>
+    </Container>
   );
 }

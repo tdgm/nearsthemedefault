@@ -1,3 +1,4 @@
+import { Container } from '@nears/ui';
 import type { RelatedLinksProps } from './related-links.schema';
 
 /**
@@ -7,7 +8,7 @@ import type { RelatedLinksProps } from './related-links.schema';
  */
 export function RelatedLinks({ title = 'Veja também', links }: RelatedLinksProps) {
   return (
-    <nav aria-label={title} className="mx-auto mb-20 max-w-7xl px-4 [contain-intrinsic-size:auto_160px] [content-visibility:auto]">
+    <Container as="nav" aria-label={title} className="mb-20 [contain-intrinsic-size:auto_160px] [content-visibility:auto]">
       <h2 className="mb-3 text-lg font-heading">{title}</h2>
       <ul className="flex flex-wrap gap-2">
         {links.map((link) => (
@@ -21,6 +22,6 @@ export function RelatedLinks({ title = 'Veja também', links }: RelatedLinksProp
           </li>
         ))}
       </ul>
-    </nav>
+    </Container>
   );
 }

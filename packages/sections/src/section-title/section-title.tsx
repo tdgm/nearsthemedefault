@@ -1,3 +1,4 @@
+import { Container } from '@nears/ui';
 import type { SectionTitleProps } from './section-title.schema';
 
 /**
@@ -8,9 +9,8 @@ import type { SectionTitleProps } from './section-title.schema';
  * que o titulo introduz logo abaixo.
  */
 export function SectionTitle({ text, level = 'h2', href }: SectionTitleProps) {
-  const H = level;
   return (
-    <H className="mx-auto max-w-7xl px-4 pb-4 text-xl font-heading text-balance md:text-2xl">
+    <Container as={level} className="pb-4 text-xl font-heading text-balance md:text-2xl">
       {href ? (
         <a href={href} className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
           {text}
@@ -21,6 +21,6 @@ export function SectionTitle({ text, level = 'h2', href }: SectionTitleProps) {
       ) : (
         text
       )}
-    </H>
+    </Container>
   );
 }

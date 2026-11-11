@@ -1,4 +1,4 @@
-import { Image, formatBRL } from '@nears/ui';
+import { Container, Image, formatBRL } from '@nears/ui';
 import { illustrationFilter } from '../shared/illustration.ts';
 import type { CategoryHubProps } from './category-hub.schema';
 
@@ -13,7 +13,7 @@ const defaults = { region: 'Compre por categoria', fromPrice: 'a partir de' } as
 export function CategoryHub({ items, limit = 6, labels }: CategoryHubProps) {
   const l = { ...defaults, ...labels };
   return (
-    <section aria-label={l.region} className="mx-auto mb-20 max-w-7xl px-4 [contain-intrinsic-size:auto_280px] [content-visibility:auto]">
+    <Container as="section" aria-label={l.region} className="mb-20 [contain-intrinsic-size:auto_280px] [content-visibility:auto]">
       <ul
         tabIndex={0}
         className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] md:grid md:grid-cols-3 md:overflow-visible lg:grid-cols-6 [&::-webkit-scrollbar]:hidden"
@@ -40,6 +40,6 @@ export function CategoryHub({ items, limit = 6, labels }: CategoryHubProps) {
           </li>
         ))}
       </ul>
-    </section>
+    </Container>
   );
 }

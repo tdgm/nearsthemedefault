@@ -1,4 +1,18 @@
-import { BagIcon, Badge, ChevronDownIcon, HeartIcon, Image, MenuIcon, OverlayTrigger, SearchIcon, UserIcon } from '@nears/ui';
+import {
+  BagIcon,
+  Badge,
+  ChevronDownIcon,
+  CountBadge,
+  HeartIcon,
+  Image,
+  Link,
+  MenuIcon,
+  OverlayTrigger,
+  SearchIcon,
+  UserIcon,
+  countLabel,
+  iconButtonClasses,
+} from '@nears/ui';
 import type { ReactNode } from 'react';
 import type { HeaderProps } from './header.schema';
 import type { NavDepartment } from '../shared/navigation.ts';
@@ -20,28 +34,12 @@ const defaults = {
   viewAll: 'Ver tudo em',
 } as const;
 
-const iconBox = 'relative inline-flex size-11 items-center justify-center rounded-md hover:bg-surface-subtle';
-
-const countLabel = (label: string, count: number) =>
-  count > 0 ? `${label}, ${count > 99 ? '99+' : count} ${count === 1 ? 'item' : 'itens'}` : label;
-
-function Count({ value }: { value: number }) {
-  if (value <= 0) return null;
-  return (
-    <span
-      aria-hidden="true"
-      className="absolute -top-0.5 -right-0.5 grid min-w-5 place-items-center rounded-full bg-badge-promo-bg px-1 text-2xs font-bold text-badge-promo-on"
-    >
-      {value > 99 ? '99+' : value}
-    </span>
-  );
-}
-
+/** Link de navegacao so com icone (conta, favoritos): mesmo visual/radius do `IconButton` (ADR 0034), mas `<a>` de verdade. */
 function ActionLink({ href, label, count = 0, children }: { href: string; label: string; count?: number; children: ReactNode }) {
   return (
-    <a href={href} aria-label={countLabel(label, count)} className={iconBox}>
+    <a href={href} aria-label={countLabel(label, count)} className={iconButtonClasses('tertiary')}>
       {children}
-      <Count value={count} />
+      <CountBadge value={count} />
     </a>
   );
 }
@@ -54,9 +52,9 @@ function ActionLink({ href, label, count = 0, children }: { href: string; label:
  */
 export function CartButton({ cartCount = 0, label }: { cartCount?: number; label: string }) {
   return (
-    <OverlayTrigger targetId={MINICART_ID} aria-controls={MINICART_ID} aria-label={countLabel(label, cartCount)} className={iconBox}>
+    <OverlayTrigger targetId={MINICART_ID} aria-controls={MINICART_ID} aria-label={countLabel(label, cartCount)} className={iconButtonClasses('tertiary')}>
       <BagIcon />
-      <Count value={cartCount} />
+      <CountBadge value={cartCount} />
     </OverlayTrigger>
   );
 }
@@ -105,18 +103,18 @@ function DepartmentMenu({ dep, viewAllLabel }: { dep: NavDepartment; viewAllLabe
           {dep.groups?.map((group) => (
             <div key={group.label} className="min-w-36">
               {group.href ? (
-                <a href={group.href} className="mb-2 block text-sm font-medium hover:underline">
+                <Link href={group.href} variant="standalone" className="mb-2 text-sm font-medium">
                   {group.label}
-                </a>
+                </Link>
               ) : (
                 <p className="mb-2 text-sm font-medium text-on-surface-muted">{group.label}</p>
               )}
               <ul className="space-y-1">
                 {group.links.map((link) => (
                   <li key={link.href}>
-                    <a href={link.href} className="inline-flex min-h-11 items-center text-sm text-on-surface-muted hover:text-on-surface hover:underline">
+                    <Link href={link.href} variant="standalone" className="text-sm">
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -124,18 +122,18 @@ function DepartmentMenu({ dep, viewAllLabel }: { dep: NavDepartment; viewAllLabe
           ))}
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-border pt-4">
-          <a href={dep.href} className="inline-flex min-h-11 items-center text-sm font-medium underline underline-offset-4">
+          <Link href={dep.href} variant="standalone" className="text-sm font-medium">
             {viewAllLabel} {dep.label}
-          </a>
+          </Link>
           {dep.highlight && (
             <a href={dep.highlight.href} className="inline-flex min-h-11 items-center gap-2">
               <Badge tone="promo">{dep.highlight.label}</Badge>
             </a>
           )}
           {dep.promo && (
-            <a href={dep.promo.href} className="inline-flex min-h-11 items-center text-sm font-medium underline underline-offset-4">
+            <Link href={dep.promo.href} variant="standalone" className="text-sm font-medium">
               {dep.promo.title}
-            </a>
+            </Link>
           )}
         </div>
       </div>
@@ -192,7 +190,7 @@ export function Header({
           <div className="mx-auto flex h-full max-w-7xl items-center gap-4 px-2 md:px-4">
             <div className="flex items-center gap-2 lg:gap-8">
               {full && nav && nav.departments.length > 0 && (
-                <OverlayTrigger targetId={NAV_DRAWER_ID} aria-controls={NAV_DRAWER_ID} aria-label={l.menu} className={`${iconBox} lg:hidden`}>
+                <OverlayTrigger targetId={NAV_DRAWER_ID} aria-controls={NAV_DRAWER_ID} aria-label={l.menu} className={`${iconButtonClasses('tertiary')} lg:hidden`}>
                   <MenuIcon />
                 </OverlayTrigger>
               )}
@@ -210,9 +208,9 @@ export function Header({
                       </li>
                     ) : (
                       <li key={dep.href}>
-                        <a href={dep.href} className="inline-flex min-h-11 items-center px-1 text-sm font-medium">
+                        <Link href={dep.href} variant="standalone" className="px-1 text-sm font-medium">
                           {dep.label}
-                        </a>
+                        </Link>
                       </li>
                     ),
                   )}
@@ -223,7 +221,7 @@ export function Header({
             <div className="ml-auto flex items-center gap-1">
               {full && search && (
                 <>
-                  <a href={searchHref} aria-label={l.search} className={`${iconBox} md:hidden`}>
+                  <a href={searchHref} aria-label={l.search} className={`${iconButtonClasses('tertiary')} md:hidden`}>
                     <SearchIcon />
                   </a>
                   <form role="search" aria-label={l.search} action={searchHref} method="get" className="hidden items-center md:flex">
@@ -237,7 +235,11 @@ export function Header({
                       placeholder={l.searchPlaceholder}
                       className="min-h-11 w-48 rounded-l-md border border-border-control bg-surface px-3 lg:w-64"
                     />
-                    <button type="submit" aria-label={l.searchSubmit} className={`${iconBox} rounded-l-none border border-l-0 border-border-control`}>
+                    <button
+                      type="submit"
+                      aria-label={l.searchSubmit}
+                      className={`${iconButtonClasses('tertiary')} rounded-l-none rounded-r-md border border-l-0 border-border-control`}
+                    >
                       <SearchIcon />
                     </button>
                   </form>

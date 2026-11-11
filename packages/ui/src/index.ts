@@ -3,7 +3,8 @@
 export { cn } from './cn';
 export * from './format';
 export { Button, buttonClasses, type ButtonProps, type ButtonSize, type ButtonVariant } from './button/button';
-export { IconButton, type IconButtonProps } from './icon-button/icon-button';
+export { Container, containerClasses, type ContainerProps } from './container/container';
+export { CountBadge, IconButton, countLabel, iconButtonClasses, type IconButtonProps } from './icon-button/icon-button';
 export { Link, type LinkProps } from './link/link';
 export { Badge, type BadgeProps, type BadgeTone } from './badge/badge';
 export { Skeleton, type SkeletonProps } from './skeleton/skeleton';
