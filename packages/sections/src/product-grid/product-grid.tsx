@@ -1,4 +1,4 @@
-import { buttonClasses, Button, Checkbox, Overlay, OverlayTrigger, Pagination, Select } from '@nears/ui';
+import { buttonClasses, Button, Checkbox, Container, Overlay, OverlayTrigger, Pagination, Select } from '@nears/ui';
 import { ProductCard } from '../product-card/product-card.tsx';
 import { fill } from '../shared/template.ts';
 import { pageHref, toQueryString, type GridQuery } from './grid-url.ts';
@@ -78,7 +78,7 @@ export function ProductGrid({
   const active = currentSort ?? asArray(q.sort)[0] ?? sort[0];
 
   return (
-    <section className="mx-auto mb-20 max-w-7xl px-4">
+    <Container as="section" className="mb-20">
       <h2 className="sr-only">{l.heading}</h2>
 
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
@@ -169,6 +169,6 @@ export function ProductGrid({
         totalPages={totalPages}
         hrefFor={(p) => pageHref(basePath, q, p)}
       />
-    </section>
+    </Container>
   );
 }

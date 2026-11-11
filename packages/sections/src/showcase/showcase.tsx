@@ -1,4 +1,4 @@
-import { Tabs } from '@nears/ui';
+import { Container, Tabs } from '@nears/ui';
 import { ProductRail } from '../shared/product-rail.tsx';
 import type { ShowcaseProps } from './showcase.schema';
 
@@ -26,7 +26,7 @@ export function Showcase({ variant = 'static', title, limit = 8, tabs, products 
   if (!isTabs && products.length === 0 && variant !== 'wishlist') return null;
 
   return (
-    <section className="mx-auto mb-20 max-w-7xl px-4 [contain-intrinsic-size:auto_520px] [content-visibility:auto]">
+    <Container as="section" className="mb-20 [contain-intrinsic-size:auto_520px] [content-visibility:auto]">
       <h2 className="mb-4 text-xl font-heading text-balance md:text-2xl">{heading}</h2>
       {isTabs ? (
         <Tabs
@@ -42,6 +42,6 @@ export function Showcase({ variant = 'static', title, limit = 8, tabs, products 
       ) : (
         <p className="py-8 text-on-surface-muted">{empty}</p>
       )}
-    </section>
+    </Container>
   );
 }

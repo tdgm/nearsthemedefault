@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Container } from '@nears/ui';
 import { getProducts } from '../data/client';
 import { cardAspect, toProductCard } from '../data/mappers';
 import { loadAllManifests } from '../manifest';
@@ -26,12 +27,12 @@ export async function NotFoundPage() {
   return (
     <main>
       {renderInstances(instances, propsFor)}
-      <p className="mx-auto max-w-7xl px-4 py-6">
+      <Container as="p" className="py-6">
         O endereço que você abriu não existe.{' '}
         <Link href="/" className="inline-flex min-h-11 items-center underline">
           Voltar ao início
         </Link>
-      </p>
+      </Container>
     </main>
   );
 }

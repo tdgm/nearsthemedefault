@@ -4,6 +4,7 @@
 // Nenhuma das duas altera a altura da barra (reservada em h-12): CLS zero.
 
 import { useEffect, useState, type ReactNode } from 'react';
+import { Container } from '@nears/ui';
 
 export function PromoBarShell({
   children,
@@ -22,7 +23,7 @@ export function PromoBarShell({
   if (dismissed) return null;
   return (
     <section aria-label={regionLabel} className="h-12 overflow-hidden bg-surface-inverse text-on-inverse">
-      <div className="mx-auto flex h-full max-w-7xl items-center justify-center gap-2 px-4">
+      <Container className="flex h-full items-center justify-center gap-2">
         {children}
         {dismissible && (
           <button
@@ -34,7 +35,7 @@ export function PromoBarShell({
             <span aria-hidden="true">✕</span>
           </button>
         )}
-      </div>
+      </Container>
     </section>
   );
 }

@@ -1,4 +1,4 @@
-import { Breadcrumb } from '@nears/ui';
+import { Breadcrumb, Container } from '@nears/ui';
 import type { BreadcrumbSectionProps } from './breadcrumb.schema';
 
 /**
@@ -8,8 +8,8 @@ import type { BreadcrumbSectionProps } from './breadcrumb.schema';
  */
 export function BreadcrumbSection({ items, label }: BreadcrumbSectionProps) {
   return (
-    <div className="mx-auto mb-4 min-h-11 max-w-7xl px-4">
+    <Container className="mb-4 min-h-11">
       <Breadcrumb items={items} label={label} />
-    </div>
+    </Container>
   );
 }

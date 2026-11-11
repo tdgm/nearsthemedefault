@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Suspense, type ReactNode } from 'react';
+import { Container } from '@nears/ui';
 import { quotePickup } from '../data/pickup';
 import { quoteShipping } from '../data/shipping';
 import { loadAllManifests } from '../manifest';
@@ -87,17 +88,17 @@ export function PdpPage({ view, searchParams }: { view: PdpView; searchParams: P
     <main className="pb-[72px] md:pb-0">
       <PdpJsonLd view={view} />
       {render(pick('breadcrumb'))}
-      <div className="mx-auto mb-20 max-w-7xl px-4 lg:grid lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
+      <Container className="mb-20 lg:grid lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
         {render(group(GALLERY_GROUP))}
-      </div>
-      <div className="mx-auto max-w-7xl px-4">
+      </Container>
+      <Container>
         {hasDynamic && (
           <Suspense fallback={render(dynamic)}>
             <DynamicFulfillment view={view} searchParams={searchParams} instances={dynamic} />
           </Suspense>
         )}
         {render(body)}
-      </div>
+      </Container>
       {render(pick('faq'))}
     </main>
   );

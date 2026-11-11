@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { ProductGrid } from '@nears/sections';
+import { Container } from '@nears/ui';
 import { SearchForm } from '../../components/search-form';
 import { SearchStatus } from '../../components/search-status';
 import { parseCollectionQuery, searchProducts } from '../../lib/data/collections';
@@ -68,11 +69,11 @@ async function Results({ searchParams }: { searchParams: SearchParams }) {
 
 export default function Page({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <main className="mx-auto max-w-7xl p-4">
+    <Container as="main" className="py-4">
       <h1 className="my-4 text-2xl font-heading">{vocab('search')}</h1>
       <Suspense fallback={<SearchForm {...formProps()} />}>
         <Results searchParams={searchParams} />
       </Suspense>
-    </main>
+    </Container>
   );
 }

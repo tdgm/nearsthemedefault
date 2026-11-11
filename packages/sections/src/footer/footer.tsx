@@ -1,4 +1,4 @@
-import { Button, Checkbox, Image, Input, formatCNPJ } from '@nears/ui';
+import { Button, Checkbox, Container, Image, Input, Link, formatCNPJ } from '@nears/ui';
 import type { FooterProps } from './footer.schema';
 
 const defaults = {
@@ -12,8 +12,6 @@ const defaults = {
   seals: 'Selos de confiança',
   cnpj: 'CNPJ',
 } as const;
-
-const linkClass = 'inline-flex min-h-11 items-center underline-offset-4 hover:underline';
 
 // Colunas colapsam so no mobile. O <details> nativo fecha o painel; a partir de md
 // o `::details-content` volta a ficar visivel, entao o conteudo nunca depende de JS.
@@ -34,7 +32,7 @@ export function Footer({ service, newsletter, columns, apps, social, seals, lega
       aria-label={l.region}
       className="mt-20 border-t border-border bg-surface-subtle [contain-intrinsic-size:auto_640px] [content-visibility:auto]"
     >
-      <div className="mx-auto max-w-7xl px-4 py-8">
+      <Container className="py-8">
         {(service?.length || showNewsletter) && (
           <div className="grid gap-8 border-b border-border pb-8 md:grid-cols-2">
             {service && service.length > 0 && (
@@ -48,9 +46,9 @@ export function Footer({ service, newsletter, columns, apps, social, seals, lega
                       <dt className="font-medium">{item.label}:</dt>
                       <dd>
                         {item.href ? (
-                          <a href={item.href} className={linkClass}>
+                          <Link href={item.href} variant="standalone">
                             {item.value}
-                          </a>
+                          </Link>
                         ) : (
                           item.value
                         )}
@@ -100,9 +98,9 @@ export function Footer({ service, newsletter, columns, apps, social, seals, lega
                 <ul className="pb-3">
                   {column.links.map((link) => (
                     <li key={link.href}>
-                      <a href={link.href} className={linkClass}>
+                      <Link href={link.href} variant="standalone">
                         {link.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -118,9 +116,9 @@ export function Footer({ service, newsletter, columns, apps, social, seals, lega
                 <ul className="flex flex-wrap gap-x-4">
                   {apps.map((app) => (
                     <li key={app.href}>
-                      <a href={app.href} className={linkClass}>
+                      <Link href={app.href} variant="standalone">
                         {app.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -131,9 +129,10 @@ export function Footer({ service, newsletter, columns, apps, social, seals, lega
                 <ul className="flex flex-wrap gap-x-4">
                   {social.map((item) => (
                     <li key={item.href}>
-                      <a href={item.href} rel="noopener noreferrer" className={linkClass}>
+                      {/* rel direto (nao `external`): o rotulo sr-only extra de `external` mudaria o nome acessivel. */}
+                      <Link href={item.href} variant="standalone" rel="noopener noreferrer">
                         {item.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -166,16 +165,16 @@ export function Footer({ service, newsletter, columns, apps, social, seals, lega
               <ul className="mt-1 flex flex-wrap gap-x-4">
                 {legal.links.map((link) => (
                   <li key={link.href}>
-                    <a href={link.href} className={linkClass}>
+                    <Link href={link.href} variant="standalone">
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
             )}
           </div>
         )}
-      </div>
+      </Container>
     </footer>
   );
 }

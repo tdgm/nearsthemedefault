@@ -1,4 +1,4 @@
-import { Image, buttonClasses, cn } from '@nears/ui';
+import { Container, Image, buttonClasses, cn } from '@nears/ui';
 import type { BannerFullProps } from './banner-full.schema';
 
 /**
@@ -9,7 +9,7 @@ import type { BannerFullProps } from './banner-full.schema';
  */
 export function BannerFull({ image, alt, headline, body, cta, href, imageSide = 'left' }: BannerFullProps) {
   return (
-    <section className="mx-auto mb-20 max-w-7xl px-4 [contain-intrinsic-size:auto_420px] [content-visibility:auto]">
+    <Container as="section" className="mb-20 [contain-intrinsic-size:auto_420px] [content-visibility:auto]">
       <div className="grid overflow-hidden rounded-lg bg-surface-subtle md:grid-cols-2">
         <Image
           src={image.src}
@@ -29,6 +29,6 @@ export function BannerFull({ image, alt, headline, body, cta, href, imageSide = 
           )}
         </div>
       </div>
-    </section>
+    </Container>
   );
 }

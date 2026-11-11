@@ -1,4 +1,4 @@
-import { cn } from '@nears/ui';
+import { Container, cn } from '@nears/ui';
 import { chipHref } from './chip-href.ts';
 import type { QuickFilterProps } from './quick-filter.schema';
 
@@ -10,7 +10,7 @@ import type { QuickFilterProps } from './quick-filter.schema';
  */
 export function QuickFilter({ chips, basePath = '', current = {}, labels }: QuickFilterProps) {
   return (
-    <nav aria-label={labels?.region ?? 'Filtros rápidos'} className="mx-auto min-h-12 max-w-7xl px-4 py-2">
+    <Container as="nav" aria-label={labels?.region ?? 'Filtros rápidos'} className="min-h-12 py-2">
       <ul
         tabIndex={0}
         className="flex snap-x snap-mandatory gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -34,6 +34,6 @@ export function QuickFilter({ chips, basePath = '', current = {}, labels }: Quic
           );
         })}
       </ul>
-    </nav>
+    </Container>
   );
 }

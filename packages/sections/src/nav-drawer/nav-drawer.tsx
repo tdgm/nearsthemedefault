@@ -1,10 +1,11 @@
-import { Badge, ChevronDownIcon, Overlay } from '@nears/ui';
+import { Badge, ChevronDownIcon, Link, Overlay } from '@nears/ui';
 import { NAV_DRAWER_ID } from '../header/header.tsx';
 import type { NavDrawerProps } from './nav-drawer.schema';
 
 const defaults = { title: 'Menu', nav: 'Departamentos', viewAll: 'Ver tudo em', close: 'Fechar menu' } as const;
 
-const row = 'inline-flex min-h-11 w-full items-center px-4 text-md';
+/** Mesmo `Link` do design system (ADR 0034): largura total e padding proprios do drawer entram via `className`. */
+const row = 'w-full px-4 text-md';
 
 /**
  * Menu multinivel por departamento. TODOS os links ficam no HTML inicial (o
@@ -30,45 +31,45 @@ export function NavDrawer({ departments, labels }: NavDrawerProps) {
                       </span>
                     </summary>
                     <div className="bg-surface-subtle pb-2">
-                      <a href={dep.href} className={`${row} font-medium underline underline-offset-4`}>
+                      <Link href={dep.href} variant="standalone" className={`${row} font-medium`}>
                         {l.viewAll} {dep.label}
-                      </a>
+                      </Link>
                       {dep.highlight && (
-                        <a href={dep.highlight.href} className={`${row} gap-2 text-badge-promo-bg`}>
+                        <a href={dep.highlight.href} className={`${row} inline-flex min-h-11 items-center gap-2`}>
                           <Badge tone="promo">{dep.highlight.label}</Badge>
                         </a>
                       )}
                       {dep.groups?.map((group) => (
                         <div key={group.label} className="pt-2">
                           {group.href ? (
-                            <a href={group.href} className={`${row} font-medium`}>
+                            <Link href={group.href} variant="standalone" className={`${row} font-medium`}>
                               {group.label}
-                            </a>
+                            </Link>
                           ) : (
                             <p className="px-4 pt-2 text-sm font-medium text-on-surface-muted">{group.label}</p>
                           )}
                           <ul>
                             {group.links.map((link) => (
                               <li key={link.href}>
-                                <a href={link.href} className={`${row} text-on-surface-muted`}>
+                                <Link href={link.href} variant="standalone" className={row}>
                                   {link.label}
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
                         </div>
                       ))}
                       {dep.promo && (
-                        <a href={dep.promo.href} className={`${row} font-medium underline underline-offset-4`}>
+                        <Link href={dep.promo.href} variant="standalone" className={`${row} font-medium`}>
                           {dep.promo.title}
-                        </a>
+                        </Link>
                       )}
                     </div>
                   </details>
                 ) : (
-                  <a href={dep.href} className={`${row} font-medium`}>
+                  <Link href={dep.href} variant="standalone" className={`${row} font-medium`}>
                     {dep.label}
-                  </a>
+                  </Link>
                 )}
               </li>
             );
